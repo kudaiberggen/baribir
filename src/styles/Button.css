@@ -1,5 +1,5 @@
 .button {
-  background-color: #886fed;
+  background-color: #411666;
   color: white;
   padding: 12px 24px;
   font-size: 14px;
@@ -12,5 +12,5 @@
 }
 
 .button:hover {
-  background-color: #755ed1;
+  background-color: #37184f;
 }
