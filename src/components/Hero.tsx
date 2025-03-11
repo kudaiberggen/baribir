@@ -1,18 +1,18 @@
 import "../styles/Hero.css";
-import GetStartedImage from "../assets/DJ.jpg";
+import Concert from "../assets/concert.png";
 import Magnifier from "../assets/magnifier.png";
 import Handshake from "../assets/handshake.png";
 import Ticket from "../assets/ticket.png";
+import SmallLoupe from "../assets/smallloupe.png";
+import Calendar from "../assets/calendar.png";
+import Book from "../assets/book.png";
+import TrendingEvents from "./TrendingEvents";
+import Testimonials from "./Testimonials";
 
 const Hero = () => {
   return (
     <section>
       <div className="getstarted">
-        <img
-          src={GetStartedImage}
-          alt="Background"
-          className="background-image"
-        />
         <div className="content">
           <h1>
             Find <span style={{ color: "#411666" }}>Events</span>, Meet{" "}
@@ -27,6 +27,7 @@ const Hero = () => {
           </p>
           <a href="#">Get Started</a>
         </div>
+        <img src={Concert} alt="Concert" className="background-image" />
       </div>
       <div className="how-it-works">
         <h2>How It Works?</h2>
@@ -94,6 +95,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
       <div className="features">
         <div className="features-container">
           <div className="features-text">
@@ -102,24 +104,30 @@ const Hero = () => {
               Best Features <br /> For You
             </h2>
             <p className="features-description">
-              Bar1bir makes it easier than ever to discover exciting events,
-              meet like-minded people, and create unforgettable memories—all in
-              one seamless platform designed for real connections.
+              Bar1bir simplifies discovering events, connecting with like-minded
+              people, and creating unforgettable memories—all in one seamless
+              platform.
             </p>
           </div>
 
           <div className="features-cards">
             <div className="feature-card">
-              <div className="icon"></div>
-              <h3>Personalized Recommendations</h3>
+              <div className="icon">
+                <img src={SmallLoupe} alt="Custom Event Suggestions" />
+              </div>
+
+              <h3>Custom Event Suggestions</h3>
               <p>
-                Get event suggestions tailored to your interests, location, and
-                past activities so you never miss out on something exciting.
+                Receive personalized event recommendations based on your
+                interests, location, and past activities, ensuring you never
+                miss out on exciting opportunities.
               </p>
             </div>
 
             <div className="feature-card">
-              <div className="icon"></div>
+              <div className="icon">
+                <img src={Calendar} alt="Easy Event Creation" />
+              </div>
               <h3>Easy Event Creation</h3>
               <p>
                 Whether it's a small gathering or a large meetup, organizing
@@ -129,7 +137,9 @@ const Hero = () => {
             </div>
 
             <div className="feature-card">
-              <div className="icon"></div>
+              <div className="icon">
+                <img src={Book} alt="My Memories" />
+              </div>
               <h3>My Memories</h3>
               <p>
                 Save your favorite events, revisit past experiences, and keep
@@ -137,6 +147,22 @@ const Hero = () => {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+      <TrendingEvents />
+      <Testimonials />
+      <div className="readytostart">
+        <div className="readycontent">
+          <h1>Ready to start your next adventure ?</h1>
+          <p>
+            Find an event, create your own, and meet amazing people along the
+            way!
+          </p>
+          <p className="small-p">
+            See how Bar1b1r is bringing people together through unforgettable
+            events<br></br> and shared experiences!
+          </p>
+          <a href="#">Get Started</a>
         </div>
       </div>
     </section>

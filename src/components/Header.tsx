@@ -1,6 +1,5 @@
 import Button from "./Button";
-import SearchInput from "./SearchInput";
-import Logo from "/icon.svg";
+import Logo from "/BariB1r.svg";
 import "../styles/Header.css";
 
 const Header: React.FC = () => {
@@ -10,7 +9,6 @@ const Header: React.FC = () => {
         <a href="/">
           <img src={Logo} alt="Company Logo" />
         </a>
-        <SearchInput />
 
         <nav className="flex gap-4 items-center">
           <a href="#">Home</a>

@@ -1,7 +1,6 @@
 section {
   font-family: Popins, sans-serif;
-  width: 100vw;
-  height: 100vh;
+  background: linear-gradient(to top, rgba(128, 0, 128, 0.05) 20%, white 95%);
 }
 
 .getstarted {
@@ -14,34 +13,30 @@ section {
 }
 
 .getstarted h1 {
-  font-size: 60px;
+  font-size: 50px;
 }
 
 .getstarted a {
   font-size: 16px;
   text-decoration: none;
-  background-color: white;
+  background-color: #411666;
   display: inline-block;
   margin-top: 20px;
-  padding: 10px 20px;
-  color: #411666;
-  border-radius: 5px;
+  padding: 10px 50px;
+  color: white;
+  border-radius: 12px;
 }
 
 .getstarted a:hover {
-  background-color: #411666;
-  color: white;
+  background-color: #37184f;
   transition: 0.2s ease-in-out;
 }
 
 .content {
-  text-align: center;
-  color: white;
+  text-align: left;
+  color: black;
   padding: 30px;
   border-radius: 15px;
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(8px);
-  z-index: 1;
 }
 
 .content p {
@@ -50,11 +45,10 @@ section {
 }
 
 .background-image {
-  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 750pxpx;
+  height: 450px;
   object-fit: cover;
 }
 
@@ -110,6 +104,10 @@ section {
 .features {
   padding: 80px 5%;
   background-color: #fcfaff;
+  background-image: url("../assets/purpleline.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .features-container {
@@ -121,23 +119,28 @@ section {
 
 .features-text {
   max-width: 450px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .features-subtitle {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #411666;
 }
 
 .features-title {
-  font-size: 40px;
+  font-size: 28px;
   font-weight: bold;
   margin: 10px 0;
 }
 
 .features-description {
-  font-size: 16px;
-  color: #555;
+  color: #411666;
 }
 
 .features-cards {
@@ -162,12 +165,55 @@ section {
 .icon {
   background: #e9dcff;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
   color: #411666;
   margin: 0 auto 15px;
+}
+
+.icon img {
+  height: 36px;
+  width: 36px;
+}
+
+.readytostart {
+  position: relative;
+  margin: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.readycontent {
+  text-align: center;
+  color: black;
+  padding: 30px 100px;
+  border-radius: 50px;
+  background: #eee9ff;
+}
+
+.readycontent a {
+  font-size: 16px;
+  text-decoration: none;
+  background-color: white;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  color: #411666;
+  border-radius: 5px;
+}
+
+.readycontent a:hover {
+  background-color: #411666;
+  color: white;
+  transition: 0.2s ease-in-out;
+}
+
+.small-p {
+  font-size: 12px;
+  color: #646464;
 }

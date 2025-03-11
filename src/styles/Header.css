@@ -12,9 +12,9 @@ header {
   margin: 0 auto;
 }
 
-img {
-  height: 60px;
-  width: auto;
+.nav-container img {
+  height: auto;
+  width: 100px;
 }
 
 nav {
