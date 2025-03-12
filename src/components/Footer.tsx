@@ -31,8 +31,12 @@ const Footer = () => {
             </a>
           </div>
           <div className="app-buttons">
-            <img src={AppStore} alt="Download on the App Store" />
-            <img src={GooglePLay} alt="Get it on Google Play" />
+            <a href="https://www.apple.com/app-store/">
+              <img src={AppStore} alt="Download on the App Store" />
+            </a>
+            <a href="https://play.google.com/store/games?hl=ru">
+              <img src={GooglePLay} alt="Get it on Google Play" />
+            </a>
           </div>
           <div className="footer-bottom">
             <p>
