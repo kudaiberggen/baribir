@@ -13,12 +13,15 @@ const Header: React.FC = () => {
 
         <nav className="flex gap-4 items-center">
           <Link to="/">Home</Link>
-          <Link to="/contact">Contact us</Link>
           <Link to="/about">About us</Link>
-          <Link to="/login">Log in</Link>
-
-          <Button> Create An Account </Button>
+          <Link to="/contact">Contact us</Link>
         </nav>
+        <div className="login-div">
+          <Link to="/login">Log in</Link>
+          <Link to="/registration">
+            <Button> Create An Account </Button>
+          </Link>
+        </div>
       </div>
     </header>
   );

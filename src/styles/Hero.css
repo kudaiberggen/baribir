@@ -198,13 +198,14 @@ section {
 
 .readycontent a {
   font-size: 16px;
+  font-weight: 500;
   text-decoration: none;
   background-color: white;
   display: inline-block;
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 10px 24px;
   color: #411666;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .readycontent a:hover {
