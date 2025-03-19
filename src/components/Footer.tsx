@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles/Footer.css";
 import AppStore from "../assets/appstore.png";
 import GooglePLay from "../assets/googleplay.png";
@@ -49,10 +50,10 @@ const Footer = () => {
           <div className="footer-column-div">
             <div className="footer-column">
               <h3>Overview</h3>
-              <a href="#">Home</a>
-              <a href="#">About us</a>
-              <a href="#">Categories</a>
-              <a href="#">Contact</a>
+              <Link to="/">Home</Link>
+              <Link to="/about">About us</Link>
+              <Link to="/categories">Categories</Link>
+              <Link to="/contact">Contact</Link>
             </div>
             <div className="footer-column">
               <h3>Contacts</h3>

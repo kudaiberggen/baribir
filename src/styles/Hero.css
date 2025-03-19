@@ -206,6 +206,8 @@ section {
   padding: 10px 24px;
   color: #411666;
   border-radius: 6px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .readycontent a:hover {

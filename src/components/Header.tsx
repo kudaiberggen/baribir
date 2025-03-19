@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import Button from "./Button";
+import { NavLink } from "react-router-dom";
 import Logo from "/BariB1r.svg";
 import "../styles/Header.css";
 
@@ -7,20 +6,29 @@ const Header: React.FC = () => {
   return (
     <header>
       <div className="nav-container">
-        <Link to="/">
+        <NavLink to="/">
           <img src={Logo} alt="Company Logo" />
-        </Link>
+        </NavLink>
 
         <nav className="flex gap-4 items-center">
-          <Link to="/">Home</Link>
-          <Link to="/about">About us</Link>
-          <Link to="/contact">Contact us</Link>
+          <NavLink to="/" className="nav-link">
+            Home
+          </NavLink>
+          <NavLink to="/about" className="nav-link">
+            About us
+          </NavLink>
+          <NavLink to="/contact" className="nav-link">
+            Contact us
+          </NavLink>
         </nav>
+
         <div className="login-div">
-          <Link to="/login">Log in</Link>
-          <Link to="/registration">
-            <Button> Create An Account </Button>
-          </Link>
+          <NavLink to="/login" className="nav-link">
+            Log in
+          </NavLink>
+          <NavLink to="/registration" className="registration-link">
+            Create An Account
+          </NavLink>
         </div>
       </div>
     </header>

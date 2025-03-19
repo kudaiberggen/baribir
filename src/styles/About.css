@@ -1,0 +1,223 @@
+section {
+  font-family: Popins, sans-serif;
+}
+
+.background-image {
+  display: flex;
+  color: white;
+  font-size: 40px;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../assets/microphone.png");
+}
+
+.aboutus-div {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px auto;
+}
+
+.aboutus-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutus-left h2 {
+  font-size: 32px;
+}
+
+.aboutus-left p {
+  font-size: 20px;
+}
+
+.special {
+  text-align: center;
+  background: #fff;
+  max-width: 120px;
+  border-radius: 25px;
+  padding: 8px 20px;
+  box-shadow: -6px 6px 12px rgba(0, 0, 0, 0.2),
+    -6px 6px 12px rgba(255, 255, 255, 0.9);
+}
+
+.aboutus-right img {
+  width: 500px;
+  border-radius: 25px;
+}
+
+.ourmission-div {
+  background-color: #eee9ff;
+  padding: 40px 80px;
+}
+
+.ourmission-text {
+  text-align: center;
+}
+
+.ourmission-text h2 {
+  font-size: 32px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.ourmission-text p {
+  font-size: 20px;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.whatwedo-div {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.whatwedo-div h2 {
+  font-size: 42px;
+  font-weight: 550;
+  margin-bottom: 60px;
+}
+
+.grid {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.item {
+  width: 22%;
+  position: relative;
+}
+
+.number {
+  font-size: 80px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.line-container {
+  position: relative;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.line {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: #e7e7e7;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #411666;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.description {
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.whybaribir-div {
+  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.whybaribir-div h2 {
+  font-size: 40px;
+  margin: 50px auto;
+}
+
+.purple-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 30px;
+}
+
+.purple {
+  text-align: center;
+  color: white;
+  border-radius: 4px;
+  padding: 50px 50px;
+  background-color: #724a95;
+}
+
+.purple img {
+  width: 30px;
+}
+
+.purple h3 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.purple p {
+  font-size: 18px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.joinus-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 80px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #eee9ff;
+}
+
+.joinus-div h2 {
+  font-size: 48px;
+}
+
+.joinus-div p {
+  font-size: 20px;
+  color: #6c6c6c;
+  margin: 5px auto 20px;
+}
+
+.joinus-div a {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  background-color: white;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 24px;
+  color: #411666;
+  border-radius: 6px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.joinus-div a:hover {
+  background-color: #411666;
+  color: white;
+  transition: 0.2s ease-in-out;
+}

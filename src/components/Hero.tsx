@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles/Hero.css";
 import Concert from "../assets/concert.png";
 import Magnifier from "../assets/magnifier.png";
@@ -25,7 +26,7 @@ const Hero = () => {
             <br />
             memories alive—your next adventure starts here.
           </p>
-          <a href="#">Get Started</a>
+          <Link to="/registration">Get Started</Link>
         </div>
         <img src={Concert} alt="Concert" className="background-image" />
       </div>
@@ -162,7 +163,7 @@ const Hero = () => {
             See how Bar1b1r is bringing people together through unforgettable
             events<br></br> and shared experiences!
           </p>
-          <a href="#">Get Started</a>
+          <Link to="/registration">Get Started</Link>
         </div>
       </div>
     </section>

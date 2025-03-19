@@ -1,15 +1,20 @@
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 12px;
   font-family: Poppins, sans-serif;
+  z-index: 1000;
 }
 
 .nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 1380px;
   margin: 0 auto;
 }
 
@@ -35,8 +40,30 @@ nav {
   color: #411666;
 }
 
+.nav-link.active {
+  color: #411666;
+  font-weight: 520;
+}
+
 .login-div {
   display: flex;
   gap: 50px;
   align-items: center;
+}
+
+.registration-link {
+  background-color: #411666;
+  color: #ffff !important;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.registration-link:hover {
+  background-color: #37184f;
 }
