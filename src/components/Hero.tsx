@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "../styles/Hero.css";
-import Concert from "../assets/concert.png";
+import Concert from "../assets/concert-image.png";
 import Magnifier from "../assets/magnifier.png";
 import Handshake from "../assets/handshake.png";
 import Ticket from "../assets/ticket.png";

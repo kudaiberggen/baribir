@@ -57,7 +57,7 @@ const Footer = () => {
             </div>
             <div className="footer-column">
               <h3>Contacts</h3>
-              <a href="#">FAQ</a>
+              <Link to="/contact#faq">FAQ</Link>
               <p>+7 (***) *** ****</p>
               <p>info@baribir.kz</p>
             </div>

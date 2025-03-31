@@ -1,0 +1,25 @@
+.accountlinks-container {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  width: 200px;
+}
+
+.accountlinks-container a {
+  color: #8c8c8c;
+  padding: 10px 12px;
+  margin: 4px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.accountlinks-container a:hover {
+  color: #411666;
+}
+
+.account-links.active {
+  color: #411666;
+  background-color: #eee9ff;
+}

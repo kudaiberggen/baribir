@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "../styles/HeroContactUs.css";
 import Email from "../assets/email.png";
 import Whatsapp from "../assets/whatsapp.png";
@@ -8,6 +9,16 @@ import QuestionMark from "../assets/questionmark.png";
 import FAQ from "../components/FAQ";
 
 const HeroContactUs = () => {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   return (
     <section>
       <div className="stayconnected">
@@ -79,7 +90,7 @@ const HeroContactUs = () => {
             className="question-img"
           />
         </div>
-        <div className="faq-undercontent">
+        <div className="faq-undercontent" id="faq">
           <p>FAQ</p>
           <h2>Frequently Asked Questions</h2>
         </div>
