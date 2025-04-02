@@ -1,8 +1,55 @@
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "/BariB1r.svg";
 import "../styles/Login.css";
 
-const Login = () => {
+interface LoginFormState {
+  username: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+const Login: React.FC = () => {
+  const [formState, setFormState] = useState<LoginFormState>({
+    username: "",
+    password: "",
+    rememberMe: false,
+  });
+
+  const navigate = useNavigate();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(formState);
+
+    const response = await fetch("http://127.0.0.1:8000/api/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: formState.username,
+        password: formState.password,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      navigate("/");
+    } else {
+      alert("Invalid credentials");
+    }
+  };
+
   return (
     <div className="register-container">
       <div className="register-box">
@@ -12,19 +59,37 @@ const Login = () => {
             BACK!
           </h1>
           <p>
-            Find your community by <br></br>your interests
+            Find your community by <br /> your interests
           </p>
         </div>
         <div className="register-right">
           <Link to="/">
             <img src={Logo} alt="Company Logo" />
           </Link>
-          <form>
-            <input type="text" placeholder="Username" />
-            <input type="text" placeholder="Password" />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formState.username}
+              onChange={handleInputChange}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formState.password}
+              onChange={handleInputChange}
+            />
             <div className="remember-forgot">
               <label className="remember-me">
-                <input type="checkbox" /> Remember me
+                <input
+                  type="checkbox"
+                  name="rememberMe"
+                  checked={formState.rememberMe}
+                  onChange={handleInputChange}
+                />{" "}
+                Remember me
               </label>
               <Link to="/forgot-password" className="forgot-password">
                 Forgot password?
