@@ -1,8 +1,9 @@
+from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework import status, views, generics
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -41,4 +42,12 @@ class LoginView(views.APIView):
                     status=status.HTTP_200_OK,
                 )
             return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PasswordResetView(APIView):
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            response_data = serializer.send_temporary_password()
+            return Response(response_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
