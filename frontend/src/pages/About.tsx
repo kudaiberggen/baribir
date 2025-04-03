@@ -8,7 +8,6 @@ import "../styles/About.css";
 const About = () => {
   return (
     <section>
-      <Header />
       <div className="about-image">
         <h1>About Us</h1>
       </div>
@@ -151,7 +150,6 @@ const About = () => {
         </p>
         <Link to="/registration">Get Started</Link>
       </div>
-      <Footer />
     </section>
   );
 };

@@ -5,9 +5,7 @@ import Footer from "../components/Footer";
 const Contact = () => {
   return (
     <div>
-      <Header />
       <HeroContactUs />
-      <Footer />
     </div>
   );
 };

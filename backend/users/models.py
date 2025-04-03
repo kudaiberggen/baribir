@@ -6,6 +6,11 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, blank=False, null=False)
     first_name = models.CharField(max_length=150, blank=False, null=False)
     last_name = models.CharField(max_length=150, blank=False, null=False)
+    profile_image = models.ImageField(
+        upload_to="profile_images/",
+        default="profile_images/default.png",  
+        blank=True
+    )
 
     def __str__(self):
         return self.username

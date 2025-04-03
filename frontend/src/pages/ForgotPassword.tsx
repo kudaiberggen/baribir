@@ -34,7 +34,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <section>
+    <div className="forgotpassword-section">
       <div className="forgotpassword-container">
         <Link to="/">
           <img src={Logo} alt="Company Logo" />
@@ -72,7 +72,7 @@ const ForgotPassword = () => {
           ← Back to Login
         </Link>
       </div>
-    </section>
+    </div>
   );
 };
 

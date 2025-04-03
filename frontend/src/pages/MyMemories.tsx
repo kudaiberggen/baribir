@@ -5,24 +5,16 @@ import "../styles/MyMemories.css";
 
 const MyMemories = () => {
   return (
-    <div>
-      <Header />
-      <section>
-        <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>
-          Account Settings
-        </h1>
-        <div className="mymemories-container">
-          <AccountSettingsLinks />
-          <div>
-            <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>
-              My Memories
-            </h2>
-            <div className="memories-container"></div>
-          </div>
+    <section>
+      <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
+      <div className="mymemories-container">
+        <AccountSettingsLinks />
+        <div>
+          <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>My Memories</h2>
+          <div className="memories-container"></div>
         </div>
-      </section>
-      <Footer />
-    </div>
+      </div>
+    </section>
   );
 };
 

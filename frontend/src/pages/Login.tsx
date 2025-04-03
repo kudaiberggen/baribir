@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "../components/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "/BariB1r.svg";
 import "../styles/Login.css";
@@ -16,11 +17,12 @@ const Login: React.FC = () => {
     rememberMe: false,
   });
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-
     setFormState((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? checked : value,
@@ -29,24 +31,34 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formState);
+    setErrorMessage(null);
 
-    const response = await fetch("http://127.0.0.1:8000/api/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: formState.username,
-        password: formState.password,
-      }),
-    });
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formState.username,
+          password: formState.password,
+        }),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      navigate("/");
-    } else {
-      alert("Invalid credentials");
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+
+        login();
+        navigate("/");
+      } else {
+        setErrorMessage(data.detail || "Invalid credentials");
+      }
+    } catch (error) {
+      setErrorMessage("Server error. Please try again later.");
     }
   };
 
@@ -95,6 +107,7 @@ const Login: React.FC = () => {
                 Forgot password?
               </Link>
             </div>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <button type="submit">Log in</button>
           </form>
           <p className="login-text">

@@ -11,9 +11,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "first_name", "last_name", "email", "phone", "password", "confirm_password"]
+        fields = ["username", "first_name", "last_name", "email", "phone", "password", "confirm_password", "profile_image"]
         extra_kwargs = {
             "password": {"write_only": True},
+            "profile_image": {"read_only": True}
         }
 
     def validate(self, data):

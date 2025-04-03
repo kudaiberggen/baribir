@@ -51,7 +51,7 @@ nav {
 
 .login-div {
   display: flex;
-  gap: 50px;
+  gap: 16px;
   align-items: center;
 }
 
@@ -59,6 +59,7 @@ nav {
   background-color: #411666;
   color: #ffff !important;
   padding: 10px 16px;
+  margin-left: 20px;
   font-size: 14px;
   border-radius: 8px;
   font-family: Poppins, sans-serif;
@@ -70,4 +71,45 @@ nav {
 
 .registration-link:hover {
   background-color: #37184f;
+}
+
+.profile-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 50%;
+  transform: translateX(50%);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  z-index: 100;
+  text-align: center;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s ease-in-out;
+}
+
+.dropdown-item:hover {
+  background: #ebe9e9;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
 }

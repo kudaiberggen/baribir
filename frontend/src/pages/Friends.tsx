@@ -5,22 +5,16 @@ import "../styles/Friends.css";
 
 const Friends = () => {
   return (
-    <div>
-      <Header />
-      <section>
-        <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>
-          Account Settings
-        </h1>
-        <div className="myfriends-container">
-          <AccountSettingsLinks />
-          <div>
-            <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>My Friends</h2>
-            <div className="friends-container"></div>
-          </div>
+    <section>
+      <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
+      <div className="myfriends-container">
+        <AccountSettingsLinks />
+        <div>
+          <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>My Friends</h2>
+          <div className="friends-container"></div>
         </div>
-      </section>
-      <Footer />
-    </div>
+      </div>
+    </section>
   );
 };
 

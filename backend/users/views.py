@@ -38,6 +38,7 @@ class LoginView(views.APIView):
                         "message": "Login successful",
                         "access_token": str(refresh.access_token),
                         "refresh_token": str(refresh),
+                        "profile_image": request.build_absolute_uri(user.profile_image.url) if user.profile_image else None
                     },
                     status=status.HTTP_200_OK,
                 )
