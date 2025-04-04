@@ -51,9 +51,9 @@ const Footer = () => {
             <div className="footer-column">
               <h3>Overview</h3>
               <Link to="/">Home</Link>
+              <Link to="/events">Events</Link>
               <Link to="/about">About us</Link>
-              <Link to="/categories">Categories</Link>
-              <Link to="/contact">Contact</Link>
+              <Link to="/contact">Contact us</Link>
             </div>
             <div className="footer-column">
               <h3>Contacts</h3>
