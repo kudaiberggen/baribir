@@ -25,24 +25,35 @@ footer {
 
 .newsletter {
   display: flex;
-  margin: 10px 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .newsletter input {
-  padding: 10px 16px;
+  padding: 10px 24px;
+  margin: 0 -30px 0 0;
+  font-size: 16px;
   color: #37184f;
-  width: 300px;
-  margin-right: -30px;
-  border-radius: 20px;
+  width: 65%;
+  border-radius: 20px 0 0 20px;
   border: none;
   outline: none;
+  display: flex;
+  align-items: center;
+}
+
+.newsletter input::placeholder {
+  color: #411666;
+  font-size: 16px;
+  opacity: 0.9;
 }
 
 .newsletter button {
+  margin: 0;
   background-color: #411666;
   color: white;
-  width: 120px;
-  padding: 10px 16px;
+  width: 35%;
   border-radius: 20px;
   border: none;
   cursor: pointer;

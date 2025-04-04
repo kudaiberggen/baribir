@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "/BariB1r.svg";
-import "../styles/Registration.css";
+import "../styles/Auth.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +14,14 @@ const Register = () => {
     confirm_password: "",
   });
 
-  const [error, setError] = useState("");
+  const [errorMessages, setErrorMessages] = useState<{ [key: string]: string }>(
+    {}
+  );
   const [success, setSuccess] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrorMessages({ ...errorMessages, [e.target.name]: "" });
   };
 
   const validateEmail = (email: string) => {
@@ -28,28 +31,32 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setErrorMessages({});
     setSuccess("");
 
+    let errors: { [key: string]: string } = {};
+
     if (formData.password !== formData.confirm_password) {
-      setError("Passwords do not match");
-      return;
+      errors.confirm_password = "Passwords do not match";
     }
 
     if (!validateEmail(formData.email)) {
-      setError("Invalid email format");
-      return;
+      errors.email = "Invalid email format";
     }
 
     if (formData.phone.length < 10) {
-      setError("Phone number must be at least 10 digits");
-      return;
+      errors.phone = "Phone number must be at least 10 digits";
     }
 
     if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters");
+      errors.password = "Password must be at least 8 characters";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrorMessages(errors);
       return;
     }
+
     console.log("Form data being sent:", formData);
     try {
       const response = await fetch("http://127.0.0.1:8000/api/register/", {
@@ -65,12 +72,14 @@ const Register = () => {
       if (response.ok) {
         setSuccess("Account created successfully!");
       } else {
-        setError(
-          data.error ? data.error : Object.values(data).flat().join(", ")
+        setErrorMessages(
+          data.error
+            ? { general: data.error }
+            : Object.fromEntries(Object.entries(data))
         );
       }
     } catch (error) {
-      setError("Something went wrong");
+      setErrorMessages({ general: "Something went wrong" });
     }
   };
 
@@ -88,68 +97,119 @@ const Register = () => {
             <img src={Logo} alt="Company Logo" />
           </Link>
           <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-            <div className="name-inputs">
+            <div className="input-group">
               <input
                 type="text"
-                name="first_name"
-                placeholder="First Name"
-                value={formData.first_name}
+                name="username"
+                placeholder="Username"
+                value={formData.username}
                 onChange={handleChange}
                 required
               />
-              <input
-                type="text"
-                name="last_name"
-                placeholder="Last Name"
-                value={formData.last_name}
-                onChange={handleChange}
-                required
-              />
+              {errorMessages.username && (
+                <p className="error right-align">{errorMessages.username}</p>
+              )}
             </div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="confirm_password"
-              placeholder="Confirm Password"
-              value={formData.confirm_password}
-              onChange={handleChange}
-              required
-            />
+
+            <div className="name-inputs">
+              <div className="input-group">
+                <input
+                  type="text"
+                  name="first_name"
+                  placeholder="First Name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  required
+                  style={{ width: "170px" }}
+                />
+                {errorMessages.first_name && (
+                  <p className="error right-align">
+                    {errorMessages.first_name}
+                  </p>
+                )}
+              </div>
+              <div className="input-group">
+                <input
+                  type="text"
+                  name="last_name"
+                  placeholder="Last Name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  required
+                  style={{ width: "170px" }}
+                />
+                {errorMessages.last_name && (
+                  <p className="error right-align">{errorMessages.last_name}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="input-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              {errorMessages.email && (
+                <p className="error right-align">{errorMessages.email}</p>
+              )}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+              {errorMessages.phone && (
+                <p className="error right-align">{errorMessages.phone}</p>
+              )}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              {errorMessages.password && (
+                <p className="error right-align">{errorMessages.password}</p>
+              )}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm Password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                required
+              />
+              {errorMessages.confirm_password && (
+                <p className="error right-align">
+                  {errorMessages.confirm_password}
+                </p>
+              )}
+            </div>
+
             <button type="submit">Create account</button>
-            {error && <p className="error">{error}</p>}
+
+            {errorMessages.general && (
+              <p className="error general">{errorMessages.general}</p>
+            )}
             {success && <p className="success">{success}</p>}
           </form>
+
           <p className="login-text">
             Already have an account? <Link to="/login">Log in</Link>
           </p>

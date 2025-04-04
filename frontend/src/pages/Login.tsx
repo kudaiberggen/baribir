@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../components/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "/BariB1r.svg";
-import "../styles/Login.css";
+import "../styles/Auth.css";
 
 interface LoginFormState {
   username: string;
@@ -17,7 +17,11 @@ const Login: React.FC = () => {
     rememberMe: false,
   });
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{
+    username?: string;
+    password?: string;
+    general?: string;
+  }>({});
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -29,9 +33,28 @@ const Login: React.FC = () => {
     }));
   };
 
+  const validateForm = () => {
+    let newErrors: { username?: string; password?: string } = {};
+
+    if (!formState.username.trim()) {
+      newErrors.username = "Username is required";
+    }
+
+    if (!formState.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage(null);
+    setErrors({});
+
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/login/", {
@@ -55,15 +78,15 @@ const Login: React.FC = () => {
         login();
         navigate("/");
       } else {
-        setErrorMessage(data.detail || "Invalid credentials");
+        setErrors({ general: data.detail || "Invalid credentials" });
       }
     } catch (error) {
-      setErrorMessage("Server error. Please try again later.");
+      setErrors({ general: "Server error. Please try again later." });
     }
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container" style={{ height: "80vh" }}>
       <div className="register-box">
         <div className="register-left">
           <h1>
@@ -79,20 +102,30 @@ const Login: React.FC = () => {
             <img src={Logo} alt="Company Logo" />
           </Link>
           <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formState.username}
-              onChange={handleInputChange}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formState.password}
-              onChange={handleInputChange}
-            />
+            <div className="input-group">
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={formState.username}
+                onChange={handleInputChange}
+                className={errors.username ? "input-error" : ""}
+              />
+              {errors.username && <p className="error">{errors.username}</p>}
+            </div>
+
+            <div className="input-group">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formState.password}
+                onChange={handleInputChange}
+                className={errors.password ? "input-error" : ""}
+              />
+              {errors.password && <p className="error">{errors.password}</p>}
+            </div>
+
             <div className="remember-forgot">
               <label className="remember-me">
                 <input
@@ -107,7 +140,11 @@ const Login: React.FC = () => {
                 Forgot password?
               </Link>
             </div>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+            {errors.general && (
+              <p className="error general">{errors.general}</p>
+            )}
+
             <button type="submit">Log in</button>
           </form>
           <p className="login-text">

@@ -81,7 +81,7 @@ button {
 
 .login-text {
   margin-top: 20px;
-  font-size: 0.9rem;
+  font-size: 16px;
 }
 
 .login-text a {
@@ -90,4 +90,52 @@ button {
 
 .login-text a:hover {
   color: #37184f;
+}
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.remember-me input {
+  width: 16px;
+  height: 16px;
+}
+
+.forgot-password {
+  color: #411666;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.error {
+  margin: 0 auto;
+  color: red;
+  font-size: 16px;
+  text-align: center;
+}
+
+.error.general {
+  text-align: center;
+}
+
+.success {
+  color: green;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
 }
