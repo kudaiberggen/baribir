@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 import uuid
 
 class CustomUser(AbstractUser):
@@ -123,3 +126,49 @@ class MemoryMention(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     picture = models.IntegerField(null=True, blank=True)
     username = models.CharField(max_length=255, null=True, blank=True)
+
+class Interest(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='sub_interests'
+    )
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=255, null=True, blank=True)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='interests'
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Review(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    created_date = models.DateTimeField(null=True, blank=True)
+    likes = models.BigIntegerField(null=True, blank=True)
+    rate = models.PositiveSmallIntegerField(
+        help_text="1-10",
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10)
+        ]
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+
+    class Meta:
+        db_table = 'reviews'
+
+    def __str__(self):
+        return f"Review by {self.author} - {self.rate}/10"
