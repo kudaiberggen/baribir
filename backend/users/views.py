@@ -1,5 +1,8 @@
-from django.db.models import Q
+from datetime import timedelta
+
+from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework import status, views, generics, permissions
@@ -103,3 +106,23 @@ class EventDetailView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     lookup_field = 'id'
+
+class PopularEventsView(APIView):
+    def get(self, request):
+        today = timezone.now().date()
+        in_30_days = today + timedelta(days=30)
+
+        popular_events = (
+            Event.objects
+            .filter(date__gte=today, date__lt=in_30_days)
+            .annotate(
+                participant_count=Count(
+                    'eventparticipant',
+                    filter=Q(eventparticipant__is_staff=False)
+                )
+            )
+            .order_by('-participant_count')[:10]
+        )
+
+        serializer = EventSerializer(popular_events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
