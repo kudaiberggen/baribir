@@ -26,7 +26,7 @@ const Home = () => {
             <br />
             memories alive—your next adventure starts here.
           </p>
-          <Link to="/registration">Get Started</Link>
+          <Link to="/events">Get Started</Link>
         </div>
         <img src={Concert} alt="Concert" className="background-image" />
       </div>
@@ -163,7 +163,7 @@ const Home = () => {
             See how Bar1b1r is bringing people together through unforgettable
             events<br></br> and shared experiences!
           </p>
-          <Link to="/registration">Get Started</Link>
+          <Link to="/events">Get Started</Link>
         </div>
       </div>
     </section>

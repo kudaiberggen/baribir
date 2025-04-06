@@ -12,7 +12,7 @@ const testimonials = [
     id: 1,
     name: "Anna Mitchell",
     role: "Manager",
-    text: "Bar1b1r turned my weekends into real adventures! I’ve met so many great people.",
+    text: "Bar1b1r turned my weekends into real adventures! I've met so many great people.",
     image: scroll1,
     rating: 5,
   },
@@ -36,7 +36,7 @@ const testimonials = [
     id: 4,
     name: "Michael Smith",
     role: "Entrepreneur",
-    text: "The community aspect is amazing! I’ve never felt so welcomed!",
+    text: "The community aspect is amazing! I've never felt so welcomed!",
     image: scroll4,
     rating: 5,
   },
@@ -67,7 +67,7 @@ const Testimonials: React.FC = () => {
 
     let animationFrame: number;
     let start: number | null = null;
-    const speed = 0.5; // Скорость прокрутки
+    const speed = 0.5;
 
     const step = (timestamp: number) => {
       if (!start) start = timestamp;

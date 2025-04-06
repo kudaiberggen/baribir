@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import Friends from "../assets/friends.jpg";
 import YesVector from "../assets/yes-vector.png";
 import "../styles/About.css";
@@ -148,7 +146,7 @@ const About = () => {
           Find an event, create your own, and meet amazing <br />
           people along the way!
         </p>
-        <Link to="/registration">Get Started</Link>
+        <Link to="/events">Get Started</Link>
       </div>
     </section>
   );

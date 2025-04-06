@@ -59,7 +59,7 @@ const Footer = () => {
               <h3>Contacts</h3>
               <Link to="/contact#faq">FAQ</Link>
               <p>+7 (***) *** ****</p>
-              <p>info@baribir.kz</p>
+              <p>baribir@gmail.com</p>
             </div>
           </div>
           <p>

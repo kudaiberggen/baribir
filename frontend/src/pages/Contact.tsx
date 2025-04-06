@@ -72,7 +72,7 @@ const Contact = () => {
               <a href="/">
                 <img src={Email} alt="Email" />
               </a>{" "}
-              youremail@mail.com
+              baribir@mail.com
             </li>
             <li>
               <a href="/">
@@ -90,7 +90,7 @@ const Contact = () => {
               <a href="/">
                 <img src={TikTok} alt="TikTok" />
               </a>{" "}
-              barib1r
+              barib1r.app
             </li>
           </ul>
         </div>
