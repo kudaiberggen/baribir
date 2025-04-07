@@ -71,16 +71,18 @@ const Login: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        if (data.token) {
-          localStorage.setItem("token", data.token);
+        console.log("Login response:", data);
+        if (data.access_token) {
+          localStorage.setItem("access_token", data.access_token);
+          localStorage.setItem("profile_image", data.profile_image);
+          login();
+          navigate("/");
         }
-
-        login();
-        navigate("/");
       } else {
         setErrors({ general: data.detail || "Invalid credentials" });
       }
     } catch (error) {
+      console.error("Request failed:", error);
       setErrors({ general: "Server error. Please try again later." });
     }
   };

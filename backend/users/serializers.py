@@ -51,6 +51,42 @@ class PasswordResetSerializer(serializers.Serializer):
         user.save()
 
         return {"temporary_password": temp_password}
+    
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    profile_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "first_name", "last_name", "email", "phone", "profile_image")
+
+    def get_profile_image(self, obj):
+        request = self.context.get("request")
+        if obj.profile_image and hasattr(obj.profile_image, "url"):
+            return request.build_absolute_uri(obj.profile_image.url)
+        return None
+
+
+
+class EventCreateSerializer(serializers.ModelSerializer):
+    photos = serializers.ListField(
+        child=serializers.ImageField(), 
+        write_only=True,
+        required=False
+    )
+
+    class Meta:
+        model = Event
+        fields = ['title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos']
+
+    def create(self, validated_data):
+        photos = validated_data.pop("photos", [])
+        event = Event.objects.create(**validated_data)
+
+        for photo in photos:
+            EventPhoto.objects.create(event=event, image=photo)
+
+        return event
 
 class EventSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
@@ -59,12 +95,12 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'date', 'location', 'author', 'category', 'photos']
+        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos']
 
     def get_photos(self, obj):
-        # Включаем все фото, связанные с событием
         photos = EventPhoto.objects.filter(event=obj)
         return EventPhotoSerializer(photos, many=True).data
+    
 
 class EventPhotoSerializer(serializers.ModelSerializer):
     event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())

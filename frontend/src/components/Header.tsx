@@ -4,31 +4,48 @@ import { useAuth } from "../components/AuthContext";
 import Logo from "/BariB1r.svg";
 import Chat from "../assets/chat.png";
 import Notification from "../assets/notification.png";
-import DefaultProfileImage from "../assets/profile_image.png";
 import "../styles/Header.css";
 
 const Header: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState<string>(DefaultProfileImage);
+  const [profileImage, setProfileImage] = useState<string>(() => {
+    return (
+      localStorage.getItem("profile_image") ||
+      "/media/profile_images/default.png"
+    );
+  });
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const fetchProfileImage = () => {
+    fetch("http://127.0.0.1:8000/api/user-info", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Ошибка от сервера:", response.status, errorText);
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const imageUrl =
+          data.profile_image || "/media/profile_images/default.png";
+        setProfileImage(imageUrl);
+        localStorage.setItem("profile_image", imageUrl);
+      })
+      .catch((error) => {
+        console.error("Ошибка при загрузке изображения профиля:", error);
+        setProfileImage("/media/profile_images/default.png");
+      });
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetch("/api/user-info", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.profile_image) {
-            setProfileImage(data.profile_image);
-          }
-        })
-        .catch((error) =>
-          console.error("Error fetching profile image:", error)
-        );
+      fetchProfileImage();
     }
   }, [isAuthenticated]);
 
@@ -77,14 +94,14 @@ const Header: React.FC = () => {
         <div className="login-div">
           {isAuthenticated ? (
             <>
-              <NavLink to="/">
+              <NavLink to="/chat">
                 <img
                   src={Chat}
                   alt="Chat"
                   style={{ width: "32px", borderRadius: "50%" }}
                 />
               </NavLink>
-              <NavLink to="/">
+              <NavLink to="/notifications">
                 <img
                   src={Notification}
                   alt="Notification"
@@ -97,7 +114,11 @@ const Header: React.FC = () => {
                   src={profileImage}
                   alt="Profile"
                   onClick={() => setDropdownOpen(!isDropdownOpen)}
-                  style={{ width: "32px", borderRadius: "50%" }}
+                  style={{
+                    width: "32px",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                  }}
                 />
                 {isDropdownOpen && (
                   <div className="dropdown-menu">

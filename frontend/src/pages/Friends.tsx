@@ -1,6 +1,4 @@
-import Header from "../components/Header";
 import AccountSettingsLinks from "../components/AccountSettingsLinks";
-import Footer from "../components/Footer";
 import "../styles/Friends.css";
 
 const Friends = () => {

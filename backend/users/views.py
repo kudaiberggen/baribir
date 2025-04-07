@@ -5,13 +5,14 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
-from rest_framework import status, views, generics, permissions
+from rest_framework import status, views, generics, permissions, viewsets
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Category, Event, EventParticipant
-from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
-    EventParticipantSerializer
+from django.core.files.storage import default_storage
+from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -60,6 +61,49 @@ class PasswordResetView(APIView):
             response_data = serializer.send_temporary_password()
             return Response(response_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserInfoSerializer(request.user, context={"request": request})
+        return Response(serializer.data)
+
+class ChangePhotoView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request):
+        file = request.FILES.get('profile_image')  # Получаем файл изображения из запроса
+        if not file:
+            return Response({"error": "No file uploaded"}, status=400)
+
+        # Сохраняем изображение
+        file_name = default_storage.save(f"profile_images/{file.name}", file)
+        file_url = default_storage.url(file_name)
+
+        # Обновляем поле profile_image у пользователя
+        user = request.user
+        user.profile_image = file_url
+        user.save()
+
+        return Response({"profile_image": file_url}, status=200)
+
+class DeletePhotoView(APIView):
+    def delete(self, request):
+        user = request.user
+        image_path = user.profile_image  # Путь к изображению из базы данных
+
+        if image_path and os.path.exists(image_path):
+            # Удаляем изображение с файловой системы
+            default_storage.delete(image_path)
+
+            # Очищаем поле в модели пользователя
+            user.profile_image = None
+            user.save()
+
+            return Response({"message": "Profile image deleted successfully"}, status=200)
+
+        return Response({"error": "Image not found"}, status=404)
 
 class EventFilterView(APIView):
     def get(self, request):
@@ -94,18 +138,17 @@ class EventParticipantsByEventView(APIView):
         serializer = EventParticipantSerializer(participants, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class EventCreateView(generics.CreateAPIView):
+class EventCreateView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = EventCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            event = serializer.save()
+            return Response({"id": str(event.id)}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-class EventDetailView(generics.RetrieveAPIView):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-    lookup_field = 'id'
 
 class PopularEventsView(APIView):
     def get(self, request):
