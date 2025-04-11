@@ -162,3 +162,27 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.author} - {self.rate}/10"
+
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="settings")
+
+    # Notifications
+    remind_registered_events = models.BooleanField(default=True)
+    personalized_recommendations = models.BooleanField(default=True)
+    platform_news = models.BooleanField(default=True)
+    trending_events_in_city = models.BooleanField(default=True)
+    interest_based_recommendations = models.BooleanField(default=True)
+    birthday_greetings = models.BooleanField(default=True)
+    event_changes = models.BooleanField(default=True)
+    new_messages = models.BooleanField(default=True)
+    upcoming_event_reminders = models.BooleanField(default=True)
+    someone_interested_in_event = models.BooleanField(default=True)
+    event_time_or_location_changes = models.BooleanField(default=True)
+    exclusive_promotions = models.BooleanField(default=True)
+
+    # Privacy
+    private_account = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username}'s settings"
