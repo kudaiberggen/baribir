@@ -104,3 +104,10 @@ section {
   background-color: #f44336;
   color: white;
 }
+
+.tab-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

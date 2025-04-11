@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AccountSettingsLinks from "../components/AccountSettingsLinks";
 import "../styles/Settings.css";
+import ProfileForm from "../components/ProfileForm";
 
 const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
@@ -174,44 +175,36 @@ const Settings: React.FC = () => {
           <div className="tab-content">
             {activeTab === "profile" && (
               <div className="tab-pane">
-                <div
+                <img
+                  src={profileImage}
+                  alt="Current avatar"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "50%",
                   }}
-                >
-                  <img
-                    src={profileImage}
-                    alt="Current avatar"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      borderRadius: "50%",
-                    }}
+                />
+                <p>Refresh the page to see your new avatar.</p>
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    id="file-upload"
+                    style={{ display: "none" }}
                   />
-                  <p>Refresh the page to see your new avatar.</p>
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      id="file-upload"
-                      style={{ display: "none" }}
-                    />
-                    <label htmlFor="file-upload" className="custom-button">
-                      Select File
-                    </label>
+                  <label htmlFor="file-upload" className="custom-button">
+                    Select File
+                  </label>
 
-                    <button onClick={handleUpload} className="upload-button">
-                      Upload photo
-                    </button>
-                    <button onClick={handleDelete} className="delete-button">
-                      Delete avatar
-                    </button>
-                  </div>
+                  <button onClick={handleUpload} className="upload-button">
+                    Upload photo
+                  </button>
+                  <button onClick={handleDelete} className="delete-button">
+                    Delete avatar
+                  </button>
                 </div>
+                <ProfileForm />
               </div>
             )}
             {activeTab === "notifications" && (
