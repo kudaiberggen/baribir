@@ -10,9 +10,10 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Category, Event, EventParticipant
+from .models import Category, Event, EventParticipant, UserSettings
 from django.core.files.storage import default_storage
-from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer
+from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
+    EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -174,3 +175,13 @@ class PopularEventsView(APIView):
 
         serializer = EventSerializer(popular_events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class UserSettingsView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSettingsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        settings, created = UserSettings.objects.get_or_create(user=self.request.user)
+        return settings
