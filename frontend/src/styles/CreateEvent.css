@@ -1,0 +1,196 @@
+.create-event-container {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.12);
+  width: 900px;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.create-event-form {
+  width: 600px;
+  padding: 30px;
+}
+
+.create-event-btn {
+  background-color: #411666;
+  color: #ffff !important;
+  padding: 14px 16px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.create-event-btn:hover {
+  background-color: #37184f;
+}
+
+.create-event-form input,
+.create-event-form textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d3d3d3;
+  border-radius: 6px;
+}
+
+.create-event-form input:focus,
+.create-event-form textarea:focus {
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.upload-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  border: 2px dashed #d3d3d3;
+  border-radius: 12px;
+  text-align: center;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.browse-button {
+  padding: 6px 24px;
+  border: 2px solid #411666;
+  border-radius: 8px;
+  color: #411666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.browse-button:hover {
+  background-color: #2f104a;
+  color: #fff;
+}
+
+.custom-datepicker {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #9a77b7;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.custom-datepicker:focus {
+  border: 2px solid #9a77b7;
+  box-shadow: 0 0 0 2px #e9d5ff;
+}
+
+.react-datepicker {
+  border: 1px solid #9a77b7;
+  border-radius: 4px;
+}
+
+.react-datepicker__header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #9a77b7;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker__day-name {
+  color: #000000;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #724a95 !important;
+  color: white;
+}
+
+.react-datepicker__time-container .react-datepicker__time {
+  background-color: #ffffff;
+}
+
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-wrapper select {
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  border: 1px solid #d3d3d3;
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23999' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.custom-select-wrapper select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(94, 158, 214, 0.2);
+}
+
+.custom-select-wrapper option[disabled] {
+  color: #999;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"] {
+  appearance: none;
+  max-width: 20px;
+  max-height: 20px;
+  border: 2px solid #411666;
+  border-radius: 4px;
+  position: relative;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: #411666;
+  border-color: #411666;
+}
+
+.checkbox-container input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+  opacity: 1;
+}
