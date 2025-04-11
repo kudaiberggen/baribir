@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "../styles/Footer.css";
+import WhiteLogo from "../assets/BariB1r-white.png";
 import AppStore from "../assets/appstore.png";
 import GooglePLay from "../assets/googleplay.png";
 import Instagram from "../assets/instagram.png";
@@ -12,8 +13,12 @@ const Footer = () => {
     <footer>
       <div className="footer-container">
         <div className="footer-left">
-          <h1 className="brand">BariB1r</h1>
-          <p>
+          <img
+            src={WhiteLogo}
+            alt="Company Logo"
+            style={{ width: "160px", margin: "50px auto 10px" }}
+          />
+          <p style={{ fontSize: "16px", fontWeight: "400", opacity: "0.85" }}>
             Find events, meet like-minded people,<br></br> and turn moments into
             memories.
           </p>
@@ -39,24 +44,33 @@ const Footer = () => {
               <img src={GooglePLay} alt="Get it on Google Play" />
             </a>
           </div>
-          <div className="footer-bottom">
-            <p>
-              Copyright © 2025 BariB1r. All rights reserved.<br></br>Bringing
-              people together through experiences.
-            </p>
-          </div>
+          <p
+            style={{
+              margin: "10px auto 30px",
+              lineHeight: "16px",
+              fontSize: "12px",
+              opacity: "0.8",
+            }}
+          >
+            Copyright © 2025 BariB1r. All rights reserved.<br></br>Bringing
+            people together through experiences.
+          </p>
         </div>
         <div className="footer-right">
           <div className="footer-column-div">
             <div className="footer-column">
-              <h3>Overview</h3>
+              <h3 style={{ fontSize: "24px", marginBottom: "12px" }}>
+                Overview
+              </h3>
               <Link to="/">Home</Link>
               <Link to="/events">Events</Link>
               <Link to="/about">About us</Link>
               <Link to="/contact">Contact us</Link>
             </div>
             <div className="footer-column">
-              <h3>Contacts</h3>
+              <h3 style={{ fontSize: "24px", marginBottom: "12px" }}>
+                Contacts
+              </h3>
               <Link to="/contact#faq">FAQ</Link>
               <p>+7 (***) *** ****</p>
               <p>baribir@gmail.com</p>
