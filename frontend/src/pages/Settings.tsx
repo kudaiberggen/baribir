@@ -10,7 +10,7 @@ const Settings: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
-    fetch("/api/user-info", {
+    fetch("/api/user-info/", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -57,7 +57,7 @@ const Settings: React.FC = () => {
     formData.append("profile_image", selectedFile);
 
     try {
-      const response = await fetch("/api/change-photo", {
+      const response = await fetch("/api/change-photo/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -84,7 +84,7 @@ const Settings: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch("/api/delete-photo", {
+      const response = await fetch("/api/delete-photo/", {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -115,83 +115,129 @@ const Settings: React.FC = () => {
       <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
       <div className="mysettings-container">
         <AccountSettingsLinks />
-        <div>
+        <div style={{ width: "80%" }}>
           <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>Settings</h2>
-          <div className="settings-container">
-            <div className="tabs">
-              <a
-                href="#profile"
-                className={activeTab === "profile" ? "active" : ""}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleTabClick("profile");
-                }}
-              >
-                Profile
-              </a>
-              <a
-                href="#security"
-                className={activeTab === "security" ? "active" : ""}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleTabClick("security");
-                }}
-              >
-                Notifications
-              </a>
-              <a
-                href="#notifications"
-                className={activeTab === "notifications" ? "active" : ""}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleTabClick("notifications");
-                }}
-              >
-                Privacy and Security
-              </a>
-            </div>
+          <div className="tabs">
+            <a
+              href="#profile"
+              className={activeTab === "profile" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                handleTabClick("profile");
+              }}
+            >
+              Profile
+            </a>
+            <a
+              href="#notifications"
+              className={activeTab === "notifications" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                handleTabClick("notifications");
+              }}
+            >
+              Notifications
+            </a>
+            <a
+              href="#privacy"
+              className={activeTab === "privacy" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                handleTabClick("privacy");
+              }}
+            >
+              Privacy and Security
+            </a>
+            <a
+              href="#payments"
+              className={activeTab === "payments" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                handleTabClick("payments");
+              }}
+            >
+              Payments
+            </a>
+            <a
+              href="#discovery"
+              className={activeTab === "discovery" ? "active" : ""}
+              onClick={(e) => {
+                e.preventDefault();
+                handleTabClick("discovery");
+              }}
+            >
+              Discovery
+            </a>
+          </div>
 
-            {/* Контент вкладок */}
-            <div className="tab-content">
-              {activeTab === "profile" && (
-                <div className="tab-pane">
-                  <div
+          {/* Контент вкладок */}
+          <div className="tab-content">
+            {activeTab === "profile" && (
+              <div className="tab-pane">
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src={profileImage}
+                    alt="Current avatar"
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "20px",
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
                     }}
-                  >
-                    <img
-                      src={profileImage}
-                      alt="Current avatar"
-                      style={{ width: "100px", borderRadius: "50%" }}
+                  />
+                  <p>Refresh the page to see your new avatar.</p>
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      id="file-upload"
+                      style={{ display: "none" }}
                     />
-                    <div>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                      />
-                      <button onClick={handleUpload}>Upload photo</button>
-                      <button onClick={handleDelete}>Delete avatar</button>
-                    </div>
+                    <label htmlFor="file-upload" className="custom-button">
+                      Select File
+                    </label>
+
+                    <button onClick={handleUpload} className="upload-button">
+                      Upload photo
+                    </button>
+                    <button onClick={handleDelete} className="delete-button">
+                      Delete avatar
+                    </button>
                   </div>
                 </div>
-              )}
-              {activeTab === "security" && (
-                <div className="tab-pane">
-                  <h2>Безопасность</h2>
-                  <p>Настройки безопасности.</p>
-                </div>
-              )}
-              {activeTab === "notifications" && (
-                <div className="tab-pane">
-                  <h2>Уведомления</h2>
-                  <p>Настройки уведомлений.</p>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+            {activeTab === "notifications" && (
+              <div className="tab-pane">
+                <h2>Безопасность</h2>
+                <p>Настройки безопасности.</p>
+              </div>
+            )}
+            {activeTab === "privacy" && (
+              <div className="tab-pane">
+                <h2>Уведомления</h2>
+                <p>Настройки уведомлений.</p>
+              </div>
+            )}
+            {activeTab === "payments" && (
+              <div className="tab-pane">
+                <h2>Уведомления</h2>
+                <p>Настройки уведомлений.</p>
+              </div>
+            )}
+            {activeTab === "discovery" && (
+              <div className="tab-pane">
+                <h2>Уведомления</h2>
+                <p>Настройки уведомлений.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

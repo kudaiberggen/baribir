@@ -5,21 +5,9 @@
   padding: 40px 20px;
 }
 
-.trending h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.trending p {
-  font-size: 1.2rem;
-  color: gray;
-  margin-bottom: 30px;
-}
-
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: minmax(200px, auto);
   gap: 20px;
 }
 
@@ -31,6 +19,7 @@
   color: white;
   display: block;
   transition: transform 0.3s ease;
+  height: 200px;
 }
 
 .grid-item:hover {
@@ -62,18 +51,4 @@
   position: absolute;
   top: 10px;
   left: 10px;
-}
-
-.large {
-  grid-column: span 2;
-  height: 250px;
-}
-
-@media (max-width: 768px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-  .large {
-    grid-column: span 1;
-  }
 }

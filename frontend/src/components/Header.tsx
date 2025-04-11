@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import Logo from "/BariB1r.svg";
-import Chat from "../assets/chat.png";
 import Notification from "../assets/notification.png";
 import "../styles/Header.css";
 
@@ -94,13 +93,6 @@ const Header: React.FC = () => {
         <div className="login-div">
           {isAuthenticated ? (
             <>
-              <NavLink to="/chat">
-                <img
-                  src={Chat}
-                  alt="Chat"
-                  style={{ width: "32px", borderRadius: "50%" }}
-                />
-              </NavLink>
               <NavLink to="/notifications">
                 <img
                   src={Notification}
@@ -116,6 +108,7 @@ const Header: React.FC = () => {
                   onClick={() => setDropdownOpen(!isDropdownOpen)}
                   style={{
                     width: "32px",
+                    height: "32px",
                     borderRadius: "50%",
                     cursor: "pointer",
                   }}

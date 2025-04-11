@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+from django.conf import settings
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -70,40 +70,45 @@ class UserInfoView(APIView):
         return Response(serializer.data)
 
 class ChangePhotoView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-
     def post(self, request):
-        file = request.FILES.get('profile_image')  # Получаем файл изображения из запроса
-        if not file:
-            return Response({"error": "No file uploaded"}, status=400)
-
-        # Сохраняем изображение
-        file_name = default_storage.save(f"profile_images/{file.name}", file)
-        file_url = default_storage.url(file_name)
-
-        # Обновляем поле profile_image у пользователя
         user = request.user
-        user.profile_image = file_url
-        user.save()
+        new_image = request.FILES.get("profile_image")
 
-        return Response({"profile_image": file_url}, status=200)
+        if not new_image:
+            return Response({"error": "No image provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Удаляем старое изображение, если оно не дефолтное
+            if user.profile_image.name != "profile_images/default.png":
+                if default_storage.exists(user.profile_image.name):
+                    default_storage.delete(user.profile_image.name)
+
+            # Сохраняем новое изображение
+            user.profile_image = new_image
+            user.save()
+
+            return Response({"message": "Profile image updated successfully."}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DeletePhotoView(APIView):
     def delete(self, request):
         user = request.user
-        image_path = user.profile_image  # Путь к изображению из базы данных
 
-        if image_path and os.path.exists(image_path):
-            # Удаляем изображение с файловой системы
-            default_storage.delete(image_path)
+        try:
+            if user.profile_image.name != "profile_images/default.png":
+                if default_storage.exists(user.profile_image.name):
+                    default_storage.delete(user.profile_image.name)
 
-            # Очищаем поле в модели пользователя
-            user.profile_image = None
+            # Назначаем дефолтную аватарку
+            user.profile_image = "profile_images/default.png"
             user.save()
 
-            return Response({"message": "Profile image deleted successfully"}, status=200)
+            return Response({"message": "Profile image reset to default."}, status=status.HTTP_200_OK)
 
-        return Response({"error": "Image not found"}, status=404)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class EventFilterView(APIView):
     def get(self, request):

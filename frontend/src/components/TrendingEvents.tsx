@@ -40,16 +40,14 @@ const events = [
 const TrendingEvents: React.FC = () => {
   return (
     <div className="trending">
-      <h2>Trending Now</h2>
-      <p>The most exciting events happening right now—don't miss out!</p>
+      <h2 style={{ fontSize: "2rem", marginBottom: "10px" }}>Trending Now</h2>
+      <p style={{ fontSize: "1.2rem", color: "gray", marginBottom: "30px" }}>
+        The most exciting events happening right now—don't miss out!
+      </p>
 
       <div className="grid-container">
         {events.map((event) => (
-          <a
-            key={event.id}
-            href={event.link}
-            className={`grid-item ${event.large ? "large" : ""}`}
-          >
+          <a key={event.id} href={event.link} className="grid-item">
             <img src={event.image} alt={event.title} />
             <div className="event-info">
               <span className="date">{event.date}</span>
