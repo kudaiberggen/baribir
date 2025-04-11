@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.core.mail import send_mail
 
-from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser
+from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings
 
 User = get_user_model()
 
@@ -117,3 +117,10 @@ class EventParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventParticipant
         fields = ['id', 'user', 'event', 'is_staff']
+
+
+class UserSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSettings
+        fields = '__all__'
+        read_only_fields = ['user']
