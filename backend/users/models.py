@@ -11,6 +11,8 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, blank=False, null=False)
     first_name = models.CharField(max_length=150, blank=False, null=False)
     last_name = models.CharField(max_length=150, blank=False, null=False)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
     link_telegram = models.CharField(max_length=255, null=True, blank=True)
     link_instagram = models.CharField(max_length=255, null=True, blank=True)
     link_whatsapp = models.CharField(max_length=255, null=True, blank=True)
@@ -153,7 +155,8 @@ class Review(models.Model):
     )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='reviews'
     )
 
@@ -186,3 +189,34 @@ class UserSettings(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s settings"
+
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ("remind_registered_events", "Reminder for Registered Events"),
+        ("personalized_recommendations", "Personalized Recommendations"),
+        ("platform_news", "Platform News and Updates"),
+        ("trending_events_in_city", "Trending Events in Your City"),
+        ("interest_based_recommendations", "Recommendations Based on Your Interests"),
+        ("birthday_greetings", "Birthday and Holiday Greetings"),
+        ("event_changes", "Notifications about Event Changes"),
+        ("new_messages", "New Messages from Organizers or Participants"),
+        ("upcoming_event_reminders", "Reminders for Upcoming Events"),
+        ("someone_interested_in_event", "Someone is Interested in Your Event"),
+        ("event_time_or_location_changes", "Event Date, Time, or Location Changes"),
+        ("exclusive_promotions", "Exclusive Deals and Promotions"),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications")
+    type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    url = models.URLField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_type_display()}"
+
+    class Meta:
+        ordering = ["-created_at"]

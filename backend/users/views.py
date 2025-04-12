@@ -10,10 +10,11 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Category, Event, EventParticipant, UserSettings
+from .models import Category, Event, EventParticipant, UserSettings, Interest
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
-    EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer
+    EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
+    InterestSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -185,3 +186,17 @@ class UserSettingsView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         settings, created = UserSettings.objects.get_or_create(user=self.request.user)
         return settings
+
+
+class GetCategoriesView(APIView):
+    def get(self, request):
+        categories = Category.objects.filter(parent=None)
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+
+
+class GetInterestsView(APIView):
+    def get(self, request):
+        interests = Interest.objects.filter(parent=None)
+        serializer = InterestSerializer(interests, many=True)
+        return Response(serializer.data)

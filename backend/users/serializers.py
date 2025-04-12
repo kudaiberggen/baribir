@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.core.mail import send_mail
 
-from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings
+from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest
 
 User = get_user_model()
 
@@ -124,3 +124,26 @@ class UserSettingsSerializer(serializers.ModelSerializer):
         model = UserSettings
         fields = '__all__'
         read_only_fields = ['user']
+
+class CategorySerializer(serializers.ModelSerializer):
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'code', 'parent', 'children']
+
+    def get_children(self, obj):
+        children = obj.children.all()
+        return CategorySerializer(children, many=True).data if children else []
+
+
+class InterestSerializer(serializers.ModelSerializer):
+    sub_interests = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Interest
+        fields = ['id', 'name', 'code', 'category', 'parent', 'sub_interests']
+
+    def get_sub_interests(self, obj):
+        sub_interests = obj.sub_interests.all()
+        return InterestSerializer(sub_interests, many=True).data if sub_interests else []
