@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.core.mail import send_mail
 
-from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest
+from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest, Notification
 
 User = get_user_model()
 
@@ -147,3 +147,9 @@ class InterestSerializer(serializers.ModelSerializer):
     def get_sub_interests(self, obj):
         sub_interests = obj.sub_interests.all()
         return InterestSerializer(sub_interests, many=True).data if sub_interests else []
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
