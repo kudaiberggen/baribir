@@ -10,11 +10,11 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Category, Event, EventParticipant, UserSettings, Interest
+from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
-    InterestSerializer
+    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -185,6 +185,21 @@ class UserSettingsView(generics.RetrieveUpdateAPIView):
         return settings
 
 
+class UserSettingsUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserWithSettingsSerializer(request.user)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserWithSettingsSerializer(instance=request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class GetCategoriesView(APIView):
     def get(self, request):
         categories = Category.objects.filter(parent=None)
@@ -196,4 +211,23 @@ class GetInterestsView(APIView):
     def get(self, request):
         interests = Interest.objects.filter(parent=None)
         serializer = InterestSerializer(interests, many=True)
+        return Response(serializer.data)
+
+class GetNotificationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        settings = getattr(user, 'settings', None)
+        print(settings)
+        if not settings:
+            return Response([])
+
+        allowed_types = [
+            key for key, enabled in vars(settings).items()
+            if key in dict(Notification.NOTIFICATION_TYPES) and enabled
+        ]
+
+        notifications = Notification.objects.filter(user=user, type__in=allowed_types)
+        serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)

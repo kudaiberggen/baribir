@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.core.mail import send_mail
 
-from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest
+from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest, Notification
 
 User = get_user_model()
 
@@ -125,6 +125,31 @@ class UserSettingsSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['user']
 
+
+class UserWithSettingsSerializer(serializers.ModelSerializer):
+    settings = UserSettingsSerializer()
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'first_name', 'last_name', 'email', 'phone', 'city', 'address',
+            'link_telegram', 'link_instagram', 'link_whatsapp', 'profile_image',
+            'settings',
+        ]
+
+    def update(self, instance, validated_data):
+        settings_data = validated_data.pop('settings', {})
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        user_settings = instance.settings
+        for attr, value in settings_data.items():
+            setattr(user_settings, attr, value)
+        user_settings.save()
+
+        return instance
+
 class CategorySerializer(serializers.ModelSerializer):
     children = serializers.SerializerMethodField()
 
@@ -147,3 +172,9 @@ class InterestSerializer(serializers.ModelSerializer):
     def get_sub_interests(self, obj):
         sub_interests = obj.sub_interests.all()
         return InterestSerializer(sub_interests, many=True).data if sub_interests else []
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
