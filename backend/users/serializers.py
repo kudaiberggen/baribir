@@ -77,15 +77,17 @@ class EventCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos']
+        fields = [
+            'title', 'description', 'date', 'city', 'address',
+            'author', 'category', 'photos', 'is_free', 'price',
+            'contact_email', 'contact_phone'
+        ]
 
     def create(self, validated_data):
         photos = validated_data.pop("photos", [])
         event = Event.objects.create(**validated_data)
-
         for photo in photos:
             EventPhoto.objects.create(event=event, image=photo)
-
         return event
 
 class EventSerializer(serializers.ModelSerializer):

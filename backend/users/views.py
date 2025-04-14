@@ -143,11 +143,16 @@ class EventParticipantsByEventView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class EventCreateView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = EventCreateSerializer(data=request.data)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data.copy()
+        data['author'] = request.user.id  # автоматически вставляем автора
+
+        serializer = EventCreateSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             event = serializer.save()
-            return Response({"id": str(event.id)}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Event created", "event_id": event.id}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EventViewSet(viewsets.ModelViewSet):

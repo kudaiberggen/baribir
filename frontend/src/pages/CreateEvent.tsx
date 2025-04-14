@@ -5,10 +5,10 @@ import UploadIcon from "../assets/upload-icon.png";
 import "../styles/CreateEvent.css";
 
 const categories = [
+  "Tech & IT",
   "Food & Drinks",
   "Fashion",
   "Sport",
-  "Tech & IT",
   "Entertainment",
   "Culture & Arts",
   "Music",
@@ -40,7 +40,7 @@ const CreateEvent: React.FC = () => {
     address: "",
     category: "",
     price: "",
-    photos: [] as File[],
+    photos: [],
     isFree: false,
     contactEmail: "",
     contactPhone: "",
@@ -62,15 +62,10 @@ const CreateEvent: React.FC = () => {
     setFormData({ ...formData, description: e.target.value });
   };
 
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: "main" | "additional"
-  ) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      if (type === "main") {
-        setFormData({ ...formData, photos: files });
-      }
+      setFormData({ ...formData, photos: files });
     }
   };
 
@@ -78,7 +73,18 @@ const CreateEvent: React.FC = () => {
     e.preventDefault();
 
     if (!selectedDate) {
-      alert("Please select a date before submitting.");
+      alert("Please select a date.");
+      return;
+    }
+
+    if (!formData.photos || formData.photos.length < 3) {
+      alert("Please upload at least 3 photos.");
+      return;
+    }
+
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Missing access token.");
       return;
     }
 
@@ -93,26 +99,18 @@ const CreateEvent: React.FC = () => {
     if (payload.city) formDataToSend.append("city", payload.city);
     if (payload.address) formDataToSend.append("address", payload.address);
     if (payload.category)
-      formDataToSend.append("category", Number(payload.category).toString());
-    if (payload.isFree !== undefined)
-      formDataToSend.append("isFree", payload.isFree.toString());
+      formDataToSend.append("category", String(payload.category));
+    if (payload.price && !payload.isFree)
+      formDataToSend.append("price", payload.price);
+    formDataToSend.append("isFree", String(payload.isFree));
     if (payload.contactEmail)
       formDataToSend.append("contactEmail", payload.contactEmail);
     if (payload.contactPhone)
       formDataToSend.append("contactPhone", payload.contactPhone);
-
-    payload.photos?.forEach((file) => {
-      formDataToSend.append("photos", file);
-    });
-
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      alert("Missing access token.");
-      return;
-    }
+    payload.photos?.forEach((file) => formDataToSend.append("photos", file));
 
     try {
-      const response = await fetch("http://localhost:8000/event/create/", {
+      const response = await fetch("http://localhost:8000/api/event/create/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -122,14 +120,29 @@ const CreateEvent: React.FC = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Event created!");
+        alert("Event created successfully!");
         console.log(data);
+        // Очистить форму
+        setFormData({
+          title: "",
+          description: "",
+          date: "",
+          city: "",
+          address: "",
+          category: "",
+          price: "",
+          photos: [],
+          isFree: false,
+          contactEmail: "",
+          contactPhone: "",
+        });
+        setSelectedDate(null);
       } else {
-        alert("Failed to create event");
-        console.error(data);
+        alert(`Failed to create event: ${data?.detail || "Unknown error"}`);
       }
-    } catch (err) {
-      console.error("Error:", err);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while creating the event.");
     }
   };
 
@@ -203,7 +216,14 @@ const CreateEvent: React.FC = () => {
               JPEG, PNG formats, up to 50MB
             </p>
             <span className="browse-button">Browse File</span>
-            <input type="file" id="file-upload" style={{ display: "none" }} />
+            <input
+              type="file"
+              id="file-upload"
+              style={{ display: "none" }}
+              accept="image/png, image/jpeg"
+              multiple
+              onChange={handleFileChange}
+            />
           </label>
         </div>
         <div className="form-row" style={{ marginTop: "10px" }}>
@@ -214,10 +234,7 @@ const CreateEvent: React.FC = () => {
                 name="category"
                 value={formData.category}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    category: parseInt(e.target.value),
-                  })
+                  setFormData({ ...formData, category: e.target.value })
                 }
                 required
               >
@@ -239,7 +256,7 @@ const CreateEvent: React.FC = () => {
 
             <DatePicker
               selected={selectedDate}
-              onChange={(date: Date | null) => setSelectedDate(date)}
+              onChange={setSelectedDate}
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
@@ -257,6 +274,7 @@ const CreateEvent: React.FC = () => {
           value={formData.price}
           onChange={handleInputChange}
           placeholder="Enter price (₸)"
+          disabled={formData.isFree}
           style={{ width: "580px" }}
         />
         <label className="checkbox-container">
