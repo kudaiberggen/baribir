@@ -14,7 +14,7 @@ from .models import Category, Event, EventParticipant, UserSettings, Interest, N
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
-    InterestSerializer, NotificationSerializer
+    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -186,6 +186,21 @@ class UserSettingsView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         settings, created = UserSettings.objects.get_or_create(user=self.request.user)
         return settings
+
+
+class UserSettingsUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserWithSettingsSerializer(request.user)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserWithSettingsSerializer(instance=request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetCategoriesView(APIView):
