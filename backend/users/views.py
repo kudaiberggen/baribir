@@ -80,12 +80,10 @@ class ChangePhotoView(APIView):
             return Response({"error": "No image provided."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Удаляем старое изображение, если оно не дефолтное
             if user.profile_image.name != "profile_images/default.png":
                 if default_storage.exists(user.profile_image.name):
                     default_storage.delete(user.profile_image.name)
 
-            # Сохраняем новое изображение
             user.profile_image = new_image
             user.save()
 
@@ -103,7 +101,6 @@ class DeletePhotoView(APIView):
                 if default_storage.exists(user.profile_image.name):
                     default_storage.delete(user.profile_image.name)
 
-            # Назначаем дефолтную аватарку
             user.profile_image = "profile_images/default.png"
             user.save()
 

@@ -78,8 +78,9 @@
 }
 
 .custom-datepicker {
-  width: 100%;
+  width: 280px;
   padding: 10px 12px;
+  margin: 0;
   border: 1px solid #9a77b7;
   border-radius: 8px;
   font-size: 14px;
@@ -127,6 +128,7 @@
 .custom-select-wrapper select {
   width: 100%;
   padding: 10px 40px 10px 10px;
+  margin: 0;
   border: 1px solid #d3d3d3;
   font-size: 14px;
   border-radius: 6px;

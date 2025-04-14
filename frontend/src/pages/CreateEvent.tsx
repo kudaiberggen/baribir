@@ -179,7 +179,7 @@ const CreateEvent: React.FC = () => {
           />
         </div>
         <h2 style={{ marginBottom: "10px", fontSize: "24px" }}>Add photos</h2>
-        <p style={{ fontSize: "16px", color: "#8C8C8C" }}>
+        <p style={{ fontSize: "16px", color: "#8C8C8C", margin: "0 0 15px 0" }}>
           Upload at least 3 photos
         </p>
         <div className="upload-card">
@@ -206,62 +206,50 @@ const CreateEvent: React.FC = () => {
             <input type="file" id="file-upload" style={{ display: "none" }} />
           </label>
         </div>
-        <h2 style={{ marginBottom: "10px", fontSize: "24px" }}>Category</h2>
-        <div className="custom-select-wrapper">
-          <select
-            name="category"
-            value={formData.category}
-            onChange={(e) =>
-              setFormData({ ...formData, category: parseInt(e.target.value) })
-            }
-            required
-          >
-            <option value="" disabled>
-              Select Category
-            </option>
-            {categories.map((cat, index) => (
-              <option key={index} value={index + 1}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-        <h2 style={{ marginBottom: "10px", fontSize: "24px" }}>
-          Date and Time
-        </h2>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            border: "2px dashed #d3d3d3",
-            borderRadius: "12px",
-            padding: "32px",
-            maxWidth: "800px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-          }}
-        >
-          <label
-            style={{
-              marginBottom: "12px",
-              fontSize: "20px",
-              fontWeight: "600",
-            }}
-          >
-            Select Date & Time
-          </label>
+        <div className="form-row" style={{ marginTop: "10px" }}>
+          <div style={{ width: "100%" }}>
+            <h2 style={{ marginBottom: "15px", fontSize: "24px" }}>Category</h2>
+            <div className="custom-select-wrapper">
+              <select
+                name="category"
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    category: parseInt(e.target.value),
+                  })
+                }
+                required
+              >
+                <option value="" disabled>
+                  Select Category
+                </option>
+                {categories.map((cat, index) => (
+                  <option key={index} value={index + 1}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div style={{ width: "100%" }}>
+            <h2 style={{ marginBottom: "15px", fontSize: "24px" }}>
+              Date and Time
+            </h2>
 
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date: Date | null) => setSelectedDate(date)}
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            dateFormat="dd.MM.yyyy HH:mm"
-            placeholderText="Select date and time"
-            className="custom-datepicker"
-          />
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date: Date | null) => setSelectedDate(date)}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="dd.MM.yyyy HH:mm"
+              placeholderText="Select date and time"
+              className="custom-datepicker"
+            />
+          </div>
         </div>
+
         <h2 style={{ marginBottom: "10px", fontSize: "24px" }}>Price</h2>
         <input
           type="number"
@@ -281,22 +269,22 @@ const CreateEvent: React.FC = () => {
           The event is free, no ticket purchase is required.
         </label>
         <h2 style={{ marginBottom: "10px", fontSize: "24px" }}>Contacts</h2>
-        <input
-          type="email"
-          name="contactEmail"
-          value={formData.contactEmail}
-          onChange={handleInputChange}
-          placeholder="Contact Email"
-          style={{ width: "580px" }}
-        />
-        <input
-          type="tel"
-          name="contactPhone"
-          value={formData.contactPhone}
-          onChange={handleInputChange}
-          placeholder="Contact Phone"
-          style={{ width: "580px" }}
-        />
+        <div className="form-row">
+          <input
+            type="email"
+            name="contactEmail"
+            value={formData.contactEmail}
+            onChange={handleInputChange}
+            placeholder="Contact Email"
+          />
+          <input
+            type="tel"
+            name="contactPhone"
+            value={formData.contactPhone}
+            onChange={handleInputChange}
+            placeholder="Contact Phone"
+          />
+        </div>
 
         <button type="submit" className="create-event-btn">
           Create event
