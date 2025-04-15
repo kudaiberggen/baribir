@@ -19,3 +19,12 @@ section {
   flex-direction: row;
   padding: 30px 30px;
 }
+
+.event-cards {
+  display: flex;
+  width: 100%;
+}
+
+.event-card {
+  width: 25%;
+}

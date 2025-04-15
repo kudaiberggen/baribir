@@ -147,6 +147,68 @@ const MyProfile = () => {
           </div>
           <div>
             <h2 style={{ fontSize: "32px" }}>Events attended</h2>
+            <div className="event-cards">
+              <div className="event-card">
+                <img
+                  src={Phone}
+                  alt="Card"
+                  style={{ borderRadius: "8px", width: "100%" }}
+                />
+                <h3>«Гарри Поттер и Философский Камень»</h3>
+                <p>
+                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
+                  Central Stand up club, ул.Кабанбай Батыра, 71
+                </p>
+              </div>
+              <div className="event-card">
+                <img
+                  src={Phone}
+                  alt="Card"
+                  style={{ borderRadius: "8px", width: "100%" }}
+                />
+                <h3>«Гарри Поттер и Философский Камень»</h3>
+                <p>
+                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
+                  Central Stand up club, ул.Кабанбай Батыра, 71
+                </p>
+              </div>
+              <div className="event-card">
+                <img
+                  src={Phone}
+                  alt="Card"
+                  style={{ borderRadius: "8px", width: "100%" }}
+                />
+                <h3>«Гарри Поттер и Философский Камень»</h3>
+                <p>
+                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
+                  Central Stand up club, ул.Кабанбай Батыра, 71
+                </p>
+              </div>
+              <div className="event-card">
+                <img
+                  src={Phone}
+                  alt="Card"
+                  style={{ borderRadius: "8px", width: "100%" }}
+                />
+                <h3>«Гарри Поттер и Философский Камень»</h3>
+                <p>
+                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
+                  Central Stand up club, ул.Кабанбай Батыра, 71
+                </p>
+              </div>
+              <div className="event-card">
+                <img
+                  src={Phone}
+                  alt="Card"
+                  style={{ borderRadius: "8px", width: "100%" }}
+                />
+                <h3>«Гарри Поттер и Философский Камень»</h3>
+                <p>
+                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
+                  Central Stand up club, ул.Кабанбай Батыра, 71
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
