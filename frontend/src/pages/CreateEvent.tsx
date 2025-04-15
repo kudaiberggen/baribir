@@ -122,7 +122,7 @@ const CreateEvent: React.FC = () => {
       if (response.ok) {
         alert("Event created successfully!");
         console.log(data);
-        // Очистить форму
+
         setFormData({
           title: "",
           description: "",

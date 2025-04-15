@@ -116,8 +116,15 @@ const Settings: React.FC = () => {
       <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
       <div className="mysettings-container">
         <AccountSettingsLinks />
-        <div style={{ width: "80%" }}>
-          <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>Settings</h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            width: "82%",
+          }}
+        >
+          <h2 style={{ margin: "15px 0 15px", fontSize: "32px" }}>Settings</h2>
           <div className="tabs">
             <a
               href="#profile"

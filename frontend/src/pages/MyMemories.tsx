@@ -7,8 +7,17 @@ const MyMemories = () => {
       <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
       <div className="mymemories-container">
         <AccountSettingsLinks />
-        <div style={{ width: "80%" }}>
-          <h2 style={{ marginLeft: "20px", fontSize: "24px" }}>My Memories</h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            width: "82%",
+          }}
+        >
+          <h2 style={{ margin: "15px 0 15px", fontSize: "32px" }}>
+            My Memories
+          </h2>
           <div className="memories-container"></div>
         </div>
       </div>
