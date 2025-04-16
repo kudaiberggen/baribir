@@ -111,3 +111,44 @@ section {
   justify-content: center;
   align-items: center;
 }
+
+.notifications-row {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  padding: 20px;
+  margin: 0;
+}
+
+.notifications-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+}
+
+.notifications-column h2 {
+  margin: 0;
+}
+
+.notifications-column p {
+  margin-top: 10px;
+  line-height: 1.3rem;
+  color: #a5a5a5;
+}
+
+.notification-button {
+  padding: 10px 40px;
+  margin-bottom: 50px;
+  border: none;
+  background-color: #411666;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.notification-button:hover {
+  background-color: #37184f;
+}

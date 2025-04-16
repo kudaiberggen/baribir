@@ -215,8 +215,105 @@ const Settings: React.FC = () => {
             )}
             {activeTab === "notifications" && (
               <div className="tab-pane">
-                <h2>Безопасность</h2>
-                <p>Настройки безопасности.</p>
+                <div className="notifications-row">
+                  <div className="notifications-column">
+                    <h2>SMS Notifications</h2>
+                    <p>
+                      📌 System updates may take up <br />
+                      to 24 hours after unsubscribing, <br />
+                      during which you may still receive messages.
+                    </p>
+                  </div>
+                  <div className="notifications-column">
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Reminders for registered events
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Personalized event recommendations
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Platform news and updates
+                    </label>
+                  </div>
+                </div>
+                <hr
+                  style={{
+                    width: "60%",
+                    border: "none",
+                    borderTop: "1px solid #e0e0e0",
+                    margin: "0",
+                  }}
+                />
+                <div className="notifications-row">
+                  <div className="notifications-column">
+                    <h2>Email Subscriptions</h2>
+                    <p>Select the types of emails you want to receive:</p>
+                  </div>
+                  <div className="notifications-column">
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Trending events in your city
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Event recommendations based on your interests
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Birthday and holiday greetings
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Notifications about event changes (rescheduling,
+                      cancellations, etc.)
+                    </label>
+                  </div>
+                </div>
+                <hr
+                  style={{
+                    width: "60%",
+                    border: "none",
+                    borderTop: "1px solid #e0e0e0",
+                    margin: "0",
+                  }}
+                />
+                <div className="notifications-row">
+                  <div className="notifications-column">
+                    <h2>Push Notifications</h2>
+                    <p>
+                      Instant alerts about important updates and <br />
+                      events
+                    </p>
+                  </div>
+                  <div className="notifications-column">
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      New messages from organizers or participants
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Reminders for upcoming events
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Someone is interested in your event
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Event date, time, or location changes
+                    </label>
+                    <label className="checkbox-container">
+                      <input type="checkbox" name="checkbox" />
+                      Exclusive deals and promotions
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" className="notification-button">
+                  Save changes
+                </button>
               </div>
             )}
             {activeTab === "privacy" && (
