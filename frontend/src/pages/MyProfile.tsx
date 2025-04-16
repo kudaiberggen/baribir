@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AccountSettingsLinks from "../components/AccountSettingsLinks";
 import "../styles/MyProfile.css";
-import Phone from "../assets/phone.png";
-import EmailProfile from "../assets/email_profile.png";
+import Phone from "../assets/myprofile/phone.png";
+import EmailProfile from "../assets/myprofile/email.png";
 
 const MyProfile = () => {
   const [profileImage, setProfileImage] = useState<string>(() => {
@@ -13,6 +13,8 @@ const MyProfile = () => {
   });
 
   const [favoriteEvents, setFavoriteEvents] = useState([]);
+  const [showMoreEvents, setShowMoreEvents] = useState(false);
+  const [showMoreFavorites, setShowMoreFavorites] = useState(false);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -201,7 +203,56 @@ const MyProfile = () => {
           <div>
             <h2 style={{ fontSize: "32px" }}>Events attended</h2>
             <div className="event-cards">
-              {events.map((event, index) => (
+              {(showMoreEvents ? events : events.slice(0, 4)).map(
+                (event, index) => (
+                  <div className="event-card" key={index}>
+                    <div style={{ position: "relative" }}>
+                      <img
+                        src={event.image}
+                        alt="Card"
+                        style={{
+                          borderRadius: "12px",
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "10px",
+                          left: "10px",
+                          backgroundColor: "#411666",
+                          color: "#fff",
+                          padding: "5px 10px",
+                          borderRadius: "20px",
+                          fontSize: "14px",
+                          zIndex: 2,
+                        }}
+                      >
+                        {event.category}
+                      </div>
+                    </div>
+                    <h3>{event.title}</h3>
+                    <p style={{ color: "#ABABAB" }}>{event.description}</p>
+                  </div>
+                )
+              )}
+            </div>
+            {events.length > 4 && (
+              <button
+                onClick={() => setShowMoreEvents(!showMoreEvents)}
+                className="show-more-button"
+              >
+                {showMoreEvents ? "Show less" : "Show more"}
+              </button>
+            )}
+            <h2 style={{ fontSize: "32px" }}>Favorites</h2>
+            {/* <div className="event-cards">
+              {(showMoreFavorites
+                ? favoriteEvents
+                : favoriteEvents.slice(0, 4)
+              ).map((event, index) => (
                 <div className="event-card" key={index}>
                   <div style={{ position: "relative" }}>
                     <img
@@ -234,46 +285,15 @@ const MyProfile = () => {
                   <p style={{ color: "#ABABAB" }}>{event.description}</p>
                 </div>
               ))}
-            </div>
-            <h2 style={{ fontSize: "32px" }}>Favorites</h2>
-            {/* <div className="event-cards">
-              {favoriteEvents.map((event, index) => (
-                <div
-                  className="event-card"
-                  key={index}
-                  style={{ position: "relative" }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      left: "10px",
-                      backgroundColor: "#411666",
-                      color: "#fff",
-                      padding: "5px 10px",
-                      borderRadius: "20px",
-                      fontSize: "14px",
-                      zIndex: 2,
-                    }}
-                  >
-                    {event.category}
-                  </div>
-
-                  <img
-                    src={event.image}
-                    alt="Card"
-                    style={{
-                      borderRadius: "12px",
-                      width: "100%",
-                      objectFit: "cover",
-                      height: "200px",
-                    }}
-                  />
-                  <h3>{event.title}</h3>
-                  <p>{event.description}</p>
-                </div>
-              ))}
             </div> */}
+            {favoriteEvents.length > 4 && (
+              <button
+                onClick={() => setShowMoreFavorites(!showMoreFavorites)}
+                className="show-more-button"
+              >
+                {showMoreFavorites ? "Show less" : "Show more"}
+              </button>
+            )}
           </div>
         </div>
       </div>

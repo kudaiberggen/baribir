@@ -12,8 +12,6 @@ import Login from "../src/pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import MyProfile from "./pages/MyProfile";
 import MyEvents from "./pages/MyEvents";
-import MyMemories from "./pages/MyMemories";
-import Favorites from "./pages/Favorites";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
 
@@ -33,8 +31,6 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/my-events" element={<MyEvents />} />
-          <Route path="/my-memories" element={<MyMemories />} />
-          <Route path="/favorites" element={<Favorites />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import "../styles/Contact.css";
-import Email from "../assets/email.png";
-import Whatsapp from "../assets/whatsapp.png";
-import Instagram from "../assets/instagram.png";
-import TikTok from "../assets/tiktok.png";
-import Boy from "../assets/boy.png";
-import QuestionMark from "../assets/questionmark.png";
+import Email from "../assets/contact/email.png";
+import Whatsapp from "../assets/footer/whatsapp.png";
+import Instagram from "../assets/footer/instagram.png";
+import TikTok from "../assets/footer/tiktok.png";
+import Boy from "../assets/contact/boy.png";
+import QuestionMark from "../assets/contact/questionmark.png";
 import FAQ from "../components/FAQ";
 
 const Contact = () => {

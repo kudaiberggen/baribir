@@ -1,59 +1,59 @@
 import React, { useEffect, useRef } from "react";
 import "../styles/Testimonials.css";
-import scroll1 from "../assets/scroll1.jpg";
-import scroll2 from "../assets/scroll2.jpg";
-import scroll3 from "../assets/scroll3.jpg";
-import scroll4 from "../assets/scroll4.jpg";
-import scroll5 from "../assets/scroll5.jpg";
-import scroll6 from "../assets/scroll6.jpg";
+import review1 from "../assets/home/review1.jpg";
+import review2 from "../assets/home/review2.jpg";
+import review3 from "../assets/home/review3.jpg";
+import review4 from "../assets/home/review4.jpg";
+import review5 from "../assets/home/review5.jpg";
+import review6 from "../assets/home/review6.jpg";
 
 const testimonials = [
   {
     id: 1,
-    name: "Anna Mitchell",
-    role: "Manager",
+    name: "Rakhimov Asanali",
+    role: "Financier",
     text: "Bar1b1r turned my weekends into real adventures! I've met so many great people.",
-    image: scroll1,
+    image: review1,
     rating: 5,
   },
   {
     id: 2,
-    name: "John Doe",
-    role: "Designer",
+    name: "Melisov Airkhan",
+    role: "Metallurgist",
     text: "Great experience! This platform connects amazing people with unique events.",
-    image: scroll2,
+    image: review2,
     rating: 4,
   },
   {
     id: 3,
-    name: "Emily Carter",
-    role: "Photographer",
-    text: "I love the variety of events and the ease of meeting new friends!",
-    image: scroll3,
+    name: "Kusainova Ulzhan",
+    role: "Businesswoman",
+    text: "I love the variety of events and the ease of meeting new friends! Keep up the good work guys!",
+    image: review3,
     rating: 5,
   },
   {
     id: 4,
-    name: "Michael Smith",
-    role: "Entrepreneur",
-    text: "The community aspect is amazing! I've never felt so welcomed!",
-    image: scroll4,
+    name: "Raisov Maksat",
+    role: "Dentist",
+    text: "The community aspect is amazing! Looking forward to new events with new people.",
+    image: review4,
     rating: 5,
   },
   {
     id: 5,
-    name: "Sophia Lee",
-    role: "Writer",
+    name: "Orynbasarov Dastan",
+    role: "Student",
     text: "A perfect place to connect with like-minded people and make memories!",
-    image: scroll5,
+    image: review5,
     rating: 5,
   },
   {
     id: 6,
-    name: "David Brown",
-    role: "Musician",
-    text: "Amazing platform with a lot of opportunities to explore!",
-    image: scroll6,
+    name: "Nurlanova Saya",
+    role: "Psychologist",
+    text: "Amazing platform with a lot of opportunities to explore! I hope you will make an app in the future.",
+    image: review6,
     rating: 5,
   },
 ];

@@ -10,12 +10,6 @@ const AccountSettingsLinks: React.FC = () => {
       <NavLink to="/my-events" className="account-links">
         My Events
       </NavLink>
-      <NavLink to="/my-memories" className="account-links">
-        My Memories
-      </NavLink>
-      <NavLink to="/favorites" className="account-links">
-        Favorites
-      </NavLink>
       <NavLink to="/friends" className="account-links">
         Friends
       </NavLink>

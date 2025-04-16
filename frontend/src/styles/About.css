@@ -5,10 +5,11 @@ section {
 .about-image {
   display: flex;
   color: white;
+  height: 250px;
   font-size: 40px;
   justify-content: center;
   align-items: center;
-  background-image: url("../assets/microphone.png");
+  background-image: url("../assets/about/microphone.png");
 }
 
 .aboutus-div {

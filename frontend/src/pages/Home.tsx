@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
-import Concert from "../assets/concert-image.png";
-import Magnifier from "../assets/magnifier.png";
-import Handshake from "../assets/handshake.png";
-import Ticket from "../assets/ticket.png";
-import SmallLoupe from "../assets/smallloupe.png";
-import Calendar from "../assets/calendar.png";
-import Book from "../assets/book.png";
+import Concert from "../assets/home/concert.png";
+import Magnifier from "../assets/home/magnifier.png";
+import Handshake from "../assets/home/handshake.png";
+import Ticket from "../assets/home/ticket.png";
+import SmallLoupe from "../assets/home/smallloupe.png";
+import Calendar from "../assets/home/calendar.png";
+import Book from "../assets/home/book.png";
 import TrendingEvents from "../components/TrendingEvents";
 import Testimonials from "../components/Testimonials";
 

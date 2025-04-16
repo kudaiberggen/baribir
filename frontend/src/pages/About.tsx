@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Friends from "../assets/friends.jpg";
-import YesVector from "../assets/yes-vector.png";
+import Friends from "../assets/about/friends.jpg";
+import YesVector from "../assets/about/yes-vector.png";
 import "../styles/About.css";
 
 const About = () => {

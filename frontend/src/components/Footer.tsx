@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import "../styles/Footer.css";
-import WhiteLogo from "../assets/BariB1r-white.png";
-import AppStore from "../assets/appstore.png";
-import GooglePLay from "../assets/googleplay.png";
-import Instagram from "../assets/instagram.png";
-import Telegram from "../assets/telegram.png";
-import Whatsapp from "../assets/whatsapp.png";
-import Tiktok from "../assets/tiktok.png";
+import FooterLogo from "../assets/footer/footer-logo.png";
+import AppStore from "../assets/footer/appstore.png";
+import GooglePLay from "../assets/footer/googleplay.png";
+import Instagram from "../assets/footer/instagram.png";
+import Telegram from "../assets/footer/telegram.png";
+import Whatsapp from "../assets/footer/whatsapp.png";
+import Tiktok from "../assets/footer/tiktok.png";
 
 const Footer = () => {
   return (
@@ -14,7 +14,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-left">
           <img
-            src={WhiteLogo}
+            src={FooterLogo}
             alt="Company Logo"
             style={{ width: "160px", margin: "50px auto 10px" }}
           />

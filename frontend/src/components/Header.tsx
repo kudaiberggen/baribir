@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import Logo from "/BariB1r.svg";
-import Notification from "../assets/notification.png";
+import Notification from "../assets/header/notification.png";
 import "../styles/Header.css";
 
 const Header: React.FC = () => {
@@ -120,12 +120,6 @@ const Header: React.FC = () => {
                     </NavLink>
                     <NavLink to="/my-events" className="dropdown-item">
                       My Events
-                    </NavLink>
-                    <NavLink to="/my-memories" className="dropdown-item">
-                      My Memories
-                    </NavLink>
-                    <NavLink to="/favorites" className="dropdown-item">
-                      Favorites
                     </NavLink>
                     <NavLink to="/friends" className="dropdown-item">
                       Friends
