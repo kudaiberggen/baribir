@@ -11,7 +11,6 @@ const Favorites = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             width: "82%",
           }}
         >

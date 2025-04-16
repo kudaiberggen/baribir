@@ -12,6 +12,60 @@ const MyProfile = () => {
     );
   });
 
+  const [favoriteEvents, setFavoriteEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch("/api/favorites");
+        const data = await response.json();
+        setFavoriteEvents(data);
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  const events = [
+    {
+      title: "«Гарри Поттер и Философский Камень»",
+      description:
+        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
+      image: Phone,
+      category: "Кино",
+    },
+    {
+      title: "«Гарри Поттер и Философский Камень»",
+      description:
+        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
+      image: Phone,
+      category: "Стендап",
+    },
+    {
+      title: "«Гарри Поттер и Философский Камень»",
+      description:
+        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
+      image: Phone,
+      category: "Стендап",
+    },
+    {
+      title: "«Гарри Поттер и Философский Камень»",
+      description:
+        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
+      image: Phone,
+      category: "Стендап",
+    },
+    {
+      title: "«Гарри Поттер и Философский Камень»",
+      description:
+        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
+      image: Phone,
+      category: "Стендап",
+    },
+  ];
+
   return (
     <section>
       <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
@@ -21,7 +75,6 @@ const MyProfile = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             width: "82%",
           }}
         >
@@ -148,67 +201,79 @@ const MyProfile = () => {
           <div>
             <h2 style={{ fontSize: "32px" }}>Events attended</h2>
             <div className="event-cards">
-              <div className="event-card">
-                <img
-                  src={Phone}
-                  alt="Card"
-                  style={{ borderRadius: "8px", width: "100%" }}
-                />
-                <h3>«Гарри Поттер и Философский Камень»</h3>
-                <p>
-                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
-                  Central Stand up club, ул.Кабанбай Батыра, 71
-                </p>
-              </div>
-              <div className="event-card">
-                <img
-                  src={Phone}
-                  alt="Card"
-                  style={{ borderRadius: "8px", width: "100%" }}
-                />
-                <h3>«Гарри Поттер и Философский Камень»</h3>
-                <p>
-                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
-                  Central Stand up club, ул.Кабанбай Батыра, 71
-                </p>
-              </div>
-              <div className="event-card">
-                <img
-                  src={Phone}
-                  alt="Card"
-                  style={{ borderRadius: "8px", width: "100%" }}
-                />
-                <h3>«Гарри Поттер и Философский Камень»</h3>
-                <p>
-                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
-                  Central Stand up club, ул.Кабанбай Батыра, 71
-                </p>
-              </div>
-              <div className="event-card">
-                <img
-                  src={Phone}
-                  alt="Card"
-                  style={{ borderRadius: "8px", width: "100%" }}
-                />
-                <h3>«Гарри Поттер и Философский Камень»</h3>
-                <p>
-                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
-                  Central Stand up club, ул.Кабанбай Батыра, 71
-                </p>
-              </div>
-              <div className="event-card">
-                <img
-                  src={Phone}
-                  alt="Card"
-                  style={{ borderRadius: "8px", width: "100%" }}
-                />
-                <h3>«Гарри Поттер и Философский Камень»</h3>
-                <p>
-                  4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty
-                  Central Stand up club, ул.Кабанбай Батыра, 71
-                </p>
-              </div>
+              {events.map((event, index) => (
+                <div className="event-card" key={index}>
+                  <div style={{ position: "relative" }}>
+                    <img
+                      src={event.image}
+                      alt="Card"
+                      style={{
+                        borderRadius: "12px",
+                        width: "100%",
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        left: "10px",
+                        backgroundColor: "#411666",
+                        color: "#fff",
+                        padding: "5px 10px",
+                        borderRadius: "20px",
+                        fontSize: "14px",
+                        zIndex: 2,
+                      }}
+                    >
+                      {event.category}
+                    </div>
+                  </div>
+                  <h3>{event.title}</h3>
+                  <p style={{ color: "#ABABAB" }}>{event.description}</p>
+                </div>
+              ))}
             </div>
+            <h2 style={{ fontSize: "32px" }}>Favorites</h2>
+            {/* <div className="event-cards">
+              {favoriteEvents.map((event, index) => (
+                <div
+                  className="event-card"
+                  key={index}
+                  style={{ position: "relative" }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      left: "10px",
+                      backgroundColor: "#411666",
+                      color: "#fff",
+                      padding: "5px 10px",
+                      borderRadius: "20px",
+                      fontSize: "14px",
+                      zIndex: 2,
+                    }}
+                  >
+                    {event.category}
+                  </div>
+
+                  <img
+                    src={event.image}
+                    alt="Card"
+                    style={{
+                      borderRadius: "12px",
+                      width: "100%",
+                      objectFit: "cover",
+                      height: "200px",
+                    }}
+                  />
+                  <h3>{event.title}</h3>
+                  <p>{event.description}</p>
+                </div>
+              ))}
+            </div> */}
           </div>
         </div>
       </div>

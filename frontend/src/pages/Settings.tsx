@@ -120,7 +120,6 @@ const Settings: React.FC = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             width: "82%",
           }}
         >
