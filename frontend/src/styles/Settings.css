@@ -147,3 +147,116 @@
 .notification-button:hover {
   background-color: #37184f;
 }
+
+.privacy-content {
+  background-color: white;
+  width: 60%;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.privacy-content h3 {
+  font-size: 20px;
+  color: #202020;
+  margin: 15px 0 15px;
+}
+
+.privacy-content p {
+  font-size: 16px;
+  color: #ababab;
+  margin: 0 0 10px 0;
+}
+
+.privacy-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.privacy-row input {
+  padding: 10px;
+  width: 40%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.privacy-row input:focus {
+  outline: none;
+}
+
+.password-update-button {
+  width: 20%;
+  padding: 10px;
+  margin: 0;
+  border: none;
+  background-color: #4a2562;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.password-update-button:hover {
+  background-color: #3a1d4d;
+}
+
+.privacy-toggle-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.privacy-toggle-wrapper input:checked + .slider {
+  background-color: #26c165;
+}
+
+.privacy-toggle-wrapper input:checked + .slider:before {
+  transform: translateX(20px);
+}

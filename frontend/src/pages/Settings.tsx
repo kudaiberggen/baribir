@@ -5,6 +5,7 @@ import ProfileForm from "../components/ProfileForm";
 
 const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
+  const [isPrivate, setIsPrivate] = useState(true);
   const [profileImage, setProfileImage] = useState<string>(
     "/media/profile_images/default.png"
   );
@@ -110,6 +111,7 @@ const Settings: React.FC = () => {
   };
 
   const handleTabClick = (tab: string) => setActiveTab(tab);
+  const togglePrivacy = () => setIsPrivate((prev) => !prev);
 
   return (
     <section>
@@ -318,8 +320,70 @@ const Settings: React.FC = () => {
             )}
             {activeTab === "privacy" && (
               <div className="tab-pane">
-                <h2>Уведомления</h2>
-                <p>Настройки уведомлений.</p>
+                <div className="privacy-content">
+                  <h3>Account Details</h3>
+                  <hr
+                    style={{
+                      width: "100%",
+                      border: "none",
+                      borderTop: "1px solid #e0e0e0",
+                      margin: "0",
+                    }}
+                  />
+                  <h3>Update Password</h3>
+                  <p>Change your Password to update & protect your Account.</p>
+                  <div className="privacy-row">
+                    <input type="text" placeholder="New Password" />
+                    <input type="text" placeholder="Confirm Password" />
+                    <button type="submit" className="password-update-button">
+                      Update
+                    </button>
+                  </div>
+                </div>
+                <div className="privacy-content">
+                  <div className="privacy-toggle-wrapper">
+                    <h3>Private account</h3>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={isPrivate}
+                        onChange={togglePrivacy}
+                      />
+                      <span className="slider round"></span>
+                    </label>
+                  </div>
+                  <p>
+                    When your account is public, your profile page can be seen
+                    by anyone who use <br />
+                    this application.
+                  </p>
+                  <p>
+                    When your account is private, only the friends that you add
+                    can see what you share, <br />
+                    including your events and favorites.
+                  </p>
+                </div>
+                <div className="privacy-content">
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div>
+                      <h3>Deactivate Account</h3>
+                      <p>
+                        This will shut down your account. And it will reactivate
+                        with Signing in.
+                      </p>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        margin: "0 0 0 50px",
+                      }}
+                    >
+                      <button className="delete-button">Deactivate</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
             {activeTab === "payments" && (
