@@ -5,7 +5,8 @@ import ProfileForm from "../components/ProfileForm";
 
 const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
-  const [isPrivate, setIsPrivate] = useState(true);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [isAdult, setIsAdult] = useState(false);
   const [profileImage, setProfileImage] = useState<string>(
     "/media/profile_images/default.png"
   );
@@ -112,6 +113,7 @@ const Settings: React.FC = () => {
 
   const handleTabClick = (tab: string) => setActiveTab(tab);
   const togglePrivacy = () => setIsPrivate((prev) => !prev);
+  const toggleAdult = () => setIsAdult((prev) => !prev);
 
   return (
     <section>
@@ -394,8 +396,22 @@ const Settings: React.FC = () => {
             )}
             {activeTab === "discovery" && (
               <div className="tab-pane">
-                <h2>Уведомления</h2>
-                <p>Настройки уведомлений.</p>
+                <div className="privacy-content">
+                  <div className="privacy-toggle-wrapper">
+                    <h3>Show adult content</h3>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={isAdult}
+                        onChange={toggleAdult}
+                      />
+                      <span className="slider round"></span>
+                    </label>
+                  </div>
+                  <p>
+                    Includes 18+ events like parties, art performances, etc.
+                  </p>
+                </div>
               </div>
             )}
           </div>
