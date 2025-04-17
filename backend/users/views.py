@@ -155,6 +155,28 @@ class EventCreateView(APIView):
             return Response({"message": "Event created", "event_id": event.id}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class SubscribeToEventView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        event_id = request.data.get("event_id")
+
+        if not event_id:
+            return Response({"error": "event_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if EventParticipant.objects.filter(user=request.user, event=event).exists():
+            return Response({"message": "Already subscribed to this event."}, status=status.HTTP_200_OK)
+
+        EventParticipant.objects.create(user=request.user, event=event)
+        return Response({"message": "Successfully subscribed to the event."}, status=status.HTTP_201_CREATED)
+
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer

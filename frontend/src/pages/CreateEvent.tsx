@@ -7,7 +7,6 @@ import "../styles/CreateEvent.css";
 const categories = [
   "Tech & IT",
   "Food & Drinks",
-  "Fashion",
   "Sport",
   "Entertainment",
   "Culture & Arts",
