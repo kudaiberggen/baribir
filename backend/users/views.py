@@ -114,11 +114,12 @@ class EventFilterView(APIView):
         date = request.GET.get('date')
         category_code = request.GET.get('category')
         interests = request.GET.getlist('interests')
+        cities = request.GET.getlist('city')
 
         filters = Q()
 
         if date:
-            filters &= Q(date=date)
+            filters &= Q(date__date=date)
 
         if category_code:
             try:
@@ -130,6 +131,12 @@ class EventFilterView(APIView):
 
         if interests:
             filters &= Q(category__name__in=interests)
+
+        if not cities:
+            if request.user.is_authenticated and request.user.city:
+                cities = [request.user.city]
+        if cities:
+            filters &= Q(city__in=cities)
 
         events = Event.objects.filter(filters).distinct()
         serializer = EventSerializer(events, many=True)

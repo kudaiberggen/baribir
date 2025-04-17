@@ -110,15 +110,19 @@ class EventPhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EventPhoto
-        fields = ['id', 'event', 'name', 'image', 'created_at', 'is_main']
+        fields = ['id', 'event', 'image']
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'city', 'profile_image']
 
 class EventParticipantSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
-    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+    user = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = EventParticipant
-        fields = ['id', 'user', 'event', 'is_staff']
+        fields = ['id', 'user', 'is_staff']
 
 
 class UserSettingsSerializer(serializers.ModelSerializer):
