@@ -1,11 +1,29 @@
-section {
-  font-family: Poppins, sans-serif;
-  background: linear-gradient(to top, rgba(128, 0, 128, 0.05) 20%, white 95%);
-}
-
 .myevents-container {
   display: flex;
   flex-direction: row;
   background-color: #ffff;
   margin: 0 20px;
+}
+
+.myevents-tabs {
+  margin: 10px 0;
+}
+
+.myevents-tabs a {
+  text-decoration: none;
+  color: #000000;
+  padding: 10px 20px;
+  margin: 0 10px 0 0;
+  border-radius: 8px;
+  position: relative;
+  background-color: #eee9ff;
+}
+
+.myevents-tabs a.myevents-active {
+  color: #ffff;
+  background-color: #411666;
+}
+
+.myevents-tab-pane {
+  animation: fadeIn 0.3s ease-in-out;
 }

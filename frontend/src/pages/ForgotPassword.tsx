@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "/BariB1r.svg";
-import "../styles/ForgotPassword.css";
+import "../styles/Auth.css";
 
 const ForgotPassword = () => {
   const [username, setUsername] = useState("");
