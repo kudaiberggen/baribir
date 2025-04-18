@@ -113,11 +113,10 @@
 }
 
 .features-text {
-  max-width: 450px;
+  width: 280px;
   background: white;
   padding: 20px;
   border-radius: 15px;
-
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
@@ -144,11 +143,11 @@
 }
 
 .feature-card {
+  text-align: left;
   background: white;
-  padding: 20px;
+  padding: 25px;
   border-radius: 15px;
   width: 280px;
-  text-align: center;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
@@ -159,7 +158,7 @@
 
 .icon {
   background: #e9dcff;
-  border-radius: 50%;
+  border-radius: 12px;
   width: 60px;
   height: 60px;
   display: flex;
@@ -167,51 +166,10 @@
   justify-content: center;
   font-size: 24px;
   color: #411666;
-  margin: 0 auto 15px;
+  margin-bottom: 15px;
 }
 
 .icon img {
   height: 36px;
   width: 36px;
-}
-
-.readytostart {
-  position: relative;
-  margin: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.readycontent {
-  text-align: center;
-  color: black;
-  padding: 30px 100px;
-  border-radius: 50px;
-  background: #eee9ff;
-}
-
-.readycontent a {
-  font-size: 16px;
-  font-weight: 500;
-  text-decoration: none;
-  background-color: white;
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 24px;
-  color: #411666;
-  border-radius: 6px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.readycontent a:hover {
-  background-color: #411666;
-  color: white;
-  transition: 0.2s ease-in-out;
-}
-
-.small-p {
-  font-size: 12px;
-  color: #646464;
 }

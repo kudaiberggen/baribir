@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import Concert from "../assets/home/concert.png";
-import Magnifier from "../assets/home/magnifier.png";
-import Handshake from "../assets/home/handshake.png";
-import Ticket from "../assets/home/ticket.png";
-import SmallLoupe from "../assets/home/smallloupe.png";
-import Calendar from "../assets/home/calendar.png";
-import Book from "../assets/home/book.png";
+import Magnifier from "../assets/home/magnifier.svg";
+import Handshake from "../assets/home/handshake.svg";
+import Ticket from "../assets/home/ticket.svg";
+import Search from "../assets/home/search.svg";
+import Calendar from "../assets/home/calendar.svg";
+import Book from "../assets/home/book.svg";
 import TrendingEvents from "../components/TrendingEvents";
 import Testimonials from "../components/Testimonials";
 
@@ -114,7 +114,7 @@ const Home = () => {
           <div className="features-cards">
             <div className="feature-card">
               <div className="icon">
-                <img src={SmallLoupe} alt="Custom Event Suggestions" />
+                <img src={Search} alt="Custom Event Suggestions" />
               </div>
 
               <h3>Custom Event Suggestions</h3>
@@ -152,20 +152,6 @@ const Home = () => {
       </div>
       <TrendingEvents />
       <Testimonials />
-      <div className="readytostart">
-        <div className="readycontent">
-          <h1>Ready to start your next adventure ?</h1>
-          <p>
-            Find an event, create your own, and meet amazing people along the
-            way!
-          </p>
-          <p className="small-p">
-            See how Bar1b1r is bringing people together through unforgettable
-            events<br></br> and shared experiences!
-          </p>
-          <Link to="/events">Get Started</Link>
-        </div>
-      </div>
     </section>
   );
 };
