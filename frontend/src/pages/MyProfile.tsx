@@ -225,7 +225,7 @@ const MyProfile = () => {
                           backgroundColor: "#411666",
                           color: "#fff",
                           padding: "5px 10px",
-                          borderRadius: "20px",
+                          borderRadius: "12px",
                           fontSize: "14px",
                           zIndex: 2,
                         }}

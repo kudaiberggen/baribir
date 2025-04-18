@@ -92,7 +92,7 @@ class EventCreateSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=False, allow_null=True)
+    category = serializers.CharField(source='category.name', default=None, allow_null=True)
     photos = serializers.SerializerMethodField()
 
     class Meta:
