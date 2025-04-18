@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, EventCreateView, EventViewSet, \
     UserInfoView, ChangePhotoView, DeletePhotoView, UserSettingsView, GetCategoriesView, GetInterestsView, \
-    GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView
+    GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView, AttendedEventsView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -15,6 +15,7 @@ urlpatterns = [
     path('change-photo/', ChangePhotoView.as_view(), name='change-photo'),
     path('delete-photo/', DeletePhotoView.as_view(), name='delete-photo'),
     path('events/', EventFilterView.as_view(), name='filtered-events'),
+    path('events/attended/', AttendedEventsView.as_view(), name='attended-events'),
     path('event/create/', EventCreateView.as_view(), name='event-create'),
     path('event/subscribe/', SubscribeToEventView.as_view(), name='event-subscribe'),
     path('event/<uuid:event_id>/participants/', EventParticipantsByEventView.as_view(), name='event-participants'),

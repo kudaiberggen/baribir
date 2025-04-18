@@ -142,6 +142,21 @@ class EventFilterView(APIView):
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
+
+class AttendedEventsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        now = timezone.now()
+
+        participated_event_ids = EventParticipant.objects.filter(user=user).values_list('event_id', flat=True)
+        past_events = Event.objects.filter(id__in=participated_event_ids, date__lt=now)
+
+        serializer = EventSerializer(past_events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class EventParticipantsByEventView(APIView):
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
