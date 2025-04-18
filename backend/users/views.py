@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification
+from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
@@ -182,6 +182,24 @@ class AttendedEventsView(APIView):
         past_events = Event.objects.filter(id__in=participated_event_ids, date__lt=now)
 
         serializer = EventSerializer(past_events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class MyCreatedEventsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        events = Event.objects.filter(author=user)
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserCreatedEventsView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(CustomUser, id=user_id)
+        events = Event.objects.filter(author=user)
+        serializer = EventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
