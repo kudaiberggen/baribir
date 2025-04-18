@@ -5,6 +5,22 @@ import "../styles/MyEvents.css";
 const MyEvents = () => {
   const [activeTab, setActiveTab] = useState<string>("myevents");
   const handleTabClick = (tab: string) => setActiveTab(tab);
+  const [myEvents, setMyEvents] = useState([]);
+  const [showMoreMyevents, setShowMoreMyevents] = useState(false);
+
+  useEffect(() => {
+    const fetchMyEvents = async () => {
+      try {
+        const response = await fetch("/api/myevents");
+        const data = await response.json();
+        setMyEvents(data);
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
+    };
+
+    fetchMyEvents();
+  }, []);
 
   return (
     <section>
@@ -47,8 +63,51 @@ const MyEvents = () => {
           <div className="myevents-tab-content">
             {activeTab === "myevents" && (
               <div className="myevents-tab-pane">
-                <h2>Уведомления</h2>
-                <p>Настройки уведомлений.</p>
+                {/* <div className="event-cards">
+                  {(showMoreMyevents ? myEvents : myEvents.slice(0, 4)).map(
+                    (event, index) => (
+                      <div className="event-card" key={index}>
+                        <div style={{ position: "relative" }}>
+                          <img
+                            src={event.image}
+                            alt="Card"
+                            style={{
+                              borderRadius: "12px",
+                              width: "100%",
+                              height: "200px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: "10px",
+                              left: "10px",
+                              backgroundColor: "#411666",
+                              color: "#fff",
+                              padding: "5px 10px",
+                              borderRadius: "20px",
+                              fontSize: "14px",
+                              zIndex: 2,
+                            }}
+                          >
+                            {event.category}
+                          </div>
+                        </div>
+                        <h3>{event.title}</h3>
+                        <p style={{ color: "#ABABAB" }}>{event.description}</p>
+                      </div>
+                    )
+                  )}
+                </div> */}
+                {myEvents.length > 4 && (
+                  <button
+                    onClick={() => setShowMoreMyevents(!showMoreMyevents)}
+                    className="show-more-button"
+                  >
+                    {showMoreMyevents ? "Show less" : "Show more"}
+                  </button>
+                )}
               </div>
             )}
             {activeTab === "upcomingevents" && (

@@ -6,6 +6,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework import status, views, generics, permissions, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
@@ -63,6 +64,33 @@ class PasswordResetView(APIView):
             response_data = serializer.send_temporary_password()
             return Response(response_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get("current_password")
+        new_password = request.data.get("new_password")
+        confirm_password = request.data.get("confirm_password")
+
+        if not user.check_password(current_password):
+            return Response({"error": "Incorrect current password"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if new_password != confirm_password:
+            return Response({"error": "Passwords do not match"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({"success": "Password updated successfully"}, status=status.HTTP_200_OK)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deactivate_account(request):
+    user = request.user
+    user.is_active = False
+    user.save()
+    return Response({"success": "Account deactivated."}, status=status.HTTP_200_OK)
     
 class UserInfoView(APIView):
     permission_classes = [IsAuthenticated]

@@ -11,6 +11,9 @@ const Settings: React.FC = () => {
     "/media/profile_images/default.png"
   );
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     fetch("/api/user-info/", {
@@ -39,6 +42,7 @@ const Settings: React.FC = () => {
         if (data.profile_image) {
           setProfileImage(data.profile_image);
         }
+        setIsPrivate(data.settings?.private_account || false);
       })
       .catch((err) =>
         console.error("Ошибка при загрузке изображения профиля:", err)
@@ -108,6 +112,77 @@ const Settings: React.FC = () => {
     } catch (error) {
       console.error("Delete error:", error);
       alert("Error while deleting avatar");
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("Please fill in all password fields.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("New passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/change-password/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        body: JSON.stringify({
+          current_password: currentPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.success || "Password changed successfully");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        alert(data.error || "Failed to change password");
+      }
+    } catch (error) {
+      console.error("Password change error:", error);
+      alert("Something went wrong.");
+    }
+  };
+
+  const handleDeactivateAccount = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to deactivate your account?"
+    );
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch("/api/deactivate-account/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.success || "Account deactivated successfully");
+        localStorage.clear();
+        window.location.href = "/login";
+      } else {
+        alert(data.error || "Failed to deactivate account");
+      }
+    } catch (error) {
+      console.error("Deactivate error:", error);
+      alert("Something went wrong.");
     }
   };
 
@@ -335,9 +410,29 @@ const Settings: React.FC = () => {
                   <h3>Update Password</h3>
                   <p>Change your Password to update & protect your Account.</p>
                   <div className="privacy-row">
-                    <input type="text" placeholder="New Password" />
-                    <input type="text" placeholder="Confirm Password" />
-                    <button type="submit" className="password-update-button">
+                    <input
+                      type="password"
+                      placeholder="Current Password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                    />
+                    <input
+                      type="password"
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm New Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="password-update-button"
+                      onClick={handlePasswordChange}
+                    >
                       Update
                     </button>
                   </div>
@@ -382,7 +477,12 @@ const Settings: React.FC = () => {
                         margin: "0 0 0 50px",
                       }}
                     >
-                      <button className="delete-button">Deactivate</button>
+                      <button
+                        className="delete-button"
+                        onClick={handleDeactivateAccount}
+                      >
+                        Deactivate
+                      </button>
                     </div>
                   </div>
                 </div>
