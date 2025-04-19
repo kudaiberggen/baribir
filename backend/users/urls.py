@@ -4,7 +4,7 @@ from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, 
     UserInfoView, ChangePhotoView, DeletePhotoView, UserSettingsView, GetCategoriesView, GetInterestsView, \
     GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView, \
     AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView, \
-    FriendRecommendationsAPIView, InterestRecommendationView
+    FriendRecommendationsAPIView, InterestRecommendationView, FriendListView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -30,6 +30,7 @@ urlpatterns = [
     path('notifications/', GetNotificationsView.as_view(), name='get-notifications'),
     path('profile/my-events/', MyCreatedEventsView.as_view(), name='my-created-events'),
     path('user/<int:user_id>/created-events/', UserCreatedEventsView.as_view(), name='user-created-events'),
+    path('friends/', FriendListView.as_view(), name='friend-list'),
     path('friends/recommendations/', FriendRecommendationsAPIView.as_view(), name='friend-recommendations'),
     path('friends/recommendations/by-interest', InterestRecommendationView.as_view(), name='friends-recommendations/by-interest'),
     path('', include(router.urls)),

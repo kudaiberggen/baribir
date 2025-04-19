@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser
+from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser, UserFriend
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
@@ -345,4 +345,18 @@ class InterestRecommendationView(APIView):
     def get(self, request):
         recommendations = get_recommendations_by_interests(request.user)
         serializer = CustomUserSerializer(recommendations, many=True)
+        return Response(serializer.data)
+
+
+class FriendListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        friends = UserFriend.objects.filter(user=user)
+
+        friend_users = [friend.friend for friend in friends]
+        serializer = CustomUserSerializer(friend_users, many=True)
+
         return Response(serializer.data)
