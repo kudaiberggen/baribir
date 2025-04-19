@@ -10,6 +10,7 @@ def get_friend_recommendations(user: CustomUser):
         .exclude(id__in=friend_ids)
         .exclude(id=user.id)
         .exclude(is_superuser=True)
+        .exclude(is_active=False)
         .annotate(
             common_count=Count('friends', filter=Q(friends__in=friend_ids))
         )
@@ -25,6 +26,7 @@ def get_friend_recommendations(user: CustomUser):
         .exclude(id__in=common_friends_ids)
         .exclude(id=user.id)
         .exclude(is_superuser=True)
+        .exclude(is_active=False)
         .filter(city=user.city)
     )
 
@@ -42,6 +44,7 @@ def get_recommendations_by_interests(user: CustomUser):
         .exclude(id=user.id)
         .exclude(id__in=friend_ids)
         .exclude(is_superuser=True)
+        .exclude(is_active=False)
         .annotate(
             common_interests_count=Count(
                 'interests',
