@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
     link_telegram = models.CharField(max_length=255, null=True, blank=True)
     link_instagram = models.CharField(max_length=255, null=True, blank=True)
     link_whatsapp = models.CharField(max_length=255, null=True, blank=True)
+    interests = models.ManyToManyField('Interest', related_name='users', blank=True)
     profile_image = models.ImageField(
         upload_to="profile_images/",
         default="profile_images/default.png",  

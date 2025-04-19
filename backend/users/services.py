@@ -31,3 +31,26 @@ def get_friend_recommendations(user: CustomUser):
     combined = list(chain(common_friends, same_city))[:20]
 
     return combined
+
+
+def get_recommendations_by_interests(user: CustomUser):
+    friend_ids = UserFriend.objects.filter(user=user).values_list('friend_id', flat=True)
+    user_interest_ids = user.interests.values_list('id', flat=True)
+
+    users_with_common_interests = (
+        CustomUser.objects
+        .exclude(id=user.id)
+        .exclude(id__in=friend_ids)
+        .exclude(is_superuser=True)
+        .annotate(
+            common_interests_count=Count(
+                'interests',
+                filter=Q(interests__in=user_interest_ids),
+                distinct=True
+            )
+        )
+        .filter(common_interests_count__gt=0)
+        .order_by('-common_interests_count')[:20]
+    )
+
+    return users_with_common_interests

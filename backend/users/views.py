@@ -19,7 +19,7 @@ from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSeria
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .services import get_friend_recommendations
+from .services import get_friend_recommendations, get_recommendations_by_interests
 
 User = get_user_model()
 
@@ -335,5 +335,14 @@ class FriendRecommendationsAPIView(APIView):
 
     def get(self, request):
         recommendations = get_friend_recommendations(request.user)
+        serializer = CustomUserSerializer(recommendations, many=True)
+        return Response(serializer.data)
+
+
+class InterestRecommendationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        recommendations = get_recommendations_by_interests(request.user)
         serializer = CustomUserSerializer(recommendations, many=True)
         return Response(serializer.data)

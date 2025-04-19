@@ -111,11 +111,19 @@ class EventPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventPhoto
         fields = ['id', 'event', 'image']
+class InterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interest
+        fields = ['id', 'name', 'code']
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    interests = InterestSerializer(many=True)  # Сериализация интересов
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'city', 'profile_image']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'city', 'profile_image', 'interests']
+
 
 class EventParticipantSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
