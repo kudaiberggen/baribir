@@ -174,6 +174,20 @@ class EventFilterView(APIView):
         return Response(serializer.data)
 
 
+class DeleteEventView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+
+        if event.author != request.user:
+            return Response({"detail": "You do not have permission to delete this event."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        event.delete()
+        return Response({"detail": "Event deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+
 class AttendedEventsView(APIView):
     permission_classes = [IsAuthenticated]
 
