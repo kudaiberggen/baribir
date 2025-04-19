@@ -143,16 +143,14 @@ const MyEvents = () => {
                             <h3 style={{ color: "#202020", margin: "10px 0" }}>
                               {event.title}
                             </h3>
-                            <p style={{ color: "#202020", margin: "4px 0" }}>
-                              <strong>Location:</strong> {event.city},{" "}
-                              {event.address}
+                            <p style={{ color: "#ABABAB", margin: "4px 0" }}>
+                              {event.city}, {event.address}
                             </p>
-                            <p style={{ color: "#202020", margin: "4px 0" }}>
-                              <strong>Date:</strong>{" "}
+                            <p style={{ color: "#ABABAB", margin: "4px 0" }}>
                               {formatDateTime(event.date)}
                             </p>
-                            <p style={{ color: "#202020", margin: "4px 0" }}>
-                              <strong>Price:</strong> {formatPrice(event.price)}
+                            <p style={{ color: "#ABABAB", margin: "4px 0" }}>
+                              {formatPrice(event.price)}
                             </p>
                           </div>
                         )

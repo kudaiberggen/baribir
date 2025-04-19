@@ -17,8 +17,8 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .newsletter {
@@ -64,8 +64,9 @@ footer {
 
 .socialmedia-div {
   display: flex;
+  margin: 0 -3px;
   max-width: 200px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -85,10 +86,14 @@ footer {
   width: 24px;
 }
 
+.app-buttons {
+  margin-left: -3px;
+}
+
 .app-buttons img {
   width: 120px;
   height: 120px;
-  margin: -30px auto;
+  margin: -30px 5px -30px 0;
 }
 
 .footer-right {
@@ -113,7 +118,7 @@ footer {
 
 .footer-column {
   margin: 0 50px;
-  text-align: center;
+  text-align: left;
 }
 
 .footer-column a {

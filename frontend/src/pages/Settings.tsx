@@ -234,26 +234,6 @@ const Settings: React.FC = () => {
             >
               Privacy and Security
             </a>
-            <a
-              href="#payments"
-              className={activeTab === "payments" ? "active" : ""}
-              onClick={(e) => {
-                e.preventDefault();
-                handleTabClick("payments");
-              }}
-            >
-              Payments
-            </a>
-            <a
-              href="#discovery"
-              className={activeTab === "discovery" ? "active" : ""}
-              onClick={(e) => {
-                e.preventDefault();
-                handleTabClick("discovery");
-              }}
-            >
-              Discovery
-            </a>
           </div>
 
           {/* Контент вкладок */}
@@ -461,6 +441,22 @@ const Settings: React.FC = () => {
                   </p>
                 </div>
                 <div className="privacy-content">
+                  <div className="privacy-toggle-wrapper">
+                    <h3>Show adult content</h3>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={isAdult}
+                        onChange={toggleAdult}
+                      />
+                      <span className="slider round"></span>
+                    </label>
+                  </div>
+                  <p>
+                    Includes 18+ events like parties, art performances, etc.
+                  </p>
+                </div>
+                <div className="privacy-content">
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div>
                       <h3>Deactivate Account</h3>
@@ -485,32 +481,6 @@ const Settings: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                </div>
-              </div>
-            )}
-            {activeTab === "payments" && (
-              <div className="tab-pane">
-                <h2>Уведомления</h2>
-                <p>Настройки уведомлений.</p>
-              </div>
-            )}
-            {activeTab === "discovery" && (
-              <div className="tab-pane">
-                <div className="privacy-content">
-                  <div className="privacy-toggle-wrapper">
-                    <h3>Show adult content</h3>
-                    <label className="switch">
-                      <input
-                        type="checkbox"
-                        checked={isAdult}
-                        onChange={toggleAdult}
-                      />
-                      <span className="slider round"></span>
-                    </label>
-                  </div>
-                  <p>
-                    Includes 18+ events like parties, art performances, etc.
-                  </p>
                 </div>
               </div>
             )}

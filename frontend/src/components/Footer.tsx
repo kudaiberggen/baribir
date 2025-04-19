@@ -16,7 +16,7 @@ const Footer = () => {
           <img
             src={FooterLogo}
             alt="Company Logo"
-            style={{ width: "160px", margin: "50px auto 10px" }}
+            style={{ width: "160px", margin: "50px 0 10px" }}
           />
           <p style={{ fontSize: "16px", fontWeight: "400", opacity: "0.85" }}>
             Find events, meet like-minded people,<br></br> and turn moments into
@@ -46,7 +46,7 @@ const Footer = () => {
           </div>
           <p
             style={{
-              margin: "10px auto 30px",
+              margin: "10px 0 30px",
               lineHeight: "16px",
               fontSize: "12px",
               opacity: "0.8",
@@ -59,7 +59,7 @@ const Footer = () => {
         <div className="footer-right">
           <div className="footer-column-div">
             <div className="footer-column">
-              <h3 style={{ fontSize: "24px", marginBottom: "12px" }}>
+              <h3 style={{ fontSize: "24px", margin: " 0 0 12px" }}>
                 Overview
               </h3>
               <Link to="/">Home</Link>
@@ -68,7 +68,7 @@ const Footer = () => {
               <Link to="/contact">Contact us</Link>
             </div>
             <div className="footer-column">
-              <h3 style={{ fontSize: "24px", marginBottom: "12px" }}>
+              <h3 style={{ fontSize: "24px", margin: " 0 0 12px" }}>
                 Contacts
               </h3>
               <Link to="/contact#faq">FAQ</Link>

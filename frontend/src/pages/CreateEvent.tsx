@@ -8,11 +8,11 @@ const categories = [
   "Tech & IT",
   "Food & Drinks",
   "Sport",
-  "Entertainment",
+  "Entertainment & Media",
   "Culture & Arts",
   "Music",
-  "Social & Volunteering",
-  "Education",
+  "Community & Impact",
+  "Learning & Growth",
   "Travel & Adventure",
 ];
 

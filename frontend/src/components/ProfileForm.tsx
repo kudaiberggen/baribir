@@ -75,12 +75,7 @@ const ProfileForm: React.FC = () => {
       </div>
       <div className="form-row">
         <input type="text" placeholder="Phone number" />
-        <input type="text" placeholder="Education" />
-      </div>
-      <div className="form-row">
-        <input type="text" placeholder="Day" />
-        <input type="text" placeholder="Month" />
-        <input type="text" placeholder="Year" />
+        <input type="date" placeholder="Birthday" />
       </div>
 
       <h3 style={{ marginBottom: "10px" }}>Choose your interests</h3>
