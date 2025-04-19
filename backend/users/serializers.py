@@ -192,3 +192,29 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+
+
+class CustomUserUpdateSerializer(serializers.ModelSerializer):
+    interests = serializers.ListField(
+        child=serializers.CharField(), required=False
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'bio', 'gender', 'city', 'email', 'phone', 'birthday', 'interests']
+
+    def update(self, instance, validated_data):
+        interests_data = validated_data.pop('interests', [])
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if interests_data:
+            interest_objs = []
+            for name in interests_data:
+                interest_obj, created = Interest.objects.get_or_create(name__iexact=name.strip(), defaults={'name': name.strip()})
+                interest_objs.append(interest_obj)
+            instance.interests.set(interest_objs)
+
+        return instance

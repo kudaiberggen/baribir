@@ -15,7 +15,8 @@ from .models import Category, Event, EventParticipant, UserSettings, Interest, N
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
-    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer, CustomUserSerializer
+    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer, CustomUserSerializer, \
+    CustomUserUpdateSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -360,3 +361,16 @@ class FriendListView(APIView):
         serializer = CustomUserSerializer(friend_users, many=True)
 
         return Response(serializer.data)
+
+
+class ProfileUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        serializer = CustomUserUpdateSerializer(
+            request.user, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Profile updated successfully."})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
