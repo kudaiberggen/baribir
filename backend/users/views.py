@@ -15,9 +15,11 @@ from .models import Category, Event, EventParticipant, UserSettings, Interest, N
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
-    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer
+    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer, CustomUserSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from .services import get_friend_recommendations
 
 User = get_user_model()
 
@@ -325,4 +327,13 @@ class GetNotificationsView(APIView):
 
         notifications = Notification.objects.filter(user=user, type__in=allowed_types)
         serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+class FriendRecommendationsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        recommendations = get_friend_recommendations(request.user)
+        serializer = CustomUserSerializer(recommendations, many=True)
         return Response(serializer.data)

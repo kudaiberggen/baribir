@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, EventCreateView, EventViewSet, \
     UserInfoView, ChangePhotoView, DeletePhotoView, UserSettingsView, GetCategoriesView, GetInterestsView, \
     GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView, \
-    AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView
+    AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView, \
+    FriendRecommendationsAPIView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -29,5 +30,6 @@ urlpatterns = [
     path('notifications/', GetNotificationsView.as_view(), name='get-notifications'),
     path('profile/my-events/', MyCreatedEventsView.as_view(), name='my-created-events'),
     path('user/<int:user_id>/created-events/', UserCreatedEventsView.as_view(), name='user-created-events'),
+    path('friend-recommendations/', FriendRecommendationsAPIView.as_view(), name='friend-recommendations'),
     path('', include(router.urls)),
 ]
