@@ -7,7 +7,7 @@ import Ticket from "../assets/home/ticket.svg";
 import Search from "../assets/home/search.svg";
 import Calendar from "../assets/home/calendar.svg";
 import Book from "../assets/home/book.svg";
-import TrendingEvents from "../components/TrendingEvents";
+import PurpleYes from "../assets/home/purple-yes.png";
 import Testimonials from "../components/Testimonials";
 
 const Home = () => {
@@ -150,7 +150,90 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <TrendingEvents />
+      <div className="build-div">
+        <div className="build-left"></div>
+        <div className="build-right">
+          <h1 style={{ fontSize: "50px", margin: "10px 0" }}>
+            Build Your Own <br />
+            Profile
+          </h1>
+          <hr
+            style={{
+              border: "2px solid #411666",
+              width: "270px",
+              margin: "20px 0 20px",
+            }}
+          />
+          <p>
+            It helps you keep track of everything you've experienced and
+            <br />
+            everything you're excited to attend in the future.
+          </p>
+          <p>
+            <span style={{ color: "#411666", fontWeight: "bold" }}>
+              Event's Attended
+            </span>{" "}
+            - view your personal event history at any time.
+          </p>
+          <p>
+            <span style={{ color: "#411666", fontWeight: "bold" }}>
+              Favorites
+            </span>{" "}
+            - save events you don't want to miss or plan to attend.
+          </p>
+          <p>
+            <span style={{ color: "#411666", fontWeight: "bold" }}>
+              Tailored Suggestions
+            </span>{" "}
+            - get better recommendations based on your interests.
+          </p>
+          <p>
+            Simple, organized, and always with you — your profile helps <br />
+            you make the most of every event.
+          </p>
+        </div>
+      </div>
+      <div className="simple-div">
+        <div className="simple-left">
+          <h1 style={{ fontSize: "40px", margin: "10px 0" }}>
+            🎯 Find Or Host Events <br />
+            In Just A Few Steps <br />
+            We've Made It Simple:
+          </h1>
+          <hr
+            style={{
+              border: "2px solid #411666",
+              width: "300px",
+              margin: "20px 0 20px",
+            }}
+          />
+          <p>
+            You can explore events by theme, date, or location — or organize{" "}
+            <br />
+            your own in just a few clicks.
+          </p>
+          <div style={{ margin: "50px 0 30px" }}>
+            <p>
+              <img src={PurpleYes} alt="Yes" /> Browse through events that match
+              your interests.
+            </p>
+            <p>
+              <img src={PurpleYes} alt="Yes" /> Join events and add them to
+              upcoming events.
+            </p>
+            <p>
+              <img src={PurpleYes} alt="Yes" /> Host your own event with
+              easy-to-use tools.
+            </p>
+            <p>
+              <img src={PurpleYes} alt="Yes" /> Interact with other attendees
+              before and after the event.
+            </p>
+          </div>
+          <p>No complicated steps. Just meaningful moments.</p>
+        </div>
+        <div className="simple-right"></div>
+      </div>
       <Testimonials />
     </section>
   );

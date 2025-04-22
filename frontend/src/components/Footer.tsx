@@ -76,7 +76,7 @@ const Footer = () => {
               <p>baribir@gmail.com</p>
             </div>
           </div>
-          <p>
+          <p style={{ textAlign: "left", marginLeft: "-20px" }}>
             Subscribe to our newsletter for the latest events, exclusive
             <br></br>
             meetups, and special offers.
