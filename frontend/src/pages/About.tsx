@@ -69,8 +69,8 @@ const About = () => {
             </div>
             <div className="title">Build communities</div>
             <div className="description">
-              We connect like-minded individuals, helping them meet, interact,
-              and form meaningful relationships beyond a single event.
+              From casual meetups to themed gatherings, Bar1b1r brings people
+              together based on shared interests and vibes.
             </div>
           </div>
 
@@ -82,8 +82,9 @@ const About = () => {
             </div>
             <div className="title">Making cities more social</div>
             <div className="description">
-              Explore exciting events and hidden gems in your city, meet new
-              people, and enjoy unique experiences with Bar1b1r.
+              We help you explore your city in a new way—meet like-minded
+              people, discover hidden spots, and turn ordinary days into
+              something special.
             </div>
           </div>
 
@@ -93,10 +94,11 @@ const About = () => {
               <div className="line"></div>
               <div className="dot"></div>
             </div>
-            <div className="title">Keeping memories alive</div>
+            <div className="title">Inspire continuous discovery</div>
             <div className="description">
-              Save past events in My Memories to look back on great moments and
-              stay connected with the people you've met.
+              Bar1b1r is about more than one event—it's about staying curious,
+              finding new things to try, and making connections that grow over
+              time.
             </div>
           </div>
         </div>
@@ -131,10 +133,11 @@ const About = () => {
           </div>
           <div className="purple">
             <img src={YesVector} alt="Yes Vector" />
-            <h3>Memories that last</h3>
+            <h3>Always something new</h3>
             <p>
-              Save and revisit your <br />
-              favorite moments.
+              Explore fresh <br />
+              experiences and meet <br />
+              new people.
             </p>
           </div>
         </div>

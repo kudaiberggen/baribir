@@ -89,8 +89,8 @@ const Home = () => {
                   marginTop: "10px",
                 }}
               >
-                After the event, save your favorite moments in My Memories and
-                keep in touch with new friends.
+                After the event, discover more experiences and stay inspired by
+                the community around you.
               </span>
             </p>
           </div>
@@ -105,9 +105,9 @@ const Home = () => {
               Best Features <br /> For You
             </h2>
             <p className="features-description">
-              Bar1bir simplifies discovering events, connecting with like-minded
-              people, and creating unforgettable memories—all in one seamless
-              platform.
+              <span style={{ fontWeight: "bold" }}>Barib1r</span> simplifies
+              discovering events, connecting with like-minded people, and
+              creating unforgettable memories—all in one seamless platform.
             </p>
           </div>
 
@@ -119,9 +119,8 @@ const Home = () => {
 
               <h3>Custom Event Suggestions</h3>
               <p>
-                Receive personalized event recommendations based on your
-                interests, location, and past activities, ensuring you never
-                miss out on exciting opportunities.
+                Get event suggestions tailored to your interests, location, and
+                past activities so you never miss out on something exciting.
               </p>
             </div>
 
@@ -141,10 +140,10 @@ const Home = () => {
               <div className="icon">
                 <img src={Book} alt="My Memories" />
               </div>
-              <h3>My Memories</h3>
+              <h3>Stay Connected</h3>
               <p>
-                Save your favorite events, revisit past experiences, and keep
-                track of the moments that matter most.
+                Keep discovering new events and communities that match your
+                vibe—there's always more to explore.
               </p>
             </div>
           </div>

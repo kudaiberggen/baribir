@@ -10,22 +10,22 @@ const faqData = [
   {
     question: "How can I create my own event?",
     answer:
-      "Use filters such as category, location, and date to discover events that suit your preferences.",
+      "You can create your own event by clicking the 'Create Event' button located in the header and on the 'My Events' page.",
   },
   {
-    question: "Can I message other users before an event?",
+    question: "What happens after I register for an event?",
     answer:
-      "Yes! You can chat with event attendees, add friends, and stay connected with people you meet through Barib1r.",
+      "After registering for an event, it will automatically appear on your 'Upcoming Events' page. You can also cancel your registration there if you can't attend.",
   },
   {
-    question: "Can I save events I've attended?",
+    question: "How do notifications work on Bar1b1r?",
     answer:
-      "Absolutely! You can save past events in the 'My Memories' section to revisit them anytime.",
+      "Notifications keep you informed about important updates—like changes to events you've joined, friend requests, and reminders before an event starts.",
   },
   {
-    question: "How do I stay updated on upcoming events?",
+    question: "Can I add friends on Bar1b1r?",
     answer:
-      "Subscribe to our newsletter or enable notifications to get updates on new and trending events near you.",
+      "Yes! You can follow other users by clicking the Follow button on their profile. Their profile shows events they've attended, their favorites, and events they've created—so you can stay connected and explore what they're into.",
   },
   {
     question: "How do I report an issue with an event or user?",

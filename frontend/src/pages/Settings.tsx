@@ -191,7 +191,7 @@ const Settings: React.FC = () => {
   const toggleAdult = () => setIsAdult((prev) => !prev);
 
   return (
-    <section>
+    <section className="settings-section">
       <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
       <div className="mysettings-container">
         <AccountSettingsLinks />

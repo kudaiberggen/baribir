@@ -72,25 +72,25 @@ const Contact = () => {
               <a href="/">
                 <img src={Email} alt="Email" />
               </a>{" "}
-              baribir@mail.com
+              baribir.events@gmail.com
             </li>
             <li>
               <a href="/">
                 <img src={Whatsapp} alt="Whatsapp" />
               </a>{" "}
-              +7 (***) *** ****
+              +7 (775) 726 2132
             </li>
             <li>
               <a href="/">
                 <img src={Instagram} alt="Instagram" />
               </a>{" "}
-              barib1r.app
+              barib1r.events
             </li>
             <li>
               <a href="/">
                 <img src={TikTok} alt="TikTok" />
               </a>{" "}
-              barib1r.app
+              barib1r
             </li>
           </ul>
         </div>
@@ -122,7 +122,10 @@ const Contact = () => {
       <div className="faq-content">
         <div className="faq-images">
           <img src={Boy} alt="Boy" className="boy-img" />
-          <h1>Before You Contact Us, Check Our FAQ</h1>
+          <h1>
+            Before You Contact Us, Check Our{" "}
+            <span style={{ color: "#411666" }}>FAQ</span>
+          </h1>
           <img
             src={QuestionMark}
             alt="Question Mark"

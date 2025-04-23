@@ -69,7 +69,7 @@ const MyProfile = () => {
   ];
 
   return (
-    <section>
+    <section className="settings-section">
       <h1 style={{ marginLeft: "40px", fontSize: "28px" }}>Account Settings</h1>
       <div className="myprofile-container">
         <AccountSettingsLinks />
