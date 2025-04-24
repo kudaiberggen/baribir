@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import AccountSettingsLinks from "../components/AccountSettingsLinks";
 import "../styles/MyEvents.css";
 
@@ -8,6 +9,7 @@ interface EventPhoto {
 }
 
 interface EventType {
+  id: string;
   title: string;
   description: string;
   photos?: EventPhoto[];
@@ -108,51 +110,59 @@ const MyEvents = () => {
                     <div className="event-cards">
                       {(showMoreMyevents ? myEvents : myEvents.slice(0, 4)).map(
                         (event, index) => (
-                          <div className="event-card" key={index}>
-                            <div style={{ position: "relative" }}>
-                              <img
-                                src={
-                                  event.photos && event.photos.length > 0
-                                    ? `http://127.0.0.1:8000${event.photos[0].image}`
-                                    : "/default-event.jpg"
-                                }
-                                alt="Event"
-                                style={{
-                                  borderRadius: "12px",
-                                  width: "100%",
-                                  height: "200px",
-                                  objectFit: "cover",
-                                }}
-                              />
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  bottom: "10px",
-                                  left: "10px",
-                                  backgroundColor: "#411666",
-                                  color: "#fff",
-                                  padding: "5px 20px",
-                                  borderRadius: "8px",
-                                  fontSize: "14px",
-                                  zIndex: 2,
-                                }}
-                              >
-                                {event.category || "General"}
+                          <Link
+                            to={`/events/${event.id}`}
+                            key={event.id}
+                            className="event-card"
+                          >
+                            <div>
+                              <div style={{ position: "relative" }}>
+                                <img
+                                  src={
+                                    event.photos && event.photos.length > 0
+                                      ? `http://127.0.0.1:8000${event.photos[0].image}`
+                                      : "/default-event.jpg"
+                                  }
+                                  alt="Event"
+                                  style={{
+                                    borderRadius: "12px",
+                                    width: "100%",
+                                    height: "200px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    bottom: "10px",
+                                    left: "10px",
+                                    backgroundColor: "#411666",
+                                    color: "#fff",
+                                    padding: "5px 20px",
+                                    borderRadius: "8px",
+                                    fontSize: "14px",
+                                    zIndex: 2,
+                                  }}
+                                >
+                                  {event.category || "General"}
+                                </div>
                               </div>
+                              <h3
+                                style={{ color: "#202020", margin: "10px 0" }}
+                              >
+                                {event.title}
+                              </h3>
+                              <p style={{ color: "#ABABAB", margin: "4px 0" }}>
+                                {event.city}, {event.address}
+                              </p>
+                              <p style={{ color: "#ABABAB", margin: "4px 0" }}>
+                                {formatDateTime(event.date)}
+                              </p>
+                              <p style={{ color: "#ABABAB", margin: "4px 0" }}>
+                                {formatPrice(event.price)}
+                              </p>
                             </div>
-                            <h3 style={{ color: "#202020", margin: "10px 0" }}>
-                              {event.title}
-                            </h3>
-                            <p style={{ color: "#ABABAB", margin: "4px 0" }}>
-                              {event.city}, {event.address}
-                            </p>
-                            <p style={{ color: "#ABABAB", margin: "4px 0" }}>
-                              {formatDateTime(event.date)}
-                            </p>
-                            <p style={{ color: "#ABABAB", margin: "4px 0" }}>
-                              {formatPrice(event.price)}
-                            </p>
-                          </div>
+                          </Link>
                         )
                       )}
                     </div>

@@ -1,12 +1,15 @@
 .faq {
   width: 100%;
   max-width: 800px;
-  margin: 50px auto;
+  margin: 40px auto 50px;
 }
 
 .faq-item {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+
+.faq-item.active {
+  border-bottom: none;
 }
 
 .faq-question {
@@ -35,7 +38,7 @@
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
   padding: 0 15px;
-  background: #f9f9f9;
+  background: white;
   margin-top: -20px;
   margin-bottom: 20px;
   border-radius: 0 0 8px 8px;

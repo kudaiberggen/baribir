@@ -173,6 +173,18 @@ class EventFilterView(APIView):
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
+class EventDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, event_id):
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = EventSerializer(event, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class DeleteEventView(APIView):
     permission_classes = [IsAuthenticated]

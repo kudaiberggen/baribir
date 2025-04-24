@@ -1,4 +1,6 @@
+import "../styles/Events.css";
+
 const Events = () => {
-  return <div></div>;
+  return <section></section>;
 };
 export default Events;

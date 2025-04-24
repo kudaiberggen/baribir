@@ -50,7 +50,6 @@
 .how-it-works {
   text-align: center;
   padding: 50px 20px;
-  background: #f9f8ff;
   margin-bottom: 100px;
 }
 
@@ -98,8 +97,7 @@
 
 .features {
   padding: 80px 5%;
-  background-color: #fcfaff;
-  background-image: url("../assets/home/purpleline.png");
+  background-image: url("../assets/home/purpleline.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

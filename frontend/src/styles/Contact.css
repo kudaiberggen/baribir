@@ -1,3 +1,7 @@
+.bg-white {
+  background-color: white;
+}
+
 .stayconnected {
   padding: 80px 10%;
   color: white;
@@ -14,7 +18,6 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  background: #f8f8f8;
 }
 
 .contact-info {
@@ -68,9 +71,9 @@
 }
 
 .contact-form hr {
-  border: 1px solid #8978c7;
+  border: 1px solid #411666;
   width: 200px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   text-align: left;
   margin-left: 0;
 }
@@ -84,12 +87,14 @@
 .contact-form input,
 .contact-form textarea {
   max-width: 500px;
+  min-height: 30px;
+  max-height: 80px;
   padding: 10px;
-  margin: 5px 0;
+  margin: 6px 0;
   font-size: 14px;
   color: #411666;
   border: none;
-  background-color: #e7e7e7;
+  background-color: white;
   border-radius: 5px;
 }
 
@@ -109,7 +114,7 @@
   background: #4d2372;
   color: white;
   padding: 10px 15px;
-  margin: 5px 0 0;
+  margin: 10px 0 0;
   font-size: 14px;
   border: none;
   border-radius: 5px;

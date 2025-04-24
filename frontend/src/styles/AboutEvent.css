@@ -1,0 +1,165 @@
+.about-event-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 20px;
+  padding: 0 50px;
+}
+
+.about-event-main {
+  flex: 3;
+  min-width: 300px;
+}
+
+.about-event-header {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.about-event-header-background {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.about-event-header-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px 30px 40px 30px;
+}
+
+.about-event-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.about-event-category {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: white;
+  backdrop-filter: blur(4px);
+}
+
+.about-event-sidebar {
+  flex: 1;
+  width: 280px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  height: fit-content;
+  background-color: white;
+}
+
+.about-event-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-size: 18px;
+}
+
+.sidebar-title-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eee9ff;
+}
+
+.about-event-info-box img {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.sidebar-flex {
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  line-height: 1.3;
+}
+
+.sidebar-flex p {
+  margin: 5px 0;
+}
+
+.about-event-button {
+  width: 80%;
+  color: white;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.about-event-button.registration-event {
+  background-color: #411666;
+  transition: background-color 0.3s ease;
+}
+
+.about-event-button.registration-event:hover {
+  background-color: #37184f;
+}
+
+.about-event-button.delete {
+  display: inline-block;
+  border: 2px solid #f44336;
+  background-color: transparent;
+  color: #f44336;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.about-event-button.delete:hover {
+  background-color: #f44336;
+  color: white;
+  border: 2px solid #f44336;
+}
+
+.about-event-sidebar-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+}
+
+.about-event-photos {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin: 20px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.about-event-photo {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}

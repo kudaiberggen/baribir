@@ -7,6 +7,7 @@ import Events from "../src/pages/Events";
 import Contact from "../src/pages/Contact";
 import About from "../src/pages/About";
 import CreateEvent from "../src/pages/CreateEvent";
+import AboutEvent from "../src/pages/AboutEvent";
 import Registration from "../src/pages/Registration";
 import Login from "../src/pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/create-event" element={<CreateEvent />} />
+          <Route path="/events/:eventId" element={<AboutEvent />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

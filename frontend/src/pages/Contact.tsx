@@ -99,7 +99,7 @@ const Contact = () => {
           <h2 style={{ fontSize: "36px", fontWeight: "bold", margin: "0" }}>
             Get In Touch With Us
           </h2>
-          <p style={{ color: "#8978c7", fontSize: "24px" }}>
+          <p style={{ color: "#411666", fontSize: "24px" }}>
             AND WE WILL GET BACK TO YOU.
           </p>
           <hr />
