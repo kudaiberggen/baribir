@@ -48,7 +48,7 @@ const Friends = () => {
     if (startIndex < recommendations.length - 3) setStartIndex(startIndex + 1);
   };
 
-  const cardWidth = 290;
+  const cardWidth = 300;
 
   return (
     <section className="settings-section">
