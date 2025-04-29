@@ -1,4 +1,5 @@
-from datetime import timedelta
+import calendar
+from datetime import timedelta, date
 from django.conf import settings
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
@@ -256,11 +257,7 @@ class EventCreateView(APIView):
 class SubscribeToEventView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        event_id = request.data.get("event_id")
-
-        if not event_id:
-            return Response({"error": "event_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, event_id, *args, **kwargs):
 
         try:
             event = Event.objects.get(id=event_id)
@@ -272,6 +269,54 @@ class SubscribeToEventView(APIView):
 
         EventParticipant.objects.create(user=request.user, event=event)
         return Response({"message": "Successfully subscribed to the event."}, status=status.HTTP_201_CREATED)
+
+
+class UnsubscribeFromEventView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        participant = EventParticipant.objects.filter(user=request.user, event=event).first()
+        if not participant:
+            return Response({"message": "You are not subscribed to this event."}, status=status.HTTP_200_OK)
+
+        participant.delete()
+        return Response({"message": "Successfully unsubscribed from the event."}, status=status.HTTP_200_OK)
+
+
+class EventCalendarView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        today = date.today()
+        year, month = today.year, today.month
+        days_in_month = calendar.monthrange(year, month)[1]
+        start = date(year, month, 1)
+        end = date(year, month, days_in_month)
+
+        events = (
+            Event.objects
+            .filter(start_date__date__range=(start, end))
+            .values('start_date__date')
+            .annotate(count=Count('id'))
+        )
+        events_by_date = {e['start_date__date']: e['count'] for e in events}
+
+        result = []
+        for i in range(days_in_month):
+            current_date = start + timedelta(days=i)
+            count = events_by_date.get(current_date, "")
+            result.append({
+                "date": current_date,
+                "day": calendar.day_abbr[current_date.weekday()],
+                "count": count
+            })
+
+        return Response(result)
 
 
 class EventViewSet(viewsets.ModelViewSet):

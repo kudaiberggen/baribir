@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.core.mail import send_mail
 
-from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest, Notification
+from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest, \
+    Notification, EventAnnouncement
 
 User = get_user_model()
 
@@ -90,14 +91,21 @@ class EventCreateSerializer(serializers.ModelSerializer):
             EventPhoto.objects.create(event=event, image=photo)
         return event
 
+
+class EventAnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventAnnouncement
+        fields = ['id', 'title', 'message', 'created_at']
+
 class EventSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
     category = serializers.CharField(source='category.name', default=None, allow_null=True)
     photos = serializers.SerializerMethodField()
+    announcements = EventAnnouncementSerializer(many=True, read_only=True)
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos']
+        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos', 'announcements']
 
     def get_photos(self, obj):
         photos = EventPhoto.objects.filter(event=obj)

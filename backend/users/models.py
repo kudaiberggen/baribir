@@ -185,6 +185,12 @@ class UserSettings(models.Model):
     event_time_or_location_changes = models.BooleanField(default=True)
     exclusive_promotions = models.BooleanField(default=True)
 
+    # Email
+    email_trending_events = models.BooleanField(default=False)
+    email_interest_based = models.BooleanField(default=False)
+    email_birthday_greetings = models.BooleanField(default=False)
+    email_event_changes = models.BooleanField(default=False)
+
     # Privacy
     private_account = models.BooleanField(default=False)
 
@@ -221,3 +227,30 @@ class Notification(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class EmailSubscription(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="email_subscriptions")
+
+    trending_events_in_city = models.BooleanField(default=False)
+    interest_based_recommendations = models.BooleanField(default=False)
+    birthday_greetings = models.BooleanField(default=False)
+    event_changes = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} email subscriptions"
+
+
+class EventAnnouncement(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='announcements')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='event_announcements')
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Announcement for {self.event.title} by {self.creator.username}"

@@ -5,7 +5,7 @@ from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, 
     GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView, \
     AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView, \
     FriendRecommendationsAPIView, InterestRecommendationView, FriendListView, ProfileUpdateView, DeleteEventView, \
-    EventDetailView
+    EventDetailView, UnsubscribeFromEventView, EventCalendarView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -19,10 +19,12 @@ urlpatterns = [
     path("user-info/", UserInfoView.as_view(), name="user-info"),
     path('change-photo/', ChangePhotoView.as_view(), name='change-photo'),
     path('delete-photo/', DeletePhotoView.as_view(), name='delete-photo'),
+    path('events/calendar/', EventCalendarView.as_view(), name='events-calendar'),
     path('events/', EventFilterView.as_view(), name='filtered-events'),
     path('events/attended/', AttendedEventsView.as_view(), name='attended-events'),
     path('event/create/', EventCreateView.as_view(), name='event-create'),
-    path('event/subscribe/', SubscribeToEventView.as_view(), name='event-subscribe'),
+    path('event/<uuid:event_id>/subscribe/', SubscribeToEventView.as_view(), name='event-subscribe'),
+    path('event/<uuid:event_id>/unsubscribe/', UnsubscribeFromEventView.as_view(), name='event-unsubscribe'),
     path('event/<uuid:event_id>/participants/', EventParticipantsByEventView.as_view(), name='event-participants'),
     path("event/<uuid:event_id>/", EventDetailView.as_view(), name="event-detail"),
     path('event/<uuid:event_id>/delete/', DeleteEventView.as_view(), name='event-participants'),
