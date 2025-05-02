@@ -5,7 +5,8 @@ from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, 
     GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView, \
     AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView, \
     FriendRecommendationsAPIView, InterestRecommendationView, FriendListView, ProfileUpdateView, DeleteEventView, \
-    EventDetailView, UnsubscribeFromEventView, EventCalendarView
+    EventDetailView, UnsubscribeFromEventView, EventCalendarView, CityListAPIView, CityBulkCreateAPIView, \
+    InterestBulkCreateAPIView, CategoryBulkCreateAPIView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -31,7 +32,11 @@ urlpatterns = [
     path('settings/', UserSettingsView.as_view(), name='user-settings'),
     path('user-with-settings/', UserSettingsUpdateView.as_view(), name='user-settings'),
     path('categories/', GetCategoriesView.as_view(), name='get-categories'),
+    path('categories/add-bulk/', CategoryBulkCreateAPIView.as_view(), name='categories-bulk-create'),
     path('interests/', GetInterestsView.as_view(), name='get-interests'),
+    path('interests/add-bulk/', InterestBulkCreateAPIView.as_view(), name='interest-bulk-create'),
+    path('cities/', CityListAPIView.as_view(), name='get-cities'),
+    path('cities/add-bulk/', CityBulkCreateAPIView.as_view(), name='city-bulk-create'),
     path('notifications/', GetNotificationsView.as_view(), name='get-notifications'),
     path('profile/my-events/', MyCreatedEventsView.as_view(), name='my-created-events'),
     path('profile/update/', ProfileUpdateView.as_view(), name='profile-update'),

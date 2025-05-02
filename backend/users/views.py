@@ -12,12 +12,14 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser, UserFriend
+from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser, UserFriend, \
+    City
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
     InterestSerializer, NotificationSerializer, UserWithSettingsSerializer, CustomUserSerializer, \
-    CustomUserUpdateSerializer
+    CustomUserUpdateSerializer, CitySerializer, CityNameListSerializer, InterestNameListSerializer, \
+    CategoryNameListSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -445,3 +447,63 @@ class ProfileUpdateView(APIView):
             serializer.save()
             return Response({"message": "Profile updated successfully."})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CityListAPIView(APIView):
+    def get(self, request):
+        cities = City.objects.all().order_by('name')
+        serializer = CitySerializer(cities, many=True)
+        return Response(serializer.data)
+
+
+class CityBulkCreateAPIView(APIView):
+    def post(self, request):
+        serializer = CityNameListSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        names = serializer.validated_data
+
+        existing_names = set(City.objects.filter(name__in=names).values_list('name', flat=True))
+        new_cities = [City(name=name) for name in names if name not in existing_names]
+
+        created = City.objects.bulk_create(new_cities)
+
+        return Response(
+            {"created": [{"id": city.id, "name": city.name} for city in created]},
+            status=status.HTTP_201_CREATED
+        )
+
+
+class InterestBulkCreateAPIView(APIView):
+    def post(self, request):
+        serializer = InterestNameListSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        names = serializer.validated_data
+
+        existing_names = set(Interest.objects.filter(name__in=names).values_list('name', flat=True))
+        new_interests = [Interest(name=name) for name in names if name not in existing_names]
+
+        created = Interest.objects.bulk_create(new_interests)
+
+        return Response(
+            {"created": [{"id": i.id, "name": i.name} for i in created]},
+            status=status.HTTP_201_CREATED
+        )
+
+
+class CategoryBulkCreateAPIView(APIView):
+    def post(self, request):
+        serializer = CategoryNameListSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        names = serializer.validated_data
+
+        existing_names = set(Category.objects.filter(name__in=names).values_list('name', flat=True))
+        new_categories = [
+            Category(name=name, code=name.lower().replace(" ", "_"))
+            for name in names if name not in existing_names
+        ]
+
+        created = Category.objects.bulk_create(new_categories)
+
+        return Response(
+            {"created": [{"id": cat.id, "name": cat.name, "code": cat.code} for cat in created]},
+            status=status.HTTP_201_CREATED
+        )

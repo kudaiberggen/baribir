@@ -5,7 +5,7 @@ from rest_framework import serializers
 from django.core.mail import send_mail
 
 from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest, \
-    Notification, EventAnnouncement
+    Notification, EventAnnouncement, City
 
 User = get_user_model()
 
@@ -226,3 +226,17 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
             instance.interests.set(interest_objs)
 
         return instance
+
+class CategoryNameListSerializer(serializers.ListSerializer):
+    child = serializers.CharField(max_length=255)
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'name']
+
+class CityNameListSerializer(serializers.ListSerializer):
+    child = serializers.CharField(max_length=255)
+
+class InterestNameListSerializer(serializers.ListSerializer):
+    child = serializers.CharField(max_length=255)

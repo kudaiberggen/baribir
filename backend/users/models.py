@@ -62,7 +62,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     date = models.DateTimeField(null=True, blank=True)
-    city = models.CharField(max_length=100, null=True, blank=True)
+    city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
@@ -255,3 +255,12 @@ class EventAnnouncement(models.Model):
 
     def __str__(self):
         return f"Announcement for {self.event.title} by {self.creator.username}"
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+    country = models.CharField(max_length=100, blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
