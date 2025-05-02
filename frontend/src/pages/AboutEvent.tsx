@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import EventDate from "../assets/aboutevent/date.png";
 import Location from "../assets/aboutevent/location.png";
@@ -7,6 +7,8 @@ import Time from "../assets/aboutevent/time.png";
 import TengeSymbol from "../assets/aboutevent/tenge-symbol.png";
 import Heart from "../assets/aboutevent/heart.png";
 import "../styles/AboutEvent.css";
+
+import event from "../assets/events/event.png";
 
 interface EventPhoto {
   id: number;
@@ -26,11 +28,85 @@ interface EventType {
   author: number;
 }
 
+const abouteventcarousel = [
+  {
+    image: event,
+    title: "🔥 Фестиваль «Рахат Fest»",
+    date: "4 April",
+    time: "13:00",
+    price: "20000",
+    author: "dilyaa",
+  },
+  {
+    image: event,
+    title: "🔥 Фестиваль «Рахат Fest»",
+    date: "4 April",
+    time: "13:00",
+    price: "20000",
+    author: "dilyaa",
+  },
+  {
+    image: event,
+    title: "🔥 Фестиваль «Рахат Fest»",
+    date: "4 April",
+    time: "13:00",
+    price: "20000",
+    author: "dilyaa",
+  },
+  {
+    image: event,
+    title: "🔥 Фестиваль «Рахат Fest»",
+    date: "4 April",
+    time: "13:00",
+    price: "20000",
+    author: "dilyaa",
+  },
+  {
+    image: event,
+    title: "🔥 Фестиваль «Рахат Fest»",
+    date: "4 April",
+    time: "13:00",
+    price: "20000",
+    author: "dilyaa",
+  },
+];
+
 const AboutEvent = () => {
+  const [startIndex, setStartIndex] = useState(0);
   const { eventId } = useParams<{ eventId: string }>();
   const [userId, setUserId] = useState<number | null>(null);
   const [event, setEvent] = useState<EventType | null>(null);
   const BASE_URL = "http://127.0.0.1:8000";
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this event?"
+    );
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`/api/event/${eventId}/delete/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      const responseText = await response.text();
+
+      if (response.status === 204) {
+        alert("Event deleted successfully.");
+        navigate("/events");
+      } else {
+        console.error("Delete failed", response.status, responseText);
+        alert(`Error ${response.status}: ${responseText}`);
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      alert("An unexpected error occurred.");
+    }
+  };
 
   function getUserIdFromToken(): number | null {
     const token = localStorage.getItem("access_token");
@@ -69,6 +145,17 @@ const AboutEvent = () => {
 
   if (!event) return <p>Loading...</p>;
 
+  const handlePrev = () => {
+    if (startIndex > 0) setStartIndex(startIndex - 1);
+  };
+
+  const handleNext = () => {
+    if (startIndex < abouteventcarousel.length - 3)
+      setStartIndex(startIndex + 1);
+  };
+
+  const cardWidth = 320;
+
   return (
     <div className="about-event-content">
       <div className="about-event-main">
@@ -91,9 +178,7 @@ const AboutEvent = () => {
             </div>
           </div>
         </div>
-
         <p>{event.description}</p>
-
         {event.photos && event.photos.length > 0 && (
           <div className="about-event-photos">
             {event.photos.map((photo) => (
@@ -106,6 +191,80 @@ const AboutEvent = () => {
             ))}
           </div>
         )}
+        <h1 style={{ fontSize: "32px", margin: "50px 0 30px" }}>
+          Other Festivals:
+        </h1>
+        <div className="about-events-slider-controls">
+          <button onClick={handlePrev} className="arrow-button">
+            ‹
+          </button>
+          <div className="about-events-slider-window">
+            <div
+              className="about-events-slider-track"
+              style={{
+                transform: `translateX(-${startIndex * cardWidth}px)`,
+              }}
+            >
+              {abouteventcarousel.map((user, index) => (
+                <div key={index} className="about-events-carousel-card">
+                  <img
+                    src={user.image}
+                    alt="Events"
+                    className="about-events-carousel-image"
+                  />
+                  <h3>{user.title}</h3>
+                  <div className="about-carousel-column">
+                    <div className="about-carousel-column-flex">
+                      <img src={EventDate} alt="Date" />
+                      <p>
+                        {new Date(event.date).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "long",
+                        })}
+                      </p>
+                    </div>
+                    <div className="about-carousel-column-flex">
+                      <img src={Location} alt="Location" />
+                      <p>
+                        {event.city}, {event.address}
+                      </p>
+                    </div>
+                    <div className="about-carousel-column-flex">
+                      <img src={Time} alt="Time" />
+                      <p>
+                        {new Date(event.date).toLocaleTimeString("en-GB", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                    <div className="about-carousel-column-flex">
+                      <img src={TengeSymbol} alt="Price" />
+                      <p>{event.price ? `${event.price} ₸` : "Free"}</p>
+                    </div>
+                  </div>
+                  <div className="about-carousel-register-row">
+                    <p
+                      style={{
+                        textAlign: "left",
+                        lineHeight: "1.2rem",
+                        margin: "0",
+                        fontSize: "14px",
+                      }}
+                    >
+                      Organized by <br />
+                      <span style={{ color: "#724A95" }}>@dilyaaa</span>
+                    </p>
+                    <button className="about-carousel-button">REGISTER</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <button onClick={handleNext} className="arrow-button">
+            ›
+          </button>
+        </div>
       </div>
       <div>
         <div className="about-event-sidebar">
@@ -149,7 +308,10 @@ const AboutEvent = () => {
           </div>
           <div className="about-event-sidebar-buttons">
             {userId === event.author ? (
-              <button className="about-event-button delete">
+              <button
+                className="about-event-button delete"
+                onClick={handleDelete}
+              >
                 Delete Event
               </button>
             ) : (
