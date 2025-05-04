@@ -6,7 +6,8 @@ from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, 
     AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView, \
     FriendRecommendationsAPIView, InterestRecommendationView, FriendListView, ProfileUpdateView, DeleteEventView, \
     EventDetailView, UnsubscribeFromEventView, EventCalendarView, CityListAPIView, CityBulkCreateAPIView, \
-    InterestBulkCreateAPIView, CategoryBulkCreateAPIView
+    InterestBulkCreateAPIView, CategoryBulkCreateAPIView, SendFriendRequestView, DeclineFriendRequestView, \
+    AcceptFriendRequestView, FriendRequestListView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -44,5 +45,9 @@ urlpatterns = [
     path('friends/', FriendListView.as_view(), name='friend-list'),
     path('friends/recommendations/', FriendRecommendationsAPIView.as_view(), name='friend-recommendations'),
     path('friends/recommendations/by-interest', InterestRecommendationView.as_view(), name='friends-recommendations/by-interest'),
+    path('friend-request/', FriendRequestListView.as_view(), name='friend_request_list'),
+    path('friend-request/send/<user_id>/', SendFriendRequestView.as_view(), name='send_friend_request'),
+    path('friend-request/accept/<request_id>/', AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+    path('friend-request/decline/<request_id>/', DeclineFriendRequestView.as_view(), name='decline_friend_request'),
     path('', include(router.urls)),
 ]

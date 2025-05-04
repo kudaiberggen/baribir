@@ -1,6 +1,7 @@
 from django.db.models import Count, Q
 from itertools import chain
-from users.models import CustomUser, UserFriend
+from users.models import CustomUser, UserFriend, Notification
+
 
 def get_friend_recommendations(user: CustomUser):
     friend_ids = UserFriend.objects.filter(user=user).values_list('friend_id', flat=True)
@@ -57,3 +58,13 @@ def get_recommendations_by_interests(user: CustomUser):
     )
 
     return users_with_common_interests
+
+
+def create_notification(user, notif_type, title, message, url=None):
+    Notification.objects.create(
+        user=user,
+        type=notif_type,
+        title=title,
+        message=message,
+        url=url
+    )

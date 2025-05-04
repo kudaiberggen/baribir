@@ -100,27 +100,6 @@ class UserFriend(models.Model):
     friend = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='friends')
 
 
-class Memory(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_memories')  # Автор воспоминания
-    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.SET_NULL)
-    grade = models.IntegerField(null=True, blank=True)
-    text = models.TextField(null=True, blank=True)
-    is_private = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Memory {self.id} - {self.user}"
-
-class MemoryMention(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    memory = models.ForeignKey(Memory, on_delete=models.CASCADE, related_name='mentions')  # Связь с воспоминанием
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='mentioned_in_memories')  # Упомянутый пользователь
-    picture = models.IntegerField(null=True, blank=True)
-    username = models.CharField(max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return f"Mention of {self.user} in Memory {self.memory.id}"
-
 class Interest(models.Model):
     id = models.BigAutoField(primary_key=True)
     parent = models.ForeignKey(
@@ -142,31 +121,6 @@ class Interest(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Review(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    created_date = models.DateTimeField(null=True, blank=True)
-    likes = models.BigIntegerField(null=True, blank=True)
-    rate = models.PositiveSmallIntegerField(
-        help_text="1-10",
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(10)
-        ]
-    )
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name='reviews'
-    )
-
-    class Meta:
-        db_table = 'reviews'
-
-    def __str__(self):
-        return f"Review by {self.author} - {self.rate}/10"
 
 
 class UserSettings(models.Model):
@@ -201,18 +155,19 @@ class UserSettings(models.Model):
 
 class Notification(models.Model):
     NOTIFICATION_TYPES = [
-        ("remind_registered_events", "Reminder for Registered Events"),
-        ("personalized_recommendations", "Personalized Recommendations"),
-        ("platform_news", "Platform News and Updates"),
-        ("trending_events_in_city", "Trending Events in Your City"),
-        ("interest_based_recommendations", "Recommendations Based on Your Interests"),
-        ("birthday_greetings", "Birthday and Holiday Greetings"),
-        ("event_changes", "Notifications about Event Changes"),
-        ("new_messages", "New Messages from Organizers or Participants"),
-        ("upcoming_event_reminders", "Reminders for Upcoming Events"),
-        ("someone_interested_in_event", "Someone is Interested in Your Event"),
-        ("event_time_or_location_changes", "Event Date, Time, or Location Changes"),
-        ("exclusive_promotions", "Exclusive Deals and Promotions"),
+        # Event-related
+        ("event_joined", "Someone joined your event"),
+        ("friend_joined_event", "Your friend joined an event"),
+        ("friend_recommended_event", "Your friend recommended an event"),
+        ("friend_created_event", "Your friend created an event"),
+        ("event_announcement", "Announcement for Event Participants"),
+        ("event_reminder_1d", "Event Reminder: 1 Day Before"),
+        ("event_reminder_2h", "Event Reminder: 2 Hours Before"),
+        ("event_deleted", "Event Cancelled"),
+
+        # Friendship-related
+        ("friend_request", "New Friend Request"),
+        ("friend_request_accepted", "Friend Request Accepted"),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications")
@@ -222,24 +177,16 @@ class Notification(models.Model):
     url = models.URLField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
+    event = models.ForeignKey("Event", on_delete=models.CASCADE, null=True, blank=True, related_name="notifications")
+    related_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="related_notifications")
+    friend_request = models.ForeignKey("UserFriend", on_delete=models.SET_NULL, null=True, blank=True)
+    extra_data = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.get_type_display()}"
 
     class Meta:
         ordering = ["-created_at"]
-
-
-class EmailSubscription(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="email_subscriptions")
-
-    trending_events_in_city = models.BooleanField(default=False)
-    interest_based_recommendations = models.BooleanField(default=False)
-    birthday_greetings = models.BooleanField(default=False)
-    event_changes = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.user.username} email subscriptions"
 
 
 class EventAnnouncement(models.Model):
@@ -264,3 +211,14 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FriendRequest(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sent_friend_requests')
+    to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='received_friend_requests')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)  # заявка активна, пока не принята или не отклонена
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')  # чтобы не было повторных заявок

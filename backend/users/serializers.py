@@ -5,7 +5,7 @@ from rest_framework import serializers
 from django.core.mail import send_mail
 
 from users.models import Event, EventParticipant, Category, EventPhoto, CustomUser, UserSettings, Interest, \
-    Notification, EventAnnouncement, City
+    Notification, EventAnnouncement, City, FriendRequest
 
 User = get_user_model()
 
@@ -240,3 +240,12 @@ class CityNameListSerializer(serializers.ListSerializer):
 
 class InterestNameListSerializer(serializers.ListSerializer):
     child = serializers.CharField(max_length=255)
+
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    from_username = serializers.CharField(source='from_user.username', read_only=True)
+    to_username = serializers.CharField(source='to_user.username', read_only=True)
+
+    class Meta:
+        model = FriendRequest
+        fields = ['id', 'from_user', 'from_username', 'to_user', 'to_username', 'created_at']

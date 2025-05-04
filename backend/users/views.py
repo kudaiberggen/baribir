@@ -7,23 +7,23 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework import status, views, generics, permissions, viewsets
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser, UserFriend, \
-    City
+    City, FriendRequest
 from django.core.files.storage import default_storage
 from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
     EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
     InterestSerializer, NotificationSerializer, UserWithSettingsSerializer, CustomUserSerializer, \
     CustomUserUpdateSerializer, CitySerializer, CityNameListSerializer, InterestNameListSerializer, \
-    CategoryNameListSerializer
+    CategoryNameListSerializer, FriendRequestSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .services import get_friend_recommendations, get_recommendations_by_interests
+from .services import get_friend_recommendations, get_recommendations_by_interests, create_notification
 
 User = get_user_model()
 
@@ -325,6 +325,22 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def recommend(self, request, pk=None):
+        event = get_object_or_404(Event, id=pk)
+        friends = UserFriend.objects.filter(user=request.user)
+
+        for friend_link in friends:
+            friend = friend_link.friend
+            create_notification(
+                user=friend,
+                notif_type="friend_shared_event",
+                title="Your friend recommends an event",
+                message=f"{request.user.username} recommends you to join '{event.title}'."
+            )
+
+        return Response({"status": "Event recommended to friends."})
+
 class PopularEventsView(APIView):
     def get(self, request):
         today = timezone.now().date()
@@ -507,3 +523,86 @@ class CategoryBulkCreateAPIView(APIView):
             {"created": [{"id": cat.id, "name": cat.name, "code": cat.code} for cat in created]},
             status=status.HTTP_201_CREATED
         )
+
+
+def notify_upcoming_events():
+    now = timezone.now()
+    in_24h = now + timedelta(hours=24)
+    in_2h = now + timedelta(hours=2)
+
+    participants_24h = EventParticipant.objects.filter(event__date__range=(in_24h - timedelta(minutes=1), in_24h + timedelta(minutes=1)))
+    for p in participants_24h:
+        create_notification(
+            user=p.user,
+            notif_type="event_tomorrow",
+            title="Your event is tomorrow",
+            message=f"Reminder: '{p.event.title}' is happening in 24 hours."
+        )
+
+    participants_2h = EventParticipant.objects.filter(event__date__range=(in_2h - timedelta(minutes=1), in_2h + timedelta(minutes=1)))
+    for p in participants_2h:
+        create_notification(
+            user=p.user,
+            notif_type="event_soon",
+            title="Your event starts soon",
+            message=f"Reminder: '{p.event.title}' starts in 2 hours."
+        )
+
+
+#  Отправка заявки
+class SendFriendRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        to_user = get_object_or_404(CustomUser, id=user_id)
+
+        if FriendRequest.objects.filter(from_user=request.user, to_user=to_user, is_active=True).exists():
+            return Response({"detail": "Friend request already sent."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user == to_user:
+            return Response({"detail": "Cannot add yourself."}, status=status.HTTP_400_BAD_REQUEST)
+
+        FriendRequest.objects.create(from_user=request.user, to_user=to_user)
+        return Response({"detail": "Friend request sent."}, status=status.HTTP_201_CREATED)
+
+#  Принятие заявки
+class AcceptFriendRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, request_id):
+        friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user, is_active=True)
+
+        # создаём двустороннюю дружбу
+        UserFriend.objects.create(user=request.user, friend=friend_request.from_user)
+        UserFriend.objects.create(user=friend_request.from_user, friend=request.user)
+
+        friend_request.is_active = False
+        friend_request.save()
+
+        return Response({"detail": "Friend request accepted."}, status=status.HTTP_200_OK)
+
+#  Отклонение заявки
+class DeclineFriendRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, request_id):
+        friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user, is_active=True)
+
+        friend_request.is_active = False
+        friend_request.save()
+
+        return Response({"detail": "Friend request declined."}, status=status.HTTP_200_OK)
+
+
+class FriendRequestListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        incoming = FriendRequest.objects.filter(to_user=request.user, is_active=True)
+        outgoing = FriendRequest.objects.filter(from_user=request.user, is_active=True)
+
+        data = {
+            "incoming_requests": FriendRequestSerializer(incoming, many=True).data,
+            "outgoing_requests": FriendRequestSerializer(outgoing, many=True).data,
+        }
+        return Response(data, status=200)
