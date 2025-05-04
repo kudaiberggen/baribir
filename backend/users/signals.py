@@ -1,8 +1,8 @@
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 from django.conf import settings
 
-from .models import UserSettings, EventParticipant, Event, UserFriend, EventAnnouncement
+from .models import UserSettings, EventParticipant, Event, UserFriend, EventAnnouncement, EventPhoto
 from .services import create_notification
 
 
@@ -97,3 +97,10 @@ def notify_participants_event_deleted(sender, instance, **kwargs):
             title="Event cancelled",
             message=f"The event '{instance.title}' has been cancelled by the organizer."
         )
+
+
+
+@receiver(post_delete, sender=EventPhoto)
+def delete_event_photo_file(sender, instance, **kwargs):
+    if instance.image:
+        instance.image.delete(save=False)
