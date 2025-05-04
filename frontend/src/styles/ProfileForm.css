@@ -46,9 +46,9 @@
   transition: 0.3s;
 }
 
-.gender-buttons button:hover {
+/* .gender-buttons button:hover {
   background-color: #f0f0f0;
-}
+}  */
 
 .gender-buttons .selected {
   background-color: #4a2562;

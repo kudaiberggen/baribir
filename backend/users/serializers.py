@@ -154,9 +154,9 @@ class UserWithSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'first_name', 'last_name', 'email', 'phone', 'city', 'address',
+            'first_name', 'last_name', 'bio', 'email', 'phone', 'city', 'address',
             'link_telegram', 'link_instagram', 'link_whatsapp', 'profile_image',
-            'settings',
+            'settings', 'interests'
         ]
 
     def update(self, instance, validated_data):

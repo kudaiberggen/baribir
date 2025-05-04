@@ -12,23 +12,72 @@ const MyProfile = () => {
     );
   });
 
+  const [showFullBio, setShowFullBio] = useState(false);
+
+  const truncateByWords = (text: string, maxWords: number): string => {
+    const words = text.split(" ");
+    if (words.length <= maxWords) return text;
+    return words.slice(0, maxWords).join(" ");
+  };
+
+  const [profileData, setProfileData] = useState<any>(null);
   const [favoriteEvents, setFavoriteEvents] = useState([]);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
   const [showMoreFavorites, setShowMoreFavorites] = useState(false);
 
   useEffect(() => {
-    const fetchFavorites = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await fetch("/api/favorites");
-        const data = await response.json();
-        setFavoriteEvents(data);
+        const token = localStorage.getItem("access_token");
+        const res = await fetch("/api/user-with-settings/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch profile");
+        }
+
+        const data = await res.json();
+        console.log("Fetched user data:", data);
+        setProfileData(data);
+
+        if (data.profile_image) {
+          const baseUrl = "http://localhost:8000";
+          setProfileImage(`${baseUrl}${data.profile_image}`);
+        }
       } catch (error) {
-        console.error("Error fetching favorites:", error);
+        console.error("Error fetching profile:", error);
       }
     };
 
-    fetchFavorites();
+    fetchProfile();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchFavorites = async () => {
+  //     try {
+  //       const token = localStorage.getItem("access_token");
+  //       const response = await fetch("/api/favorites", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch favorites");
+  //       }
+
+  //       const data = await response.json();
+  //       setFavoriteEvents(data);
+  //     } catch (error) {
+  //       console.error("Error fetching favorites:", error);
+  //     }
+  //   };
+
+  //   fetchFavorites();
+  // }, []);
 
   const events = [
     {
@@ -84,7 +133,7 @@ const MyProfile = () => {
             My Profile
           </h2>
           <div className="profile-container-white">
-            <div style={{ width: "50%" }}>
+            <div style={{ width: "60%" }}>
               <div
                 style={{
                   display: "flex",
@@ -98,14 +147,35 @@ const MyProfile = () => {
                   style={{
                     width: "150px",
                     height: "150px",
+                    objectFit: "cover",
                     borderRadius: "50%",
                     border: "2px solid #411666",
+                    flexShrink: 0,
                   }}
                 />
                 <div style={{ margin: "0 30px 0 30px" }}>
-                  <h2>Yelzhas Kudaibergen</h2>
-                  <p>Kazakhstan, Almaty</p>
-                  <p>I'm looking for friends to go to the cinema</p>
+                  <h2>
+                    {profileData?.first_name || "Firstname"}{" "}
+                    {profileData?.last_name || "Lastname"}
+                  </h2>
+                  <p>{profileData?.city || "City"}</p>
+                  <p>
+                    {showFullBio
+                      ? profileData?.bio
+                      : truncateByWords(profileData?.bio || "Bio", 20)}
+                    {(profileData?.bio?.split(" ").length > 20 || false) && (
+                      <span
+                        onClick={() => setShowFullBio(!showFullBio)}
+                        style={{
+                          color: "#8E8ECE",
+                          cursor: "pointer",
+                          marginLeft: "8px",
+                        }}
+                      >
+                        {showFullBio ? "Hide" : "...Read more"}
+                      </span>
+                    )}
+                  </p>
                 </div>
               </div>
 
@@ -114,7 +184,7 @@ const MyProfile = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  margin: "20px 0 0 0",
+                  margin: "10px 0 0",
                 }}
               >
                 <img
@@ -127,7 +197,7 @@ const MyProfile = () => {
                     margin: "0 10px 0 0",
                   }}
                 />
-                <p>Phone: +77055055505</p>
+                <p>Phone: {profileData?.phone || "+7..."}</p>
               </div>
               <div
                 style={{
@@ -147,7 +217,17 @@ const MyProfile = () => {
                     margin: "0 10px 0 0",
                   }}
                 />
-                <p>Email: test@gmail.com</p>
+                <p>Email: {profileData?.email || "example@example.com"}</p>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  margin: "0",
+                }}
+              >
+                {profileData?.interests || "Interests"}
               </div>
             </div>
             <div
@@ -157,7 +237,7 @@ const MyProfile = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "40px",
-                width: "50%",
+                width: "40%",
               }}
             >
               <div
