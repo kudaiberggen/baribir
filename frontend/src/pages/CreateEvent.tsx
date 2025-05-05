@@ -10,7 +10,7 @@ interface EventData {
   title: string;
   description?: string;
   date: string;
-  city?: string;
+  city?: string | number;
   address?: string;
   category?: string | number;
   price?: string;
@@ -40,30 +40,40 @@ const CreateEvent: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isCityOpen, setIsCityOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [categoriesList, setCategoriesList] = useState<string[]>([]);
-  const [citiesList, setCitiesList] = useState<string[]>([]);
+  const [categoriesList, setCategoriesList] = useState<
+    { id: number; name: string }[]
+  >([]);
+  const [citiesList, setCitiesList] = useState<{ id: number; name: string }[]>(
+    []
+  );
 
   useEffect(() => {
     fetch("/api/categories/")
       .then((res) => res.json())
-      .then((data) => setCategoriesList(data.map((item: any) => item.name)))
+      .then((data) => setCategoriesList(data))
       .catch((err) => console.error("Ошибка при загрузке категорий:", err));
 
     fetch("/api/cities/")
       .then((res) => res.json())
-      .then((data) => setCitiesList(data.map((item: any) => item.name)))
+      .then((data) => setCitiesList(data))
       .catch((err) => console.error("Ошибка при загрузке городов:", err));
   }, []);
 
-  const handleSelectCategory = (category: string) => {
-    setSelectedCategory(category);
-    setFormData({ ...formData, category });
+  const handleSelectCategory = (categoryName: string) => {
+    const category = categoriesList.find((c) => c.name === categoryName);
+    if (category) {
+      setSelectedCategory(category.name);
+      setFormData({ ...formData, category: category.id });
+    }
     setIsCategoryOpen(false);
   };
 
-  const handleSelectCity = (city: string) => {
-    setSelectedCity(city);
-    setFormData({ ...formData, city });
+  const handleSelectCity = (cityName: string) => {
+    const city = citiesList.find((c) => c.name === cityName);
+    if (city) {
+      setSelectedCity(city.name);
+      setFormData({ ...formData, city: city.id });
+    }
     setIsCityOpen(false);
   };
 
@@ -119,7 +129,7 @@ const CreateEvent: React.FC = () => {
     formDataToSend.append("date", payload.date);
     if (payload.description)
       formDataToSend.append("description", payload.description);
-    if (payload.city) formDataToSend.append("city", payload.city);
+    if (payload.city) formDataToSend.append("city", String(payload.city));
     if (payload.address) formDataToSend.append("address", payload.address);
     if (payload.category)
       formDataToSend.append("category", String(payload.category));
@@ -141,7 +151,15 @@ const CreateEvent: React.FC = () => {
         body: formDataToSend,
       });
 
-      const data = await response.json();
+      let data: any = null;
+      let errorText: string | null = null;
+
+      try {
+        data = await response.json(); // Пробуем прочитать как JSON
+      } catch (err) {
+        errorText = "Failed to parse JSON. Server might have returned HTML.";
+      }
+
       if (response.ok) {
         alert("Event created successfully!");
         console.log(data);
@@ -160,8 +178,19 @@ const CreateEvent: React.FC = () => {
           contactPhone: "",
         });
         setSelectedDate(null);
+        setSelectedCategory(null);
+        setSelectedCity(null);
       } else {
-        alert(`Failed to create event: ${data?.detail || "Unknown error"}`);
+        console.error("Response not ok:", response.status);
+
+        if (data) {
+          alert(
+            `Failed to create event: ${data?.detail || JSON.stringify(data)}`
+          );
+          console.log("Response data:", data);
+        } else {
+          alert(`Failed to create event: ${errorText}`);
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -212,8 +241,8 @@ const CreateEvent: React.FC = () => {
             {isCityOpen && (
               <ul className="dropdown-list-create-event">
                 {citiesList.map((city) => (
-                  <li key={city} onClick={() => handleSelectCity(city)}>
-                    {city}
+                  <li key={city.id} onClick={() => handleSelectCity(city.name)}>
+                    {city.name}
                   </li>
                 ))}
               </ul>
@@ -284,10 +313,10 @@ const CreateEvent: React.FC = () => {
                   <ul className="dropdown-list-create-event">
                     {categoriesList.map((category) => (
                       <li
-                        key={category}
-                        onClick={() => handleSelectCategory(category)}
+                        key={category.id}
+                        onClick={() => handleSelectCategory(category.name)}
                       >
-                        {category}
+                        {category.name}
                       </li>
                     ))}
                   </ul>
