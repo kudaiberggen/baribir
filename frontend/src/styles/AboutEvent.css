@@ -147,21 +147,54 @@
   margin: 0 0 20px;
 }
 
-.about-event-photos {
+.about-event-gallery {
+  width: 100%;
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  margin: 20px 0;
-  scroll-snap-type: x mandatory;
+  justify-content: center;
 }
 
-.about-event-photo {
-  width: 200px;
-  height: 150px;
+.main-photo-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.main-event-photo {
+  width: 100%;
+  height: auto;
+  display: block;
   object-fit: cover;
-  border-radius: 10px;
-  flex-shrink: 0;
-  scroll-snap-align: start;
+}
+
+.thumbnail-overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+}
+
+.thumbnail-photo {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.3s;
+  border: 2px solid transparent;
+}
+
+.thumbnail-photo.selected,
+.thumbnail-photo:hover {
+  opacity: 1;
+  border-color: #fff;
 }
 
 .about-events-slider-controls {

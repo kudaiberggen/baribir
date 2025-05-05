@@ -6,6 +6,7 @@ import Location from "../assets/aboutevent/location.png";
 import Time from "../assets/aboutevent/time.png";
 import TengeSymbol from "../assets/aboutevent/tenge-symbol.png";
 import Heart from "../assets/aboutevent/heart.png";
+import HeartFavorites from "../assets/aboutevent/heart_favorites.png";
 import "../styles/AboutEvent.css";
 
 import event from "../assets/events/event.png";
@@ -76,6 +77,10 @@ const AboutEvent = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const [userId, setUserId] = useState<number | null>(null);
   const [event, setEvent] = useState<EventType | null>(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const getImageUrl = (imagePath: string) => {
+    return imagePath.startsWith("http") ? imagePath : `${BASE_URL}${imagePath}`;
+  };
   const BASE_URL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
 
@@ -128,7 +133,7 @@ const AboutEvent = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(`/api/events/${eventId}/`, {
+        const response = await fetch(`/api/event/${eventId}/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
@@ -165,7 +170,7 @@ const AboutEvent = () => {
             style={{
               backgroundImage: `url(${
                 event.photos?.[0]?.image
-                  ? `${BASE_URL}${event.photos[0].image}`
+                  ? getImageUrl(event.photos[0].image)
                   : "/default-event.jpg"
               })`,
             }}
@@ -180,15 +185,27 @@ const AboutEvent = () => {
         </div>
         <p>{event.description}</p>
         {event.photos && event.photos.length > 0 && (
-          <div className="about-event-photos">
-            {event.photos.map((photo) => (
+          <div className="about-event-gallery">
+            <div className="main-photo-wrapper">
               <img
-                key={photo.id}
-                src={`${BASE_URL}${photo.image}`}
-                alt="Event"
-                className="about-event-photo"
+                src={getImageUrl(event.photos[selectedPhotoIndex].image)}
+                alt="Main Event"
+                className="main-event-photo"
               />
-            ))}
+              <div className="thumbnail-overlay">
+                {event.photos.map((photo, index) => (
+                  <img
+                    key={photo.id}
+                    src={getImageUrl(photo.image)}
+                    alt={`Thumbnail ${index}`}
+                    className={`thumbnail-photo ${
+                      index === selectedPhotoIndex ? "selected" : ""
+                    }`}
+                    onClick={() => setSelectedPhotoIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         )}
         <h1 style={{ fontSize: "32px", margin: "50px 0 30px" }}>
@@ -240,7 +257,11 @@ const AboutEvent = () => {
                     </div>
                     <div className="about-carousel-column-flex">
                       <img src={TengeSymbol} alt="Price" />
-                      <p>{event.price ? `${event.price} ₸` : "Free"}</p>
+                      <p>
+                        {event.price && event.price !== "0" && event.price !== 0
+                          ? `${event.price} ₸`
+                          : "Free"}
+                      </p>
                     </div>
                   </div>
                   <div className="about-carousel-register-row">

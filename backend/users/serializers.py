@@ -109,10 +109,11 @@ class EventSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='category.name', default=None, allow_null=True)
     photos = EventPhotoSerializer(many=True, read_only=True)
     announcements = EventAnnouncementSerializer(many=True, read_only=True)
+    city = serializers.CharField(source='city.name')
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos', 'announcements']
+        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos', 'announcements', 'price']
 
 
 class InterestSerializer(serializers.ModelSerializer):
@@ -122,7 +123,7 @@ class InterestSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    interests = InterestSerializer(many=True)  # Сериализация интересов
+    interests = InterestSerializer(many=True)  
 
     class Meta:
         model = CustomUser
