@@ -56,20 +56,26 @@ type EventType = {
 const Events = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedCity, setSelectedCity] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isCityOpen, setIsCityOpen] = useState(false);
   const [events, setEvents] = useState<EventType[]>([]);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
 
-  const categories = [
-    "Entertainment",
-    "Culture & Arts",
-    "Tech & IT",
-    "Food & Drinks",
-  ];
-  const cities = ["Almaty", "Astana", "Shymkent"];
+  useEffect(() => {
+    fetch("/api/categories/")
+      .then((res) => res.json())
+      .then((data) => setCategories(data.map((item: any) => item.name)))
+      .catch((err) => console.error("Ошибка загрузки категорий:", err));
+
+    fetch("/api/cities/")
+      .then((res) => res.json())
+      .then((data) => setCities(data.map((item: any) => item.name)))
+      .catch((err) => console.error("Ошибка загрузки городов:", err));
+  }, []);
 
   const handleSelectCategory = (category: string) => {
     setSelectedCategory(category);
@@ -137,9 +143,8 @@ const Events = () => {
     const matchesDate =
       new Date(event.date).toDateString() === selectedDate.toDateString();
     const matchesCategory =
-      selectedCategory === "All" || event.title.includes(selectedCategory);
-    const matchesCity =
-      selectedCity === "All" || event.title.includes(selectedCity);
+      !selectedCategory || event.title.includes(selectedCategory);
+    const matchesCity = !selectedCity || event.title.includes(selectedCity);
 
     return matchesDate && matchesCategory && matchesCity;
   });
@@ -220,16 +225,19 @@ const Events = () => {
               onClick={() => setIsCategoryOpen(!isCategoryOpen)}
             >
               <div className="dropdown-header">
-                {selectedCategory === "All" ? "Categories" : selectedCategory}
+                {selectedCategory || "Categories"}
                 <span className="arrow">
                   <img src={isCategoryOpen ? ArrowUp : ArrowDown} alt="Arrow" />
                 </span>
               </div>
               {isCategoryOpen && (
                 <ul className="dropdown-list">
-                  {categories.map((cat) => (
-                    <li key={cat} onClick={() => handleSelectCategory(cat)}>
-                      {cat}
+                  {categories.map((category) => (
+                    <li
+                      key={category}
+                      onClick={() => handleSelectCategory(category)}
+                    >
+                      {category}
                     </li>
                   ))}
                 </ul>
@@ -241,7 +249,7 @@ const Events = () => {
               onClick={() => setIsCityOpen(!isCityOpen)}
             >
               <div className="dropdown-header">
-                {selectedCity === "All" ? "City" : selectedCity}
+                {selectedCity || "City"}
                 <span className="arrow">
                   <img src={isCityOpen ? ArrowUp : ArrowDown} alt="Arrow" />
                 </span>

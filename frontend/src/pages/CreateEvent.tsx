@@ -1,20 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import UploadIcon from "../assets/create-event/upload-icon.png";
 import "../styles/CreateEvent.css";
-
-const categories = [
-  "Tech & IT",
-  "Food & Drinks",
-  "Sport",
-  "Entertainment & Media",
-  "Culture & Arts",
-  "Music",
-  "Community & Impact",
-  "Learning & Growth",
-  "Travel & Adventure",
-];
+import ArrowDown from "../assets/events/arrow-down.svg";
+import ArrowUp from "../assets/events/arrow-up.svg";
 
 interface EventData {
   title: string;
@@ -46,11 +36,45 @@ const CreateEvent: React.FC = () => {
   });
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isCityOpen, setIsCityOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [categoriesList, setCategoriesList] = useState<string[]>([]);
+  const [citiesList, setCitiesList] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories/")
+      .then((res) => res.json())
+      .then((data) => setCategoriesList(data.map((item: any) => item.name)))
+      .catch((err) => console.error("Ошибка при загрузке категорий:", err));
+
+    fetch("/api/cities/")
+      .then((res) => res.json())
+      .then((data) => setCitiesList(data.map((item: any) => item.name)))
+      .catch((err) => console.error("Ошибка при загрузке городов:", err));
+  }, []);
+
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
+    setFormData({ ...formData, category });
+    setIsCategoryOpen(false);
+  };
+
+  const handleSelectCity = (city: string) => {
+    setSelectedCity(city);
+    setFormData({ ...formData, city });
+    setIsCityOpen(false);
+  };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
@@ -175,13 +199,26 @@ const CreateEvent: React.FC = () => {
         />
         <h2 style={{ marginBottom: "10px", fontSize: "24px" }}>Location</h2>
         <div className="form-row">
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleInputChange}
-            placeholder="City"
-          />
+          <div
+            className="custom-dropdown-create-event"
+            onClick={() => setIsCityOpen(!isCityOpen)}
+          >
+            <div className="dropdown-header-create-event">
+              {selectedCity || "Select city"}
+              <span className="arrow">
+                <img src={isCityOpen ? ArrowUp : ArrowDown} alt="Arrow" />
+              </span>
+            </div>
+            {isCityOpen && (
+              <ul className="dropdown-list-create-event">
+                {citiesList.map((city) => (
+                  <li key={city} onClick={() => handleSelectCity(city)}>
+                    {city}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <input
             type="text"
             name="address"
@@ -229,23 +266,33 @@ const CreateEvent: React.FC = () => {
           <div style={{ width: "100%" }}>
             <h2 style={{ marginBottom: "15px", fontSize: "24px" }}>Category</h2>
             <div className="custom-select-wrapper">
-              <select
-                name="category"
-                value={formData.category}
-                onChange={(e) =>
-                  setFormData({ ...formData, category: e.target.value })
-                }
-                required
+              <div
+                className="custom-dropdown-create-event"
+                style={{ width: "100%" }}
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
               >
-                <option value="" disabled>
-                  Select Category
-                </option>
-                {categories.map((cat, index) => (
-                  <option key={index} value={index + 1}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+                <div className="dropdown-header-create-event">
+                  {selectedCategory || "Select category"}
+                  <span className="arrow">
+                    <img
+                      src={isCategoryOpen ? ArrowUp : ArrowDown}
+                      alt="Arrow"
+                    />
+                  </span>
+                </div>
+                {isCategoryOpen && (
+                  <ul className="dropdown-list-create-event">
+                    {categoriesList.map((category) => (
+                      <li
+                        key={category}
+                        onClick={() => handleSelectCategory(category)}
+                      >
+                        {category}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
           <div style={{ width: "100%" }}>

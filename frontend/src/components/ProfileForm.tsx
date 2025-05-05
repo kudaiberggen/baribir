@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ProfileForm.css";
+import ArrowDown from "../assets/events/arrow-down.svg";
+import ArrowUp from "../assets/events/arrow-up.svg";
 
 const interestsList = [
   "Music",
@@ -40,8 +42,25 @@ const ProfileForm: React.FC = () => {
   });
 
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
+  const [isCityOpen, setIsCityOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string>("");
 
   useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const res = await fetch("/api/cities/");
+        const data = await res.json();
+        if (res.ok) {
+          setCities(data);
+        } else {
+          console.error("Failed to load cities:", data);
+        }
+      } catch (error) {
+        console.error("City fetch error:", error);
+      }
+    };
+
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem("access_token");
@@ -70,6 +89,7 @@ const ProfileForm: React.FC = () => {
                 ? "Female"
                 : null,
           });
+          setSelectedCity(data.city || "");
           setSelectedInterests(data.interests || []);
         } else {
           console.error("Failed to load user data:", data);
@@ -79,11 +99,14 @@ const ProfileForm: React.FC = () => {
       }
     };
 
+    fetchCities();
     fetchUserInfo();
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -94,6 +117,12 @@ const ProfileForm: React.FC = () => {
         ? prev.filter((i) => i !== interest)
         : [...prev, interest]
     );
+  };
+
+  const handleSelectCity = (city: string) => {
+    setSelectedCity(city);
+    setFormData((prev) => ({ ...prev, city }));
+    setIsCityOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -186,13 +215,33 @@ const ProfileForm: React.FC = () => {
 
       <h3 style={{ marginBottom: "10px" }}>Contact information</h3>
       <div className="form-row">
-        <input
-          type="text"
-          placeholder="City"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-        />
+        <div
+          className="custom-dropdown-cities"
+          onClick={() => setIsCityOpen((prev) => !prev)}
+        >
+          <div className="dropdown-header-cities">
+            {selectedCity || "Select city"}
+            <span className="arrow">
+              <img src={isCityOpen ? ArrowUp : ArrowDown} alt="Arrow" />
+            </span>
+          </div>
+          {isCityOpen && (
+            <ul className="dropdown-list-cities">
+              {cities.map((city) => (
+                <li
+                  key={city.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectCity(city.name);
+                  }}
+                >
+                  {city.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <input
           type="email"
           placeholder="Email"
@@ -201,6 +250,7 @@ const ProfileForm: React.FC = () => {
           onChange={handleChange}
         />
       </div>
+
       <div className="form-row">
         <input
           type="text"

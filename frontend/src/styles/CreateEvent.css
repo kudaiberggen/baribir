@@ -196,3 +196,70 @@
 .checkbox-container input[type="checkbox"]:checked::after {
   opacity: 1;
 }
+
+.custom-dropdown-create-event {
+  position: relative;
+  user-select: none;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  width: 50%;
+}
+
+.dropdown-header-create-event {
+  cursor: pointer;
+  position: relative;
+  font-size: 14px;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.arrow {
+  position: absolute;
+  right: 10px;
+  top: 55%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.arrow img {
+  z-index: 2;
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.dropdown-list-create-event {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  /* overflow: hidden; */
+  padding: 0;
+}
+
+.dropdown-list-create-event li {
+  padding: 10px 14px;
+  cursor: pointer;
+  list-style: none;
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.dropdown-list-create-event li:hover {
+  background-color: #f1edf9;
+}
