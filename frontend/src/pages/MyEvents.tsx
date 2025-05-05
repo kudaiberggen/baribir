@@ -182,8 +182,9 @@ const MyEvents = () => {
 
             {activeTab === "upcomingevents" && (
               <div className="myevents-tab-pane">
-                <h2>Upcoming Events</h2>
-                <p>Notification settings and upcoming plans will go here.</p>
+                <p style={{ color: "#888", marginTop: "20px" }}>
+                  Upcoming events will go here.
+                </p>
               </div>
             )}
           </div>

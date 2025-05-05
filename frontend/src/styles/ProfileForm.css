@@ -50,7 +50,7 @@
   background-color: #f0f0f0;
 }  */
 
-.gender-buttons .selected {
+.gender-buttons button.selected {
   background-color: #4a2562;
   color: white;
   border-color: #4a2562;

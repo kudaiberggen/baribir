@@ -276,11 +276,12 @@ const Settings: React.FC = () => {
               <div className="tab-pane">
                 <div className="notifications-row">
                   <div className="notifications-column">
-                    <h2>SMS Notifications</h2>
+                    <h2>Push Notifications</h2>
                     <p>
-                      📌 System updates may take up <br />
-                      to 24 hours after unsubscribing, <br />
-                      during which you may still receive messages.
+                      📌 Get timely updates and personalized alerts for the
+                      events you care about — including reminders, last-minute
+                      changes, and organizer messages. You're always in control
+                      of what you receive.
                     </p>
                   </div>
                   <div className="notifications-column">
@@ -290,67 +291,7 @@ const Settings: React.FC = () => {
                     </label>
                     <label className="checkbox-container">
                       <input type="checkbox" name="checkbox" />
-                      Personalized event recommendations
-                    </label>
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      Platform news and updates
-                    </label>
-                  </div>
-                </div>
-                <hr
-                  style={{
-                    width: "60%",
-                    border: "none",
-                    borderTop: "1px solid #e0e0e0",
-                    margin: "0",
-                  }}
-                />
-                <div className="notifications-row">
-                  <div className="notifications-column">
-                    <h2>Email Subscriptions</h2>
-                    <p>Select the types of emails you want to receive:</p>
-                  </div>
-                  <div className="notifications-column">
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      Trending events in your city
-                    </label>
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      Event recommendations based on your interests
-                    </label>
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      Birthday and holiday greetings
-                    </label>
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      Notifications about event changes (rescheduling,
-                      cancellations, etc.)
-                    </label>
-                  </div>
-                </div>
-                <hr
-                  style={{
-                    width: "60%",
-                    border: "none",
-                    borderTop: "1px solid #e0e0e0",
-                    margin: "0",
-                  }}
-                />
-                <div className="notifications-row">
-                  <div className="notifications-column">
-                    <h2>Push Notifications</h2>
-                    <p>
-                      Instant alerts about important updates and <br />
-                      events
-                    </p>
-                  </div>
-                  <div className="notifications-column">
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      New messages from organizers or participants
+                      Messages from organizers of event
                     </label>
                     <label className="checkbox-container">
                       <input type="checkbox" name="checkbox" />
@@ -358,15 +299,7 @@ const Settings: React.FC = () => {
                     </label>
                     <label className="checkbox-container">
                       <input type="checkbox" name="checkbox" />
-                      Someone is interested in your event
-                    </label>
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
                       Event date, time, or location changes
-                    </label>
-                    <label className="checkbox-container">
-                      <input type="checkbox" name="checkbox" />
-                      Exclusive deals and promotions
                     </label>
                   </div>
                 </div>

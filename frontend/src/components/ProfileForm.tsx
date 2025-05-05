@@ -61,7 +61,7 @@ const ProfileForm: React.FC = () => {
             city: data.city || "",
             email: data.email,
             phone: data.phone,
-            birthday: data.birthday || "",
+            birthday: data.birthday ? data.birthday.slice(0, 10) : "",
             bio: data.bio || "",
             gender:
               data.gender === true
@@ -99,7 +99,7 @@ const ProfileForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("access_token"); // или откуда ты его получаешь
+    const token = localStorage.getItem("access_token");
 
     const payload = {
       ...formData,
@@ -214,6 +214,7 @@ const ProfileForm: React.FC = () => {
           name="birthday"
           value={formData.birthday}
           onChange={handleChange}
+          lang="en"
         />
       </div>
 

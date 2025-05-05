@@ -144,14 +144,7 @@ const MyProfile = () => {
                 <img
                   src={profileImage}
                   alt="Current avatar"
-                  style={{
-                    width: "150px",
-                    height: "150px",
-                    objectFit: "cover",
-                    borderRadius: "50%",
-                    border: "2px solid #411666",
-                    flexShrink: 0,
-                  }}
+                  className="myprofile-avatar"
                 />
                 <div style={{ margin: "0 30px 0 30px" }}>
                   <h2>
@@ -190,12 +183,7 @@ const MyProfile = () => {
                 <img
                   src={Phone}
                   alt="Phone"
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "50%",
-                    margin: "0 10px 0 0",
-                  }}
+                  className="myprofile-phoneemail-image"
                 />
                 <p>Phone: {profileData?.phone || "+7..."}</p>
               </div>
@@ -210,24 +198,22 @@ const MyProfile = () => {
                 <img
                   src={EmailProfile}
                   alt="Email"
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "50%",
-                    margin: "0 10px 0 0",
-                  }}
+                  className="myprofile-phoneemail-image"
                 />
                 <p>Email: {profileData?.email || "example@example.com"}</p>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  margin: "0",
-                }}
-              >
-                {profileData?.interests || "Interests"}
+              <div className="myprofile-interests-div">
+                {profileData?.interests?.length > 0 ? (
+                  profileData.interests.map(
+                    (interest: string, index: number) => (
+                      <span className="myprofile-interests" key={index}>
+                        {interest}
+                      </span>
+                    )
+                  )
+                ) : (
+                  <span className="myprofile-interests">Interests</span>
+                )}
               </div>
             </div>
             <div
@@ -290,26 +276,9 @@ const MyProfile = () => {
                       <img
                         src={event.image}
                         alt="Card"
-                        style={{
-                          borderRadius: "12px",
-                          width: "100%",
-                          height: "200px",
-                          objectFit: "cover",
-                        }}
+                        className="myprofile-event-card-image"
                       />
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: "10px",
-                          left: "10px",
-                          backgroundColor: "#411666",
-                          color: "#fff",
-                          padding: "5px 10px",
-                          borderRadius: "12px",
-                          fontSize: "14px",
-                          zIndex: 2,
-                        }}
-                      >
+                      <div className="myprofile-event-card-category">
                         {event.category}
                       </div>
                     </div>

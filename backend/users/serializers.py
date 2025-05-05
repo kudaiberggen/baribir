@@ -150,14 +150,18 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 
 class UserWithSettingsSerializer(serializers.ModelSerializer):
     settings = UserSettingsSerializer()
+    interests = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
         fields = [
             'first_name', 'last_name', 'bio', 'email', 'phone', 'city', 'address',
             'link_telegram', 'link_instagram', 'link_whatsapp', 'profile_image',
-            'settings', 'interests'
+            'settings', 'interests', 'gender', 'birthday'
         ]
+
+    def get_interests(self, obj):
+        return [interest.name for interest in obj.interests.all()]
 
     def update(self, instance, validated_data):
         settings_data = validated_data.pop('settings', {})

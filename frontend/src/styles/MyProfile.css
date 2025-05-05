@@ -16,6 +16,15 @@
   padding: 30px 30px;
 }
 
+.myprofile-avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #411666;
+  flex-shrink: 0;
+}
+
 .event-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -26,6 +35,25 @@
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-decoration: none;
+}
+
+.myprofile-event-card-image {
+  border-radius: 12px;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.myprofile-event-card-category {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: #411666;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 2;
 }
 
 .show-more-button {
@@ -41,4 +69,28 @@
 
 .show-more-button:hover {
   background-color: #5c1c88;
+}
+
+.myprofile-phoneemail-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 10px 0 0;
+}
+
+.myprofile-interests-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 15px 0 0;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.myprofile-interests {
+  background-color: #fefefe;
+  border: 2px solid #e1e1e1;
+  padding: 5px 20px;
+  border-radius: 30px;
+  font-size: 12px;
 }
