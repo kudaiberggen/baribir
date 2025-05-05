@@ -77,7 +77,7 @@ class Event(models.Model):
 
 
 class EventPhoto(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='photos')
     image = models.ImageField(upload_to="event_photos/")
 
 

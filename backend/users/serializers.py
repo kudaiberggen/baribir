@@ -97,28 +97,24 @@ class EventAnnouncementSerializer(serializers.ModelSerializer):
         model = EventAnnouncement
         fields = ['id', 'title', 'message', 'created_at']
 
+
+class EventPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventPhoto
+        fields = ['id', 'image']
+
+
 class EventSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
     category = serializers.CharField(source='category.name', default=None, allow_null=True)
-    photos = serializers.SerializerMethodField()
+    photos = EventPhotoSerializer(many=True, read_only=True)
     announcements = EventAnnouncementSerializer(many=True, read_only=True)
 
     class Meta:
         model = Event
         fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos', 'announcements']
 
-    def get_photos(self, obj):
-        photos = EventPhoto.objects.filter(event=obj)
-        return EventPhotoSerializer(photos, many=True).data
-    
 
-class EventPhotoSerializer(serializers.ModelSerializer):
-    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
-    image = serializers.ImageField()
-
-    class Meta:
-        model = EventPhoto
-        fields = ['id', 'event', 'image']
 class InterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interest
