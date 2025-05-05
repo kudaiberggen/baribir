@@ -44,7 +44,7 @@ def notify_friends_about_new_event(sender, instance, created, **kwargs):
         friends = instance.author.friends.all()
         for f in friends:
             create_notification(
-                user=f,
+                user=f.friend,
                 notif_type="friend_event_announcement",
                 title="Your friend created an event",
                 message=f"{instance.author.username} created a new event: '{instance.title}'."
