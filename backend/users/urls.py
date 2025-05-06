@@ -1,13 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RegisterView, LoginView, PasswordResetView, EventFilterView, EventCreateView, EventViewSet, \
-    UserInfoView, ChangePhotoView, DeletePhotoView, UserSettingsView, GetCategoriesView, GetInterestsView, \
-    GetNotificationsView, UserSettingsUpdateView, SubscribeToEventView, EventParticipantsByEventView, \
-    AttendedEventsView, ChangePasswordView, deactivate_account, MyCreatedEventsView, UserCreatedEventsView, \
-    FriendRecommendationsAPIView, InterestRecommendationView, FriendListView, ProfileUpdateView, DeleteEventView, \
-    EventDetailView, UnsubscribeFromEventView, EventCalendarView, CityListAPIView, CityBulkCreateAPIView, \
-    InterestBulkCreateAPIView, CategoryBulkCreateAPIView, SendFriendRequestView, DeclineFriendRequestView, \
-    AcceptFriendRequestView, FriendRequestListView
+from .views import *
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -24,6 +17,9 @@ urlpatterns = [
     path('events/calendar/', EventCalendarView.as_view(), name='events-calendar'),
     path('events/', EventFilterView.as_view(), name='filtered-events'),
     path('events/attended/', AttendedEventsView.as_view(), name='attended-events'),
+    path('event/<uuid:event_id>/add-to-favorite/', AddFavoriteEventView.as_view(), name='add-favorite-event'),
+    path('event/<uuid:event_id>/remove-from-favorite/', RemoveFavoriteEventView.as_view(), name='remove-favorite-event'),
+    path('events/favorites', ListFavoriteEventsView.as_view(), name='list-favorite-events'),
     path('event/create/', EventCreateView.as_view(), name='event-create'),
     path('event/<uuid:event_id>/subscribe/', SubscribeToEventView.as_view(), name='event-subscribe'),
     path('event/<uuid:event_id>/unsubscribe/', UnsubscribeFromEventView.as_view(), name='event-unsubscribe'),

@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 from django.conf import settings
 
-from .models import UserSettings, EventParticipant, Event, UserFriend, EventAnnouncement, EventPhoto
+from .models import *
 from .services import create_notification
 
 

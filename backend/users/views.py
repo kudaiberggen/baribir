@@ -13,17 +13,13 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser, UserFriend, \
-    City, FriendRequest
+    City, FriendRequest, FavoriteEvent
 from django.core.files.storage import default_storage
-from .serializers import RegisterSerializer, LoginSerializer, PasswordResetSerializer, EventSerializer, \
-    EventParticipantSerializer, EventCreateSerializer, UserInfoSerializer, UserSettingsSerializer, CategorySerializer, \
-    InterestSerializer, NotificationSerializer, UserWithSettingsSerializer, CustomUserSerializer, \
-    CustomUserUpdateSerializer, CitySerializer, CityNameListSerializer, InterestNameListSerializer, \
-    CategoryNameListSerializer, FriendRequestSerializer
+from .serializers import *
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .services import get_friend_recommendations, get_recommendations_by_interests, create_notification
+from .services import *
 
 User = get_user_model()
 
@@ -147,14 +143,16 @@ class EventFilterView(APIView):
     def get(self, request):
         date = request.GET.get('date')
         category_code = request.GET.get('category')
-        interests = request.GET.getlist('interests')
-        cities = request.GET.getlist('city')
+        interest_codes = request.GET.getlist('interests')  # предполагается, что приходят code интересов
+        city_names = request.GET.getlist('city')  # предполагается, что приходят названия городов
 
         filters = Q()
 
+        # 🔹 Фильтрация по дате
         if date:
             filters &= Q(date__date=date)
 
+        # 🔹 Фильтрация по категории (включая подкатегории)
         if category_code:
             try:
                 parent_category = Category.objects.get(code=category_code)
@@ -163,18 +161,24 @@ class EventFilterView(APIView):
             except Category.DoesNotExist:
                 return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        if interests:
-            filters &= Q(category__name__in=interests)
+        # 🔹 Фильтрация по интересам → достаём связанные категории интересов
+        if interest_codes:
+            interests = Interest.objects.filter(code__in=interest_codes)
+            interest_categories = interests.values_list('category', flat=True)
+            filters &= Q(category__id__in=interest_categories)
 
-        if not cities:
+        # 🔹 Фильтрация по городам (по имени)
+        if not city_names:
             if request.user.is_authenticated and request.user.city:
-                cities = [request.user.city]
-        if cities:
-            filters &= Q(city__in=cities)
+                city_names = [request.user.city]
+
+        if city_names:
+            filters &= Q(city__name__in=city_names)
 
         events = Event.objects.filter(filters).distinct()
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
+
 
 class EventDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -361,6 +365,45 @@ class PopularEventsView(APIView):
         serializer = EventSerializer(popular_events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class AddFavoriteEventView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, event_id):
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        favorite, created = FavoriteEvent.objects.get_or_create(user=request.user, event=event)
+        if not created:
+            return Response({'message': 'Event already in favorites'}, status=status.HTTP_200_OK)
+
+        return Response({'message': 'Event added to favorites'}, status=status.HTTP_201_CREATED)
+
+class RemoveFavoriteEventView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, event_id):
+        try:
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            favorite = FavoriteEvent.objects.get(user=request.user, event=event)
+            favorite.delete()
+            return Response({'message': 'Event removed from favorites'}, status=status.HTTP_204_NO_CONTENT)
+        except FavoriteEvent.DoesNotExist:
+            return Response({'error': 'Event was not in favorites'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ListFavoriteEventsView(generics.ListAPIView):
+    serializer_class = FavoriteEventSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return FavoriteEvent.objects.filter(user=self.request.user).select_related('event')
 
 
 class UserSettingsView(generics.RetrieveUpdateAPIView):
