@@ -126,7 +126,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'city', 'profile_image', 'interests']
+        fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'email', 'city', 'profile_image', 'interests']
 
 
 class EventParticipantSerializer(serializers.ModelSerializer):

@@ -16,6 +16,7 @@ import MyProfile from "./pages/MyProfile";
 import MyEvents from "./pages/MyEvents";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
+import FriendProfile from "./pages/FriendProfile";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/my-events" element={<MyEvents />} />
           <Route path="/friends" element={<Friends />} />
+          <Route path="/friend/:friendId" element={<FriendProfile />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
         <Footer />

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import Logo from "/BariB1r.svg";
 import Notification from "../assets/header/notification.png";
@@ -7,6 +7,7 @@ import "../styles/Header.css";
 
 const Header: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [profileImage, setProfileImage] = useState<string>(() => {
     return (
@@ -129,7 +130,10 @@ const Header: React.FC = () => {
                     </NavLink>
                     <button
                       className="dropdown-item logout-btn"
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        navigate("/");
+                      }}
                     >
                       Log out
                     </button>

@@ -151,6 +151,20 @@
   transition: background-color 0.3s ease;
 }
 
+.friend-buttons a {
+  text-decoration: none;
+  text-align: center;
+  width: 80%;
+  background-color: #411666;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 .friend-buttons button:hover {
   background-color: #5c1c88;
 }
