@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework import status, views, generics, permissions, viewsets
@@ -146,6 +147,8 @@ class EventFilterView(APIView):
         interest_codes = request.GET.getlist('interests')  # предполагается, что приходят code интересов
         city_names = request.GET.getlist('city')  # предполагается, что приходят названия городов
 
+        print(category_code, interest_codes, city_names)
+
         filters = Q()
 
         # 🔹 Фильтрация по дате
@@ -170,6 +173,7 @@ class EventFilterView(APIView):
         # 🔹 Фильтрация по городам (по имени)
         if not city_names:
             if request.user.is_authenticated and request.user.city:
+                print(request.user.is_authenticated, request.user.city)
                 city_names = [request.user.city]
 
         if city_names:
@@ -323,6 +327,11 @@ class EventCalendarView(APIView):
             })
 
         return Response(result)
+
+
+class AllEventsView(ListAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
 
 class EventViewSet(viewsets.ModelViewSet):
