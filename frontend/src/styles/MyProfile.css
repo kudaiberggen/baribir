@@ -26,9 +26,20 @@
 }
 
 .event-cards {
+  margin: 20px 0 10px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+}
+
+.event-cards h3 {
+  color: #202020;
+  margin: 10px 0;
+}
+
+.event-cards p {
+  color: #ababab;
+  margin: 4px 0;
 }
 
 .event-card {
@@ -50,8 +61,8 @@
   left: 10px;
   background-color: #411666;
   color: #fff;
-  padding: 5px 10px;
-  border-radius: 12px;
+  padding: 6px 20px;
+  border-radius: 6px;
   font-size: 14px;
   z-index: 2;
 }

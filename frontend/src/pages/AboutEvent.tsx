@@ -5,8 +5,8 @@ import EventDate from "../assets/aboutevent/date.png";
 import Location from "../assets/aboutevent/location.png";
 import Time from "../assets/aboutevent/time.png";
 import TengeSymbol from "../assets/aboutevent/tenge-symbol.png";
-import Heart from "../assets/aboutevent/heart.png";
-import HeartFavorites from "../assets/aboutevent/heart_favorites.png";
+import AddToFavorites from "../assets/aboutevent/add_to_favorites.png";
+import InFavorites from "../assets/aboutevent/in_favorites.png";
 import "../styles/AboutEvent.css";
 
 import event from "../assets/events/event.png";
@@ -73,6 +73,7 @@ const abouteventcarousel = [
 ];
 
 const AboutEvent = () => {
+  const [isFavorite, setIsFavorite] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
   const { eventId } = useParams<{ eventId: string }>();
   const [userId, setUserId] = useState<number | null>(null);
@@ -147,6 +148,55 @@ const AboutEvent = () => {
 
     fetchEvent();
   }, [eventId]);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch("/api/events/favorites", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        const data = await response.json();
+        const isFav = data.some((fav: any) => fav.event.id === eventId);
+        setIsFavorite(isFav);
+      } catch (error) {
+        console.error("Error checking favorites:", error);
+      }
+    };
+
+    if (eventId) {
+      fetchFavorites();
+    }
+  }, [eventId]);
+
+  const toggleFavorite = async () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) return alert("Login required");
+
+    const url = `/api/event/${eventId}/${
+      isFavorite ? "remove-from-favorite" : "add-to-favorite"
+    }/`;
+    const method = isFavorite ? "DELETE" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setIsFavorite(!isFavorite);
+      } else {
+        const msg = await response.json();
+        alert("Error: " + JSON.stringify(msg));
+      }
+    } catch (err) {
+      console.error("Favorite toggle failed:", err);
+    }
+  };
 
   if (!event) return <p>Loading...</p>;
 
@@ -322,9 +372,17 @@ const AboutEvent = () => {
               <img src={TengeSymbol} alt="Price" />
               <p>{event.price ? `${event.price} ₸` : "Free"}</p>
             </div>
-            <div className="sidebar-flex">
-              <img src={Heart} alt="Favorites" />
-              <p>Add to Favorites</p>
+            <div
+              className="sidebar-flex"
+              onClick={toggleFavorite}
+              style={{ cursor: "pointer" }}
+            >
+              <img
+                src={isFavorite ? InFavorites : AddToFavorites}
+                alt="Favorites"
+                style={{ width: "30px", height: "30px", margin: "0 6px 0 0" }}
+              />
+              <p>{isFavorite ? "In Favorites" : "Add to Favorites"}</p>
             </div>
           </div>
           <div className="about-event-sidebar-buttons">

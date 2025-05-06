@@ -124,43 +124,18 @@ const MyEvents = () => {
                                       : "/default-event.jpg"
                                   }
                                   alt="Event"
-                                  style={{
-                                    borderRadius: "12px",
-                                    width: "100%",
-                                    height: "200px",
-                                    objectFit: "cover",
-                                  }}
+                                  className="myprofile-event-card-image"
                                 />
-                                <div
-                                  style={{
-                                    position: "absolute",
-                                    bottom: "10px",
-                                    left: "10px",
-                                    backgroundColor: "#411666",
-                                    color: "#fff",
-                                    padding: "5px 20px",
-                                    borderRadius: "8px",
-                                    fontSize: "14px",
-                                    zIndex: 2,
-                                  }}
-                                >
+                                <div className="myprofile-event-card-category">
                                   {event.category || "General"}
                                 </div>
                               </div>
-                              <h3
-                                style={{ color: "#202020", margin: "10px 0" }}
-                              >
-                                {event.title}
-                              </h3>
-                              <p style={{ color: "#ABABAB", margin: "4px 0" }}>
+                              <h3>{event.title}</h3>
+                              <p>
                                 {event.city}, {event.address}
                               </p>
-                              <p style={{ color: "#ABABAB", margin: "4px 0" }}>
-                                {formatDateTime(event.date)}
-                              </p>
-                              <p style={{ color: "#ABABAB", margin: "4px 0" }}>
-                                {formatPrice(event.price)}
-                              </p>
+                              <p>{formatDateTime(event.date)}</p>
+                              <p>{formatPrice(event.price)}</p>
                             </div>
                           </Link>
                         )
