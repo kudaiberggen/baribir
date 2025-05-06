@@ -144,8 +144,8 @@ class EventFilterView(APIView):
     def get(self, request):
         date = request.GET.get('date')
         category_code = request.GET.get('category')
-        interest_codes = request.GET.getlist('interests')  # предполагается, что приходят code интересов
-        city_names = request.GET.getlist('city')  # предполагается, что приходят названия городов
+        interest_codes = request.GET.getlist('interests')
+        city_names = request.GET.getlist('city')
 
         print(category_code, interest_codes, city_names)
 
@@ -164,17 +164,13 @@ class EventFilterView(APIView):
             except Category.DoesNotExist:
                 return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # 🔹 Фильтрация по интересам → достаём связанные категории интересов
         if interest_codes:
-            interests = Interest.objects.filter(code__in=interest_codes)
-            interest_categories = interests.values_list('category', flat=True)
-            filters &= Q(category__id__in=interest_categories)
+            filters &= Q(interests__code__in=interest_codes)
 
-        # 🔹 Фильтрация по городам (по имени)
-        if not city_names:
-            if request.user.is_authenticated and request.user.city:
-                print(request.user.is_authenticated, request.user.city)
-                city_names = [request.user.city]
+        # if not city_names:
+        #     if request.user.is_authenticated and request.user.city:
+        #         print(request.user.is_authenticated, request.user.city)
+        #         city_names = [request.user.city]
 
         if city_names:
             filters &= Q(city__name__in=city_names)
