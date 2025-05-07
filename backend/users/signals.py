@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 from django.conf import settings
@@ -51,15 +52,18 @@ def notify_friends_about_new_event(sender, instance, created, **kwargs):
             )
 
 
-@receiver(post_save, sender=UserFriend)
+@receiver(post_save, sender=FriendRequest)
 def friend_request_sent(sender, instance, created, **kwargs):
     if created:
-        create_notification(
-            user=instance.friend,
+        print(f"Creating notification for friend request: {instance.id}")
+        transaction.on_commit(lambda: create_notification(
+            user=instance.to_user,
             notif_type="friend_request",
             title="Friend request",
-            message=f"{instance.user.username} sent you a friend request."
-        )
+            message=f"{instance.from_user.username} sent you a friend request.",
+            friend_request=instance,
+            related_user=instance.from_user
+        ))
 
 @receiver(post_save, sender=UserFriend)
 def friend_request_accepted(sender, instance, created, **kwargs):

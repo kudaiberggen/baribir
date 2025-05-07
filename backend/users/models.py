@@ -148,6 +148,7 @@ class UserSettings(models.Model):
 
     # Privacy
     private_account = models.BooleanField(default=False)
+    friend_request = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.user.username}'s settings"
@@ -179,7 +180,7 @@ class Notification(models.Model):
     read = models.BooleanField(default=False)
     event = models.ForeignKey("Event", on_delete=models.CASCADE, null=True, blank=True, related_name="notifications")
     related_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="related_notifications")
-    friend_request = models.ForeignKey("UserFriend", on_delete=models.SET_NULL, null=True, blank=True)
+    friend_request = models.ForeignKey("FriendRequest", on_delete=models.SET_NULL, null=True, blank=True)
     extra_data = models.JSONField(null=True, blank=True)
 
     def __str__(self):

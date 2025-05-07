@@ -60,11 +60,15 @@ def get_recommendations_by_interests(user: CustomUser):
     return users_with_common_interests
 
 
-def create_notification(user, notif_type, title, message, url=None):
+def create_notification(user, notif_type, title, message, url=None, event=None, related_user=None, friend_request=None, extra_data=None):
     Notification.objects.create(
         user=user,
         type=notif_type,
         title=title,
         message=message,
-        url=url
+        url=url,
+        event=event,
+        related_user=related_user,
+        friend_request=friend_request,
+        extra_data=extra_data
     )

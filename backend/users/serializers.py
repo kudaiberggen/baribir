@@ -199,11 +199,26 @@ class InterestSerializer(serializers.ModelSerializer):
         return InterestSerializer(sub_interests, many=True).data if sub_interests else []
 
 
+class FriendRequestSerializer(serializers.ModelSerializer):
+    from_user = serializers.PrimaryKeyRelatedField(read_only=True)
+    to_user = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = FriendRequest
+        fields = ['id', 'from_user', 'to_user', 'created_at']
+
+
 class NotificationSerializer(serializers.ModelSerializer):
+    friend_request = FriendRequestSerializer(read_only=True)
+
     class Meta:
         model = Notification
         fields = '__all__'
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        print("Friend request representation:", rep['friend_request'])
+        return rep
 
 class CustomUserUpdateSerializer(serializers.ModelSerializer):
     interests = serializers.ListField(
