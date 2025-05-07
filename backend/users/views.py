@@ -200,6 +200,9 @@ class GetOtherEventsView(generics.ListAPIView):
         # if current_event.city:
         #     queryset = queryset.filter(city=current_event.city)
 
+        # Исключаем ивенты, созданные текущим пользователем
+        queryset = queryset.exclude(author=user)
+
         queryset = queryset.filter(date__gte=timezone.now())
 
         if user.is_authenticated:
