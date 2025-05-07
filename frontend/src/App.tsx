@@ -17,11 +17,13 @@ import MyEvents from "./pages/MyEvents";
 import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
 import FriendProfile from "./pages/FriendProfile";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

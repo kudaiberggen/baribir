@@ -217,16 +217,16 @@
 }
 
 .about-events-carousel-card {
-  padding: 0;
+  height: 500px;
   width: 295px;
   flex-shrink: 0;
 
   display: flex;
   flex-direction: column;
-  align-items: left;
   background-color: #fefefe;
   border: 1px solid #e1e1e1;
   border-radius: 12px;
+  overflow: hidden;
 }
 
 .about-events-carousel-image {
@@ -236,9 +236,17 @@
   object-fit: cover;
 }
 .about-carousel-column {
+  padding: 0 20px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+}
+
+.about-carousel-title {
+  margin: 20px 0 10px 0;
+  font-size: 18px;
+  line-height: 1.2;
+  min-height: 48px;
 }
 
 .about-carousel-column-flex {
@@ -252,20 +260,21 @@
   width: 25px;
 }
 .about-carousel-column-flex p {
-  font-size: 14px;
-  margin: 10px 0 10px 10px;
+  font-size: 16px;
+  margin: 8px 0 8px 10px;
 }
 
 .about-carousel-register-row {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 20px;
-  margin: 0 auto 20px;
+  padding: 0 15px 20px;
+  margin-top: auto;
 }
 
 .about-carousel-button {
+  text-decoration: none;
   display: inline-block;
   padding: 10px 20px;
   border-radius: 8px;
