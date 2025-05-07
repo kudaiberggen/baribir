@@ -108,11 +108,14 @@ class EventSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='category.name', default=None, allow_null=True)
     photos = EventPhotoSerializer(many=True, read_only=True)
     announcements = EventAnnouncementSerializer(many=True, read_only=True)
-    city = serializers.CharField(source='city.name')
+    city = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
         fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos', 'announcements', 'price']
+
+    def get_city(self, obj):
+        return obj.city.name if obj.city else None
 
 
 class InterestSerializer(serializers.ModelSerializer):
