@@ -21,7 +21,7 @@ type EventType = {
   title: string;
   description: string;
   photos?: EventPhoto[];
-  category?: string;
+  category?: string | number | null;
   city: string;
   address: string;
   date: string;
@@ -33,21 +33,28 @@ const Events = () => {
   const [events, setEvents] = useState<EventType[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<{
+    code: string;
+    name: string;
+  } | null>(null);
   const [selectedCity, setSelectedCity] = useState("");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isCityOpen, setIsCityOpen] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<
+    { code: string; name: string }[]
+  >([]);
   const [cities, setCities] = useState<string[]>([]);
   const [popularEvents, setPopularEvents] = useState<EventType[]>([]);
+  const findCategoryByName = (name: string) =>
+    categories.find((cat) => cat.name.toLowerCase() === name.toLowerCase());
 
   const cardWidth = 320;
 
   useEffect(() => {
     fetch("/api/categories/")
       .then((res) => res.json())
-      .then((data) => setCategories(data.map((item: any) => item.name)))
+      .then((data) => setCategories(data))
       .catch((err) => console.error("Ошибка загрузки категорий:", err));
 
     fetch("/api/cities/")
@@ -69,7 +76,8 @@ const Events = () => {
     const queryParams = new URLSearchParams();
     if (selectedDate)
       queryParams.append("date", selectedDate.toISOString().split("T")[0]);
-    if (selectedCategory) queryParams.append("category", selectedCategory);
+    if (selectedCategory)
+      queryParams.append("category", selectedCategory.code.toString());
     if (selectedCity) queryParams.append("city", selectedCity);
 
     fetch(`/api/events/?${queryParams}`, {
@@ -96,7 +104,7 @@ const Events = () => {
   }, []);
 
   const formatDateTime = (dateString: string) =>
-    new Date(dateString).toLocaleString("ru-RU", {
+    new Date(dateString).toLocaleString("en-EN", {
       day: "numeric",
       month: "long",
       hour: "2-digit",
@@ -104,7 +112,7 @@ const Events = () => {
     });
 
   const formatPrice = (price: number | null | string | undefined) =>
-    !price || Number(price) <= 0 ? "Бесплатно" : `${price}₸`;
+    !price || Number(price) <= 0 ? "Free" : `${price}₸`;
 
   const renderDays = () => {
     const days = [];
@@ -152,7 +160,11 @@ const Events = () => {
             }}
           >
             {carouselEvents.map((event, index) => (
-              <Link to={`/events/${event.id}`} className="events-carousel-card">
+              <Link
+                key={event.id}
+                to={`/events/${event.id}`}
+                className="events-carousel-card"
+              >
                 <img
                   src={
                     event.photos?.[0]?.image
@@ -172,32 +184,7 @@ const Events = () => {
       </div>
       <div className="top-categories">
         <h2 style={{ fontSize: "40px" }}>Top Categories</h2>
-        {/* <div className="top-categories-flex">
-          <div className="top-categories-card">
-            <div className="top-categories-image">
-              <img src={Entertainment} alt="Entertainment" />
-            </div>
-            <p>Entertainment</p>
-          </div>
-          <div className="top-categories-card">
-            <div className="top-categories-image">
-              <img src={Culture} alt="Culture & Arts" />
-            </div>
-            <p>Culture & Arts</p>
-          </div>
-          <div className="top-categories-card">
-            <div className="top-categories-image">
-              <img src={Tech} alt="Tech & IT" />
-            </div>
-            <p>Tech & IT</p>
-          </div>
-          <div className="top-categories-card">
-            <div className="top-categories-image">
-              <img src={Food} alt="Food & Drinks" />
-            </div>
-            <p>Food & Drinks</p>
-          </div>
-        </div> */}
+
         <div className="top-categories-flex">
           {[
             ["Entertainment", Entertainment],
@@ -205,7 +192,15 @@ const Events = () => {
             ["Tech & IT", Tech],
             ["Food & Drinks", Food],
           ].map(([name, img]) => (
-            <div className="top-categories-card" key={name}>
+            <div
+              className="top-categories-card"
+              key={name}
+              onClick={() => {
+                const category = findCategoryByName(name);
+                if (category) setSelectedCategory(category);
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <div className="top-categories-image">
                 <img src={img as string} alt={name} />
               </div>
@@ -223,7 +218,7 @@ const Events = () => {
               onClick={() => setIsCategoryOpen(!isCategoryOpen)}
             >
               <div className="dropdown-header">
-                {selectedCategory || "Categories"}
+                {selectedCategory?.name || "Categories"}
                 <span className="arrow">
                   <img src={isCategoryOpen ? ArrowUp : ArrowDown} alt="Arrow" />
                 </span>
@@ -232,13 +227,13 @@ const Events = () => {
                 <ul className="dropdown-list">
                   {categories.map((category) => (
                     <li
-                      key={category}
+                      key={category.code}
                       onClick={() => {
                         setSelectedCategory(category);
                         setIsCategoryOpen(false);
                       }}
                     >
-                      {category}
+                      {category.name}
                     </li>
                   ))}
                 </ul>
@@ -286,9 +281,11 @@ const Events = () => {
           <div className="calendar-week">{renderDays()}</div>
         </div>
 
-        <div className="myevents-tab-pane">
+        <div className="events-tab-pane">
           {events.length === 0 ? (
-            <p style={{ color: "#888", marginTop: "20px" }}>
+            <p
+              style={{ color: "#888", marginTop: "20px", textAlign: "center" }}
+            >
               There are no events on this day.
             </p>
           ) : (
@@ -351,7 +348,7 @@ const Events = () => {
                 )}
               </div>
 
-              {Events.length > 12 && (
+              {events.length > 12 && (
                 <button
                   onClick={() => setShowMoreEvents(!showMoreEvents)}
                   className="show-more-button"
@@ -376,7 +373,10 @@ const Events = () => {
             </h2>
             <div className="popular-grid">
               <div className="popular-main-card">
-                <Link to={`/events/${popularEvents[0].id}`}>
+                <Link
+                  to={`/events/${popularEvents[0].id}`}
+                  style={{ textDecoration: "none" }}
+                >
                   <div style={{ position: "relative" }}>
                     <img
                       src={
@@ -396,15 +396,17 @@ const Events = () => {
                     <h3 style={{ fontSize: "24px" }}>
                       {popularEvents[0].title}
                     </h3>
-                    <p style={{ fontSize: "16px", color: "#666" }}>
-                      {popularEvents[0].description}
-                    </p>
+                    <p>{popularEvents[0].description}</p>
                   </div>
                 </Link>
               </div>
               <div className="popular-side-cards">
                 {popularEvents.slice(1, 4).map((event) => (
-                  <Link to={`/events/${event.id}`} key={event.id}>
+                  <Link
+                    to={`/events/${event.id}`}
+                    key={event.id}
+                    style={{ textDecoration: "none" }}
+                  >
                     <div className="popular-side-card">
                       <div style={{ position: "relative" }}>
                         <img

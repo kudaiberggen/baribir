@@ -29,49 +29,6 @@ interface EventType {
   author: number;
 }
 
-const abouteventcarousel = [
-  {
-    image: event,
-    title: "🔥 Фестиваль «Рахат Fest»",
-    date: "4 April",
-    time: "13:00",
-    price: "20000",
-    author: "dilyaa",
-  },
-  {
-    image: event,
-    title: "🔥 Фестиваль «Рахат Fest»",
-    date: "4 April",
-    time: "13:00",
-    price: "20000",
-    author: "dilyaa",
-  },
-  {
-    image: event,
-    title: "🔥 Фестиваль «Рахат Fest»",
-    date: "4 April",
-    time: "13:00",
-    price: "20000",
-    author: "dilyaa",
-  },
-  {
-    image: event,
-    title: "🔥 Фестиваль «Рахат Fest»",
-    date: "4 April",
-    time: "13:00",
-    price: "20000",
-    author: "dilyaa",
-  },
-  {
-    image: event,
-    title: "🔥 Фестиваль «Рахат Fest»",
-    date: "4 April",
-    time: "13:00",
-    price: "20000",
-    author: "dilyaa",
-  },
-];
-
 const AboutEvent = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
@@ -84,6 +41,7 @@ const AboutEvent = () => {
   };
   const BASE_URL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
+  const [recommendedEvents, setRecommendedEvents] = useState<EventType[]>([]);
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
@@ -150,6 +108,24 @@ const AboutEvent = () => {
   }, [eventId]);
 
   useEffect(() => {
+    const fetchRecommendedEvents = async () => {
+      try {
+        const response = await fetch("/api/events/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        const data = await response.json();
+        setRecommendedEvents(data);
+      } catch (error) {
+        console.error("Error fetching recommended events:", error);
+      }
+    };
+
+    fetchRecommendedEvents();
+  }, []);
+
+  useEffect(() => {
     const fetchFavorites = async () => {
       try {
         const response = await fetch("/api/events/favorites", {
@@ -201,15 +177,18 @@ const AboutEvent = () => {
   if (!event) return <p>Loading...</p>;
 
   const handlePrev = () => {
-    if (startIndex > 0) setStartIndex(startIndex - 1);
+    if (startIndex > 0) {
+      setStartIndex(startIndex - 1);
+    }
   };
 
   const handleNext = () => {
-    if (startIndex < abouteventcarousel.length - 3)
+    if (startIndex < recommendedEvents.length - 3) {
       setStartIndex(startIndex + 1);
+    }
   };
 
-  const cardWidth = 320;
+  const cardWidth = 310;
 
   return (
     <div className="about-event-content">
@@ -233,7 +212,9 @@ const AboutEvent = () => {
             </div>
           </div>
         </div>
-        <p>{event.description}</p>
+        <p style={{ fontSize: "20px", textIndent: "2em" }}>
+          {event.description}
+        </p>
         {event.photos && event.photos.length > 0 && (
           <div className="about-event-gallery">
             <div className="main-photo-wrapper">
@@ -259,7 +240,7 @@ const AboutEvent = () => {
           </div>
         )}
         <h1 style={{ fontSize: "32px", margin: "50px 0 30px" }}>
-          Other Festivals:
+          Other Events:
         </h1>
         <div className="about-events-slider-controls">
           <button onClick={handlePrev} className="arrow-button">
@@ -272,64 +253,73 @@ const AboutEvent = () => {
                 transform: `translateX(-${startIndex * cardWidth}px)`,
               }}
             >
-              {abouteventcarousel.map((user, index) => (
-                <div key={index} className="about-events-carousel-card">
-                  <img
-                    src={user.image}
-                    alt="Events"
-                    className="about-events-carousel-image"
-                  />
-                  <h3>{user.title}</h3>
-                  <div className="about-carousel-column">
-                    <div className="about-carousel-column-flex">
-                      <img src={EventDate} alt="Date" />
-                      <p>
-                        {new Date(event.date).toLocaleDateString("en-GB", {
-                          day: "numeric",
-                          month: "long",
-                        })}
-                      </p>
+              {recommendedEvents
+                .slice(startIndex, startIndex + 3)
+                .map((item, index) => (
+                  <div key={item.id} className="about-events-carousel-card">
+                    <img
+                      src={
+                        item.photos && item.photos[0]
+                          ? getImageUrl(item.photos[0].image)
+                          : "/default-event.jpg"
+                      }
+                      alt="Event"
+                      className="about-events-carousel-image"
+                    />
+
+                    <div className="about-carousel-column">
+                      <h3 style={{ margin: "20px 0 10px 0" }}>{item.title}</h3>
+                      <div className="about-carousel-column-flex">
+                        <img src={EventDate} alt="Date" />
+                        <p>
+                          {new Date(item.date).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "long",
+                          })}
+                        </p>
+                      </div>
+                      <div className="about-carousel-column-flex">
+                        <img src={Location} alt="Location" />
+                        <p>
+                          {item.city}, {item.address}
+                        </p>
+                      </div>
+                      <div className="about-carousel-column-flex">
+                        <img src={Time} alt="Time" />
+                        <p>
+                          {new Date(item.date).toLocaleTimeString("en-GB", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                      <div className="about-carousel-column-flex">
+                        <img src={TengeSymbol} alt="Price" />
+                        <p>
+                          {item.price && item.price !== "0" && item.price !== 0
+                            ? `${item.price} ₸`
+                            : "Free"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="about-carousel-column-flex">
-                      <img src={Location} alt="Location" />
-                      <p>
-                        {event.city}, {event.address}
+                    <div className="about-carousel-register-row">
+                      <p
+                        style={{
+                          textAlign: "left",
+                          lineHeight: "1.2rem",
+                          margin: "0",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Organized by <br />
+                        <span style={{ color: "#724A95" }}>@{item.author}</span>
                       </p>
-                    </div>
-                    <div className="about-carousel-column-flex">
-                      <img src={Time} alt="Time" />
-                      <p>
-                        {new Date(event.date).toLocaleTimeString("en-GB", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                    <div className="about-carousel-column-flex">
-                      <img src={TengeSymbol} alt="Price" />
-                      <p>
-                        {event.price && event.price !== "0" && event.price !== 0
-                          ? `${event.price} ₸`
-                          : "Free"}
-                      </p>
+                      <button className="about-carousel-button">
+                        REGISTER
+                      </button>
                     </div>
                   </div>
-                  <div className="about-carousel-register-row">
-                    <p
-                      style={{
-                        textAlign: "left",
-                        lineHeight: "1.2rem",
-                        margin: "0",
-                        fontSize: "14px",
-                      }}
-                    >
-                      Organized by <br />
-                      <span style={{ color: "#724A95" }}>@dilyaaa</span>
-                    </p>
-                    <button className="about-carousel-button">REGISTER</button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <button onClick={handleNext} className="arrow-button">

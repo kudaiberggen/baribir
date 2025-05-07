@@ -218,26 +218,27 @@
 
 .about-events-carousel-card {
   padding: 0;
-  width: 300px;
+  width: 295px;
   flex-shrink: 0;
 
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   background-color: #fefefe;
   border: 1px solid #e1e1e1;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
 }
 
 .about-events-carousel-image {
   width: 100%;
-  height: 100%;
+  height: 40%;
+  border-radius: 12px 12px 0 0;
+  object-fit: cover;
 }
 .about-carousel-column {
   display: flex;
   flex-direction: column;
+  padding: 0 20px;
 }
 
 .about-carousel-column-flex {
