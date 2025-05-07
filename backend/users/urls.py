@@ -21,6 +21,7 @@ urlpatterns = [
     path('events/attended/', AttendedEventsView.as_view(), name='attended-events'),
     path('event/<uuid:event_id>/add-to-favorite/', AddFavoriteEventView.as_view(), name='add-favorite-event'),
     path('event/<uuid:event_id>/remove-from-favorite/', RemoveFavoriteEventView.as_view(), name='remove-favorite-event'),
+    path('event/<uuid:event_id>/other/', GetOtherEventsView.as_view(), name='remove-favorite-event'),
     path('events/favorites', ListFavoriteEventsView.as_view(), name='list-favorite-events'),
     path('event/create/', EventCreateView.as_view(), name='event-create'),
     path('event/<uuid:event_id>/subscribe/', SubscribeToEventView.as_view(), name='event-subscribe'),

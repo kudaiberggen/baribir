@@ -180,6 +180,35 @@ class EventFilterView(APIView):
         return Response(serializer.data)
 
 
+class GetOtherEventsView(generics.ListAPIView):
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        event_id = self.kwargs.get("event_id")
+        user = self.request.user
+
+        try:
+            current_event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Event.objects.none()
+
+        queryset = Event.objects.exclude(id=event_id)
+
+        # if current_event.category:
+        #     queryset = queryset.filter(category=current_event.category)
+        # if current_event.city:
+        #     queryset = queryset.filter(city=current_event.city)
+
+        queryset = queryset.filter(date__gte=timezone.now())
+
+        if user.is_authenticated:
+            registered_event_ids = EventParticipant.objects.filter(user=user).values_list('event_id', flat=True)
+            queryset = queryset.exclude(id__in=registered_event_ids)
+
+        return queryset.order_by('date')[:10]
+
+
 class EventDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
