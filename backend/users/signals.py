@@ -29,10 +29,10 @@ def notify_friends_on_join(sender, instance, created, **kwargs):
     if not created:
         return
     user = instance.user
-    friends = user.friends.all()  # Используется related_name="friends"
+    friends = user.friends.all()  
     for f in friends:
         create_notification(
-            user=f,
+            user=f.friend,
             notif_type="friend_subscribed",
             title="Your friend joined an event",
             message=f"{user.username} joined '{instance.event.title}'."

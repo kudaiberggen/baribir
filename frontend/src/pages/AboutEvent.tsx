@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 import EventDate from "../assets/aboutevent/date.png";
 import Location from "../assets/aboutevent/location.png";
@@ -8,8 +9,6 @@ import TengeSymbol from "../assets/aboutevent/tenge-symbol.png";
 import AddToFavorites from "../assets/aboutevent/add_to_favorites.png";
 import InFavorites from "../assets/aboutevent/in_favorites.png";
 import "../styles/AboutEvent.css";
-
-import event from "../assets/events/event.png";
 
 interface EventPhoto {
   id: number;
@@ -42,6 +41,82 @@ const AboutEvent = () => {
   const BASE_URL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
   const [recommendedEvents, setRecommendedEvents] = useState<EventType[]>([]);
+  const [participants, setParticipants] = useState<any[]>([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const response = await fetch(`/api/event/${eventId}/participants/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        const data = await response.json();
+        setParticipants(data);
+        const currentUserId = getUserIdFromToken();
+        const subscribed = data.some((p: any) => p.user.id === currentUserId);
+        setIsSubscribed(subscribed);
+      } catch (error) {
+        console.error("Error fetching participants:", error);
+      }
+    };
+
+    if (eventId) {
+      fetchParticipants();
+    }
+  }, [eventId]);
+
+  const subscribeToEvent = async () => {
+    try {
+      const response = await fetch(`/api/event/${eventId}/subscribe/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      if (response.ok) {
+        setIsSubscribed(true);
+        // Обновить участников
+        const updated = await response.json();
+        console.log(updated.message);
+        // Перезапросим список участников
+        const res = await fetch(`/api/event/${eventId}/participants/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        setParticipants(await res.json());
+      }
+    } catch (error) {
+      console.error("Error subscribing to event:", error);
+    }
+  };
+
+  const unsubscribeFromEvent = async () => {
+    try {
+      const response = await fetch(`/api/event/${eventId}/unsubscribe/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      if (response.ok) {
+        setIsSubscribed(false);
+        // Перезапросим участников
+        const res = await fetch(`/api/event/${eventId}/participants/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        setParticipants(await res.json());
+      }
+    } catch (error) {
+      console.error("Error unsubscribing from event:", error);
+    }
+  };
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
@@ -87,6 +162,7 @@ const AboutEvent = () => {
   useEffect(() => {
     const id = getUserIdFromToken();
     setUserId(id);
+    console.log("User ID:", id);
   }, []);
 
   useEffect(() => {
@@ -321,7 +397,7 @@ const AboutEvent = () => {
                       to={`/events/${item.id}`}
                       className="about-carousel-button"
                     >
-                      REGISTER
+                      Join Event
                     </Link>
                   </div>
                 </div>
@@ -390,8 +466,11 @@ const AboutEvent = () => {
                 Delete Event
               </button>
             ) : (
-              <button className="about-event-button registration-event">
-                Registration
+              <button
+                className="about-event-button registration-event"
+                onClick={isSubscribed ? unsubscribeFromEvent : subscribeToEvent}
+              >
+                {isSubscribed ? "Leave Event" : "Join Event"}
               </button>
             )}
           </div>
@@ -399,11 +478,47 @@ const AboutEvent = () => {
         <div className="about-event-sidebar">
           <div className="about-event-info-box">
             <div className="sidebar-title-date">
-              <p style={{ fontSize: "24px" }}>Participants</p>
+              <p style={{ fontSize: "24px" }}>
+                Participants{" "}
+                <span style={{ color: "#8C8C8C" }}>{participants.length}</span>
+              </p>
             </div>
             <div className="sidebar-participants">
-              <img src="" alt="Participants" />
-              <p></p>
+              {participants.length === 0 ? (
+                <p>No participants yet.</p>
+              ) : (
+                participants.map((userWrapper) => {
+                  const user = userWrapper.user;
+                  return (
+                    <div key={user.id} className="participant-row">
+                      <img
+                        src={
+                          user.profile_image
+                            ? getImageUrl(user.profile_image)
+                            : "/default-avatar.png"
+                        }
+                        alt={user.username}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <Link
+                        to={`/friend/${user.id}`}
+                        style={{
+                          textDecoration: "none",
+                          color: "#333",
+                          fontSize: "14px",
+                        }}
+                      >
+                        @{user.username}
+                      </Link>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

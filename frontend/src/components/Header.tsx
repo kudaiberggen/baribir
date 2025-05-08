@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
 import Logo from "/BariB1r.svg";
 import Notification from "../assets/header/notification.png";
+import Notifications from "./Notifications";
 import "../styles/Header.css";
 
 const Header: React.FC = () => {
@@ -15,6 +16,7 @@ const Header: React.FC = () => {
       "/media/profile_images/default.png"
     );
   });
+  const [isNotificationOpen, setNotificationOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchProfileImage = () => {
@@ -94,14 +96,20 @@ const Header: React.FC = () => {
         <div className="login-div">
           {isAuthenticated ? (
             <>
-              <NavLink to="/notifications">
+              <span>
                 <img
                   src={Notification}
                   alt="Notification"
-                  style={{ width: "32px", borderRadius: "50%" }}
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setNotificationOpen(!isNotificationOpen)}
                 />
-              </NavLink>
-
+              </span>
+              {isNotificationOpen && <Notifications />}
               <div className="profile-container" ref={dropdownRef}>
                 <img
                   src={profileImage}
