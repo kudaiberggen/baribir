@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
 
 import EventDate from "../assets/aboutevent/date.png";
 import Location from "../assets/aboutevent/location.png";
@@ -78,10 +77,8 @@ const AboutEvent = () => {
 
       if (response.ok) {
         setIsSubscribed(true);
-        // Обновить участников
         const updated = await response.json();
         console.log(updated.message);
-        // Перезапросим список участников
         const res = await fetch(`/api/event/${eventId}/participants/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -105,7 +102,6 @@ const AboutEvent = () => {
 
       if (response.ok) {
         setIsSubscribed(false);
-        // Перезапросим участников
         const res = await fetch(`/api/event/${eventId}/participants/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

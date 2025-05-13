@@ -28,6 +28,14 @@ type EventType = {
   price?: string | number | null;
 };
 
+const fetchWithOptionalAuth = (url: string) => {
+  const token = localStorage.getItem("access_token");
+
+  return fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
+};
+
 const Events = () => {
   const [carouselEvents, setCarouselEvents] = useState<EventType[]>([]);
   const [events, setEvents] = useState<EventType[]>([]);
@@ -62,11 +70,7 @@ const Events = () => {
       .then((data) => setCities(data.map((item: any) => item.name)))
       .catch((err) => console.error("Ошибка загрузки городов:", err));
 
-    fetch("/api/events/", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
+    fetchWithOptionalAuth("/api/events/")
       .then((res) => res.json())
       .then(setCarouselEvents)
       .catch((err) => console.error("Ошибка загрузки карусели событий:", err));
@@ -80,22 +84,14 @@ const Events = () => {
       queryParams.append("category", selectedCategory.code.toString());
     if (selectedCity) queryParams.append("city", selectedCity);
 
-    fetch(`/api/events/?${queryParams}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
+    fetchWithOptionalAuth(`/api/events/?${queryParams}`)
       .then((res) => res.json())
       .then(setEvents)
       .catch((err) => console.error("Ошибка загрузки событий:", err));
   }, [selectedDate, selectedCategory, selectedCity]);
 
   useEffect(() => {
-    fetch("/api/events/popular/", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
+    fetchWithOptionalAuth("/api/events/popular/")
       .then((res) => res.json())
       .then(setPopularEvents)
       .catch((err) =>

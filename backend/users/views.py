@@ -11,7 +11,7 @@ from rest_framework import status, views, generics, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Category, Event, EventParticipant, UserSettings, Interest, Notification, CustomUser, UserFriend, \
     City, FriendRequest, FavoriteEvent

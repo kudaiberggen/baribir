@@ -23,6 +23,22 @@ type FavoriteEvent = {
   created_at: string;
 };
 
+type AttendedEvent = {
+  id: number;
+
+  title: string;
+  description: string;
+  date: string;
+  city: string;
+  address: string;
+  author: number;
+  category: string;
+  photos: { image: string }[];
+  announcements: any[];
+  price: string;
+  attended_at: string;
+};
+
 const MyProfile = () => {
   const [profileImage, setProfileImage] = useState<string>(() => {
     return (
@@ -40,6 +56,7 @@ const MyProfile = () => {
   };
 
   const [profileData, setProfileData] = useState<any>(null);
+  const [attendedEvents, setAttendedEvents] = useState<AttendedEvent[]>([]);
   const [favoriteEvents, setFavoriteEvents] = useState<FavoriteEvent[]>([]);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
   const [showMoreFavorites, setShowMoreFavorites] = useState(false);
@@ -104,6 +121,7 @@ const MyProfile = () => {
         }
 
         const data = await response.json();
+        console.log("Favorite events:", data);
         setFavoriteEvents(data);
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -113,43 +131,30 @@ const MyProfile = () => {
     fetchFavorites();
   }, []);
 
-  const events = [
-    {
-      title: "«Гарри Поттер и Философский Камень»",
-      description:
-        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
-      image: Phone,
-      category: "Кино",
-    },
-    {
-      title: "«Гарри Поттер и Философский Камень»",
-      description:
-        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
-      image: Phone,
-      category: "Стендап",
-    },
-    {
-      title: "«Гарри Поттер и Философский Камень»",
-      description:
-        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
-      image: Phone,
-      category: "Стендап",
-    },
-    {
-      title: "«Гарри Поттер и Философский Камень»",
-      description:
-        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
-      image: Phone,
-      category: "Стендап",
-    },
-    {
-      title: "«Гарри Поттер и Философский Камень»",
-      description:
-        "4000 тенге, 22 марта в 20:00, 22:00, Стендап клуб Almaty Central Stand up club, ул.Кабанбай Батыра, 71",
-      image: Phone,
-      category: "Стендап",
-    },
-  ];
+  useEffect(() => {
+    const fetchAttendedEvents = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("/api/events/attended/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch attended events");
+        }
+
+        const data = await response.json();
+        console.log("Attended events:", data);
+        setAttendedEvents(data);
+      } catch (error) {
+        console.error("Error fetching attended events:", error);
+      }
+    };
+
+    fetchAttendedEvents();
+  }, []);
 
   return (
     <section className="settings-section">
@@ -276,7 +281,7 @@ const MyProfile = () => {
                     color: "#411666",
                   }}
                 >
-                  6
+                  {attendedEvents.length}
                 </h3>
               </div>
               <div
@@ -302,33 +307,56 @@ const MyProfile = () => {
           </div>
           <div>
             <h2 style={{ fontSize: "32px" }}>Events attended</h2>
-            <div className="event-cards">
-              {(showMoreEvents ? events : events.slice(0, 4)).map(
-                (event, index) => (
-                  <div className="event-card" key={index}>
-                    <div style={{ position: "relative" }}>
-                      <img
-                        src={event.image}
-                        alt="Card"
-                        className="myprofile-event-card-image"
-                      />
-                      <div className="myprofile-event-card-category">
-                        {event.category}
+            {attendedEvents.length === 0 ? (
+              <p style={{ color: "#888", marginTop: "20px" }}>
+                You haven't attended any events yet.
+              </p>
+            ) : (
+              <>
+                <div className="event-cards">
+                  {(showMoreEvents
+                    ? attendedEvents
+                    : attendedEvents.slice(0, 4)
+                  ).map((attended, index) => (
+                    <Link
+                      to={`/events/${attended.id}`}
+                      key={attended.id}
+                      className="event-card"
+                    >
+                      <div className="event-card" key={index}>
+                        <div style={{ position: "relative" }}>
+                          <img
+                            src={
+                              attended.photos[0]
+                                ? `http://localhost:8000${attended.photos[0].image}`
+                                : "/default.jpg"
+                            }
+                            alt="Card"
+                            className="myprofile-event-card-image"
+                          />
+                          <div className="myprofile-event-card-category">
+                            {attended.category}
+                          </div>
+                        </div>
+                        <h3>{attended.title}</h3>
+                        <p>
+                          {attended.city}, {attended.address}
+                        </p>
+                        <p>{formatDateTime(attended.date)}</p>
+                        <p>{formatPrice(attended.price)}</p>
                       </div>
-                    </div>
-                    <h3>{event.title}</h3>
-                    <p style={{ color: "#ABABAB" }}>{event.description}</p>
-                  </div>
-                )
-              )}
-            </div>
-            {events.length > 4 && (
-              <button
-                onClick={() => setShowMoreEvents(!showMoreEvents)}
-                className="show-more-button"
-              >
-                {showMoreEvents ? "Show less" : "Show more"}
-              </button>
+                    </Link>
+                  ))}
+                </div>
+                {attendedEvents.length > 4 && (
+                  <button
+                    onClick={() => setShowMoreEvents(!showMoreEvents)}
+                    className="show-more-button"
+                  >
+                    {showMoreEvents ? "Show less" : "Show more"}
+                  </button>
+                )}
+              </>
             )}
             <h2 style={{ fontSize: "32px" }}>Favorites</h2>
             {favoriteEvents.length === 0 ? (
