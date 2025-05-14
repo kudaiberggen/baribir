@@ -12,6 +12,7 @@ urlpatterns = [
     path("change-password/", ChangePasswordView.as_view(), name ='change-password'),
     path("deactivate-account/", deactivate_account, name ='deactivate-account'),
     path("user-info/", UserInfoView.as_view(), name="user-info"),
+    path('users/<id>/', UserDetailView.as_view(), name='user-detail'),
     path('change-photo/', ChangePhotoView.as_view(), name='change-photo'),
     path('delete-photo/', DeletePhotoView.as_view(), name='delete-photo'),
     path('events/calendar/', EventCalendarView.as_view(), name='events-calendar'),

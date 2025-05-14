@@ -180,6 +180,13 @@ class EventFilterView(APIView):
         return Response(serializer.data)
 
 
+class UserDetailView(APIView):
+    def get(self, request, id):
+        user = get_object_or_404(CustomUser, id=id)
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class GetOtherEventsView(generics.ListAPIView):
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
