@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/FriendProfile.css";
 import Phone from "../assets/myprofile/phone.png";
@@ -13,37 +13,58 @@ const truncateByWords = (str: string, numWords: number) => {
 };
 
 const FriendProfile = () => {
-  const { userId } = useParams();
+  const { friendId } = useParams();
   const [profileData, setProfileData] = useState<any>(null);
   const [events, setEvents] = useState<any[]>([]);
+  const [friends, setFriends] = useState<any[]>([]);
   const [showFullBio, setShowFullBio] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!friendId) return;
 
     axios
-      .get(`/api/user/${userId}/`)
-      .then((res) => setProfileData(res.data))
+      .get(`/api/users/${friendId}/`)
+      .then((res) => {
+        setProfileData(res.data);
+        setFriends(res.data.friends || []);
+      })
       .catch((err) => console.error("Failed to load profile:", err));
 
     axios
-      .get(`/api/user/${userId}/created-events/`)
+      .get(`/api/user/${friendId}/created-events/`)
       .then((res) => setEvents(res.data))
       .catch((err) => console.error("Failed to load events:", err));
-  }, [userId]);
+  }, [friendId]);
+
+  const formatPrice = (price?: string | number | null): string => {
+    if (price === null || price === "" || price === undefined) {
+      return "Free";
+    }
+    return `${price} ₸`;
+  };
+
+  const formatDateTime = (isoDate: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      dateStyle: "medium",
+      timeStyle: "short",
+    };
+    return new Date(isoDate).toLocaleString("en-GB", options);
+  };
 
   if (!profileData) return <div>Loading...</div>;
-
   return (
     <section>
-      <div style={{ display: "flex", flexDirection: "column", width: "82%" }}>
-        <h2 style={{ margin: "15px 0", fontSize: "32px" }}>Friend's Profile</h2>
-        <div className="profile-container-white">
+      <div className="friend-profile-container">
+        <div className="friend-profile-container-white">
           <div style={{ width: "60%" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <img
-                src={profileData.avatar || "/default-avatar.png"}
+                src={
+                  profileData.profile_image
+                    ? `http://localhost:8000${profileData.profile_image}`
+                    : "/default-avatar.png"
+                }
                 alt="Avatar"
                 className="myprofile-avatar"
               />
@@ -93,45 +114,39 @@ const FriendProfile = () => {
               />
               <p>Email: {profileData.email}</p>
             </div>
+
             <div className="myprofile-interests-div">
               {profileData.interests.length > 0 ? (
-                profileData.interests.map((interest: string, index: number) => (
+                profileData.interests.map((interest: any, index: number) => (
                   <span className="myprofile-interests" key={index}>
-                    {interest}
+                    {interest.name}
                   </span>
                 ))
               ) : (
                 <span className="myprofile-interests">No interests</span>
               )}
             </div>
+            <button className="white-block-follow-button">+ Follow</button>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "40px",
-              width: "40%",
-            }}
-          >
-            <div style={{ textAlign: "center" }}>
+          <div className="white-block-row">
+            <div className="white-block-column">
               <h2>Events</h2>
-              <h3
-                style={{ fontSize: "120px", fontWeight: 500, color: "#411666" }}
-              >
-                {events.length}
-              </h3>
+              <h3 className="white-block-h3">{events.length}</h3>
             </div>
-            <div style={{ textAlign: "center" }}>
+            <div className="white-block-column">
               <h2>Friends</h2>
-              <h3
-                style={{ fontSize: "120px", fontWeight: 500, color: "#411666" }}
-              >
-                --
-              </h3>
+              <h3 className="white-block-h3">{friends.length}</h3>
             </div>
           </div>
         </div>
-
+        <hr
+          style={{
+            width: "100%",
+            border: "none",
+            borderTop: "1px solid #e0e0e0",
+            margin: "50px 0",
+          }}
+        />
         <div>
           <h2 style={{ fontSize: "32px" }}>
             {profileData.first_name}'s events:
@@ -139,20 +154,34 @@ const FriendProfile = () => {
           <div className="event-cards">
             {(showMoreEvents ? events : events.slice(0, 4)).map(
               (event: any, index: number) => (
-                <div className="event-card" key={index}>
-                  <div style={{ position: "relative" }}>
-                    <img
-                      src={event.image}
-                      alt="Event"
-                      className="myprofile-event-card-image"
-                    />
-                    <div className="myprofile-event-card-category">
-                      {event.category}
+                <Link
+                  to={`/events/${event.id}`}
+                  key={event.id}
+                  className="event-card"
+                >
+                  <div className="event-card" key={index}>
+                    <div style={{ position: "relative" }}>
+                      <img
+                        src={
+                          event.photos?.[0]?.image?.startsWith("http")
+                            ? event.photos[0].image
+                            : `http://localhost:8000${event.photos?.[0]?.image}`
+                        }
+                        alt="Event"
+                        className="myprofile-event-card-image"
+                      />
+                      <div className="myprofile-event-card-category">
+                        {event.category}
+                      </div>
                     </div>
+                    <h3>{event.title}</h3>
+                    <p>
+                      {event.city}, {event.address}
+                    </p>
+                    <p>{formatDateTime(event.date)}</p>
+                    <p>{formatPrice(event.price)}</p>
                   </div>
-                  <h3>{event.title}</h3>
-                  <p style={{ color: "#ABABAB" }}>{event.description}</p>
-                </div>
+                </Link>
               )
             )}
           </div>

@@ -1,0 +1,60 @@
+.friend-profile-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.12);
+  padding: 50px 100px;
+  margin: 30px 50px;
+  width: 80%;
+}
+
+.friend-profile-container-white {
+  display: flex;
+  flex-direction: row;
+}
+
+.white-block-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  width: 40%;
+}
+
+.white-block-column {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.white-block-h3 {
+  font-size: 120px;
+  font-weight: 500;
+  margin: 0;
+  color: #411666;
+}
+
+.white-block-follow-button {
+  margin: auto 0 0;
+  display: inline-block;
+  padding: 8px 50px;
+  margin: 20px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #411666;
+  background-color: transparent;
+  color: #411666;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.white-block-follow-button:hover {
+  background-color: #411666;
+  color: white;
+}

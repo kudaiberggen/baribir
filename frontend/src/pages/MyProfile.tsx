@@ -255,53 +255,14 @@ const MyProfile = () => {
                 )}
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "40px",
-                width: "40%",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                }}
-              >
+            <div className="white-block-row">
+              <div className="white-block-column">
                 <h2>Events attented</h2>
-                <h3
-                  style={{
-                    fontSize: "120px",
-                    fontWeight: "500",
-                    margin: "0",
-                    color: "#411666",
-                  }}
-                >
-                  {attendedEvents.length}
-                </h3>
+                <h3 className="white-block-h3">{attendedEvents.length}</h3>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                }}
-              >
+              <div className="white-block-column">
                 <h2>Favorites</h2>
-                <h3
-                  style={{
-                    fontSize: "120px",
-                    fontWeight: "500",
-                    margin: "0",
-                    color: "#411666",
-                  }}
-                >
-                  {favoriteEvents.length}
-                </h3>
+                <h3 className="white-block-h3">{favoriteEvents.length}</h3>
               </div>
             </div>
           </div>

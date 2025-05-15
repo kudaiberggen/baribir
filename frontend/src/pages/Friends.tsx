@@ -171,7 +171,13 @@ const Friends = () => {
                             )
                           )}
                         </div>
-                        <button className="follow-btn">+ Follow</button>
+                        <Link
+                          className="follow-btn"
+                          to={`/friend/${user.id}`}
+                          key={user.id}
+                        >
+                          View profile
+                        </Link>
                       </div>
                     ))}
                   </div>
