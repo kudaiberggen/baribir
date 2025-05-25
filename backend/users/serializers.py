@@ -275,3 +275,27 @@ class FavoriteEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteEvent
         fields = ['id', 'event', 'created_at']
+
+
+class MessageMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MessageMedia
+        fields = ['id', 'file', 'media_type', 'uploaded_at']
+
+class MessageSerializer(serializers.ModelSerializer):
+    media = MessageMediaSerializer(many=True, read_only=True)
+    sender = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['id', 'chat', 'sender', 'content', 'created_at', 'media']
+
+class MessageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['chat', 'content']
+
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = ['id', 'name', 'is_group', 'participants']

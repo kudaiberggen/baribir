@@ -14,3 +14,14 @@ admin.site.register(UserSettings)
 admin.site.register(UserFriend)
 admin.site.register(FriendRequest)
 admin.site.register(City)
+admin.site.register(Chat)
+admin.site.register(MessageMedia)
+
+class MessageMediaInline(admin.TabularInline):
+    model = MessageMedia
+    extra = 1
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    inlines = [MessageMediaInline]
+    list_display = ['id', 'sender', 'chat', 'created_at']

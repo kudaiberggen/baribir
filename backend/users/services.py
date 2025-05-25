@@ -1,3 +1,5 @@
+import mimetypes
+
 from django.db.models import Count, Q
 from itertools import chain
 from users.models import CustomUser, UserFriend, Notification
@@ -84,3 +86,13 @@ def create_notification(user, notif_type, title, message, url=None, event=None, 
         friend_request=friend_request,
         extra_data=extra_data
     )
+
+
+def get_media_type(file_path):
+    mime_type, _ = mimetypes.guess_type(file_path)
+    if mime_type:
+        if mime_type.startswith('image'):
+            return 'image'
+        elif mime_type.startswith('video'):
+            return 'video'
+    return 'file'

@@ -235,3 +235,58 @@ class FavoriteEvent(models.Model):
 
     def __str__(self):
         return f'{self.user.username} → {self.event.title}'
+
+
+class Chat(models.Model):
+    EVENT = 'event'
+    PRIVATE = 'private'
+    GROUP = 'group'
+
+    CHAT_TYPE_CHOICES = [
+        (EVENT, 'Event Chat'),
+        (PRIVATE, 'Private Chat'),
+        (GROUP, 'Group Chat'),
+    ]
+
+    chat_type = models.CharField(max_length=10, choices=CHAT_TYPE_CHOICES)
+    name = models.CharField(max_length=255, blank=True, null=True)  # для групп/ивентов
+    event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True, blank=True)
+    participants = models.ManyToManyField(CustomUser, related_name='chats')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name or f"{self.chat_type} chat #{self.pk}"
+
+
+
+class MessageMedia(models.Model):
+    IMAGE = 'image'
+    VIDEO = 'video'
+    FILE = 'file'
+
+    MEDIA_TYPE_CHOICES = [
+        (IMAGE, 'Image'),
+        (VIDEO, 'Video'),
+        (FILE, 'File'),
+    ]
+
+    message = models.ForeignKey('Message', on_delete=models.CASCADE, related_name='media')
+    file = models.FileField(upload_to='chat_media/')
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.media_type} for message {self.message.id}"
+
+class Message(models.Model):
+    chat = models.ForeignKey('Chat', on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Message from {self.sender} at {self.created_at}"
+

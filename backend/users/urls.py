@@ -4,6 +4,9 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
+router.register('chats', ChatViewSet, basename='chat')
+router.register('messages', MessageViewSet, basename='message')
+router.register('media', MessageMediaViewSet, basename='media')
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),

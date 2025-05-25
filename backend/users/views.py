@@ -693,3 +693,34 @@ class FriendRequestListView(APIView):
             "outgoing_requests": FriendRequestSerializer(outgoing, many=True).data,
         }
         return Response(data, status=200)
+
+
+class ChatViewSet(viewsets.ModelViewSet):
+    queryset = Chat.objects.all()
+    serializer_class = ChatSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Chat.objects.filter(participants=self.request.user)
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return MessageCreateSerializer
+        return MessageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
+
+    def get_queryset(self):
+        return Message.objects.filter(chat__participants=self.request.user)
+
+
+class MessageMediaViewSet(viewsets.ModelViewSet):
+    queryset = MessageMedia.objects.all()
+    serializer_class = MessageMediaSerializer
+    permission_classes = [permissions.IsAuthenticated]
