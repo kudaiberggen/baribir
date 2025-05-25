@@ -4,14 +4,14 @@ from users.models import CustomUser, UserFriend, Notification
 
 
 def get_friend_recommendations(user: CustomUser):
-    # friend_ids = UserFriend.objects.filter(user=user).values_list('friend_id', flat=True)
+    friend_ids = UserFriend.objects.filter(user=user).values_list('friend_id', flat=True)
 
     # common_friends = (
     #     CustomUser.objects
     #     .exclude(id__in=friend_ids)
     #     .exclude(id=user.id)
     #     .exclude(is_superuser=True)
-    #     .exclude(is_active=False)
+    #     .exclude(is_active=True)
     #     .annotate(
     #         common_count=Count('friends', filter=Q(friends__in=friend_ids))
     #     )
@@ -33,7 +33,18 @@ def get_friend_recommendations(user: CustomUser):
     #     .filter(city=user.city)
     # )
 
-    all_users = CustomUser.objects.exclude(is_superuser=True).exclude(is_active=False)
+    # Объединение двух QuerySet’ов (без повторов)
+    # recommendations = common_friends
+    # return recommendations.distinct()
+    all_users = (
+        CustomUser.objects
+            .exclude(is_superuser=True)
+            .exclude(is_active=False)
+            .exclude(id__in=friend_ids)
+            .exclude(id=user.id)
+            .exclude(is_superuser=True)
+            .exclude(is_active=False)
+    )
     return all_users
 
 
