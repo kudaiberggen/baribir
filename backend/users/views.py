@@ -724,3 +724,20 @@ class MessageMediaViewSet(viewsets.ModelViewSet):
     queryset = MessageMedia.objects.all()
     serializer_class = MessageMediaSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class UnfollowAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, friend_id):
+        current_user = request.user
+        friend = get_object_or_404(CustomUser, id=friend_id)
+
+        deleted_count, _ = UserFriend.objects.filter(
+            Q(user=current_user, friend=friend) | Q(user=friend, friend=current_user)
+        ).delete()
+
+        return Response({
+            "status": "success",
+            "message": f"{deleted_count} friendship record(s) deleted."
+        }, status=status.HTTP_200_OK)
