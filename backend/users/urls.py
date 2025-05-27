@@ -52,6 +52,6 @@ urlpatterns = [
     path('friend-request/send/<user_id>/', SendFriendRequestView.as_view(), name='send_friend_request'),
     path('friend-request/accept/<request_id>/', AcceptFriendRequestView.as_view(), name='accept_friend_request'),
     path('friend-request/decline/<request_id>/', DeclineFriendRequestView.as_view(), name='decline_friend_request'),
-    path('user/<friend_id>/unfollow', UnfollowAPIView.as_view(), name='api-unfollow'),
+    path('user/<friend_id>/unfollow/', UnfollowAPIView.as_view(), name='api-unfollow'),
     path('', include(router.urls)),
 ]
