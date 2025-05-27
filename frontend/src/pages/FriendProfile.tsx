@@ -17,6 +17,7 @@ const FriendProfile = () => {
   const [profileData, setProfileData] = useState<any>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [friends, setFriends] = useState<any[]>([]);
+  const [isFriend, setIsFriend] = useState(false);
   const [showFullBio, setShowFullBio] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
 
@@ -28,6 +29,8 @@ const FriendProfile = () => {
       .then((res) => {
         setProfileData(res.data);
         setFriends(res.data.friends || []);
+        // Проверим, в друзьях ли этот пользователь
+        setIsFriend(res.data.is_friend || false); // ← предполагается, что это приходит с бэка
       })
       .catch((err) => console.error("Failed to load profile:", err));
 
@@ -50,6 +53,25 @@ const FriendProfile = () => {
       timeStyle: "short",
     };
     return new Date(isoDate).toLocaleString("en-GB", options);
+  };
+
+  const handleFollow = async () => {
+    try {
+      await axios.post(`/api/friends/request/${friendId}/`);
+      // здесь логика может отличаться: можно показывать pending или "Запрос отправлен"
+      setIsFriend(true);
+    } catch (err) {
+      console.error("Failed to send friend request:", err);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await axios.post(`/api/friends/remove/${friendId}/`);
+      setIsFriend(false);
+    } catch (err) {
+      console.error("Failed to remove friend:", err);
+    }
   };
 
   if (!profileData) return <div>Loading...</div>;
@@ -126,7 +148,21 @@ const FriendProfile = () => {
                 <span className="myprofile-interests">No interests</span>
               )}
             </div>
-            <button className="white-block-follow-button">+ Follow</button>
+            {isFriend ? (
+              <button
+                className="white-block-unfollow-button"
+                onClick={handleUnfollow}
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className="white-block-follow-button"
+                onClick={handleFollow}
+              >
+                + Follow
+              </button>
+            )}
           </div>
           <div className="white-block-row">
             <div className="white-block-column">
@@ -148,7 +184,7 @@ const FriendProfile = () => {
           }}
         />
         <div>
-          <h2 style={{ fontSize: "32px" }}>
+          <h2 style={{ fontSize: "32px", textAlign: "left" }}>
             {profileData.first_name}'s events:
           </h2>
           <div className="event-cards">
