@@ -741,3 +741,14 @@ class UnfollowAPIView(APIView):
             "status": "success",
             "message": f"{deleted_count} friendship record(s) deleted."
         }, status=status.HTTP_200_OK)
+    
+
+class IsFriendView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, friend_id):  # было user_id
+        user = get_object_or_404(CustomUser, id=friend_id)
+        is_friend = UserFriend.objects.filter(
+            Q(user=request.user, friend=user) | Q(user=user, friend=request.user)
+        ).exists()
+        return Response({"is_friend": is_friend})

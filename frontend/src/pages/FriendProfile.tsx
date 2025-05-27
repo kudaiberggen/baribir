@@ -24,18 +24,33 @@ const FriendProfile = () => {
   useEffect(() => {
     if (!friendId) return;
 
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
     axios
-      .get(`/api/users/${friendId}/`)
+      .get(`/api/users/${friendId}/`, { headers })
       .then((res) => {
         setProfileData(res.data);
         setFriends(res.data.friends || []);
-        // Проверим, в друзьях ли этот пользователь
-        setIsFriend(res.data.is_friend || false); // ← предполагается, что это приходит с бэка
       })
       .catch((err) => console.error("Failed to load profile:", err));
 
     axios
-      .get(`/api/user/${friendId}/created-events/`)
+      .get(`/api/friends/is_friend/${friendId}/`, { headers })
+      .then((res) => {
+        setIsFriend(res.data.is_friend);
+      })
+      .catch((err) => console.error("Failed to check friendship:", err));
+
+    axios
+      .get(`/api/user/${friendId}/created-events/`, { headers })
       .then((res) => setEvents(res.data))
       .catch((err) => console.error("Failed to load events:", err));
   }, [friendId]);
@@ -58,7 +73,6 @@ const FriendProfile = () => {
   const handleFollow = async () => {
     try {
       await axios.post(`/api/friends/request/${friendId}/`);
-      // здесь логика может отличаться: можно показывать pending или "Запрос отправлен"
       setIsFriend(true);
     } catch (err) {
       console.error("Failed to send friend request:", err);
@@ -67,7 +81,21 @@ const FriendProfile = () => {
 
   const handleUnfollow = async () => {
     try {
-      await axios.post(`/api/friends/remove/${friendId}/`);
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      await axios.post(
+        `http://localhost:8000/api/user/${friendId}/unfollow/`,
+        {},
+        { headers }
+      );
+
       setIsFriend(false);
     } catch (err) {
       console.error("Failed to remove friend:", err);

@@ -43,6 +43,32 @@ const Friends = () => {
     fetchFriendsAndRecommendations();
   }, []);
 
+  const handleUnfollow = async (friendId: number) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      await axios.post(
+        `${BASE_URL}/api/user/${friendId}/unfollow/`,
+        {},
+        config
+      );
+
+      setFriends((prev) => prev.filter((f) => f.id !== friendId));
+    } catch (err) {
+      console.error("Failed to unfollow user:", err);
+    }
+  };
+
   const handleSearch = () => {
     console.log("Search triggered for:", searchQuery);
   };
@@ -124,7 +150,9 @@ const Friends = () => {
                     </div>
                   </div>
                   <div className="friend-buttons">
-                    <a href="">Following</a>
+                    <button onClick={() => handleUnfollow(friend.id)}>
+                      Unfollow
+                    </button>
                     <Link to={`/friend/${friend.id}`} key={friend.id}>
                       View profile
                     </Link>

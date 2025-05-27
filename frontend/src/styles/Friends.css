@@ -140,8 +140,9 @@
 }
 
 .friend-buttons button {
-  width: 80%;
-  background-color: #411666;
+  box-sizing: border-box;
+  width: 90%;
+  background-color: #f44336;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -152,9 +153,10 @@
 }
 
 .friend-buttons a {
+  box-sizing: border-box;
   text-decoration: none;
   text-align: center;
-  width: 80%;
+  width: 90%;
   background-color: #411666;
   color: white;
   border: none;
@@ -166,6 +168,10 @@
 }
 
 .friend-buttons button:hover {
+  background-color: #d54d43;
+}
+
+.friend-buttons a:hover {
   background-color: #5c1c88;
 }
 
