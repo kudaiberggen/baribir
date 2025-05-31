@@ -117,16 +117,23 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'email', 'city', 'profile_image', 'interests', 'friends', 'phone']
 
 
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['latitude', 'longitude', 'address']
+
+
 class EventSerializer(serializers.ModelSerializer):
     author = CustomUserSerializer(read_only=True)
     category = serializers.CharField(source='category.name', default=None, allow_null=True)
     photos = EventPhotoSerializer(many=True, read_only=True)
     announcements = EventAnnouncementSerializer(many=True, read_only=True)
     city = serializers.SerializerMethodField()
+    location = LocationSerializer()
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'author', 'category', 'photos', 'announcements', 'price']
+        fields = ['id', 'title', 'description', 'date', 'city', 'address', 'location', 'author', 'category', 'photos', 'announcements', 'price']
 
     def get_city(self, obj):
         return obj.city.name if obj.city else None
@@ -290,12 +297,46 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = ['id', 'chat', 'sender', 'content', 'created_at', 'media']
 
+
+class MessageMediaSerializer(serializers.ModelSerializer):
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MessageMedia
+        fields = ['id', 'file', 'file_url', 'media_type', 'uploaded_at']
+
+    def get_file_url(self, obj):
+        if obj.file:
+            return obj.file.url
+        return None
+
+
 class MessageCreateSerializer(serializers.ModelSerializer):
+    media = MessageMediaSerializer(many=True, required=False, write_only=True)
+
     class Meta:
         model = Message
-        fields = ['chat', 'content']
+        fields = ['chat', 'content', 'media']
+
+    def create(self, validated_data):
+        media_data = validated_data.pop('media', [])
+        message = Message.objects.create(**validated_data)
+        for media in media_data:
+            MessageMedia.objects.create(message=message, **media)
+        return message
 
 class ChatSerializer(serializers.ModelSerializer):
+    last_message = serializers.SerializerMethodField()
+    is_group = serializers.SerializerMethodField()
+    participants = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Chat
-        fields = ['id', 'name', 'is_group', 'participants']
+        fields = ['id', 'name', 'chat_type', 'is_group', 'participants', 'last_message']
+
+    def get_is_group(self, obj):
+        return obj.chat_type in [Chat.GROUP, Chat.EVENT]
+
+    def get_last_message(self, obj):
+        message = obj.messages.last()
+        return MessageSerializer(message).data if message else None

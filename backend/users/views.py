@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from geopy.distance import geodesic
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
@@ -145,9 +146,9 @@ class EventFilterView(APIView):
         date = request.GET.get('date')
         category_code = request.GET.get('category')
         interest_codes = request.GET.getlist('interests')
-        city_names = request.GET.getlist('city')
-
-        print(category_code, interest_codes, city_names)
+        latitude = request.GET.get('lat')
+        longitude = request.GET.get('lng')
+        radius_km = float(request.GET.get('radius', 30))  # default 30 km
 
         filters = Q()
 
@@ -167,15 +168,20 @@ class EventFilterView(APIView):
         if interest_codes:
             filters &= Q(interests__code__in=interest_codes)
 
-        # if not city_names:
-        #     if request.user.is_authenticated and request.user.city:
-        #         print(request.user.is_authenticated, request.user.city)
-        #         city_names = [request.user.city]
+        events = Event.objects.filter(filters).select_related('location').distinct()
 
-        if city_names:
-            filters &= Q(city__name__in=city_names)
+        # Геофильтрация
+        if latitude and longitude:
+            user_coords = (float(latitude), float(longitude))
+            nearby_events = []
+            for event in events:
+                if event.location:
+                    event_coords = (event.location.latitude, event.location.longitude)
+                    distance_km = geodesic(user_coords, event_coords).km
+                    if distance_km <= radius_km:
+                        nearby_events.append(event)
+            events = nearby_events
 
-        events = Event.objects.filter(filters).distinct()
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 

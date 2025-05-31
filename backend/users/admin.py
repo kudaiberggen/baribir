@@ -24,4 +24,10 @@ class MessageMediaInline(admin.TabularInline):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     inlines = [MessageMediaInline]
-    list_display = ['id', 'sender', 'chat', 'created_at']
+    list_display = ['id', 'sender', 'chat', 'created_at', 'short_content']
+    search_fields = ['content', 'sender__username']
+    list_filter = ['created_at', 'chat__chat_type']
+    readonly_fields = ['created_at']
+
+    def short_content(self, obj):
+        return obj.content[:40] + '...' if len(obj.content) > 40 else obj.content

@@ -56,6 +56,14 @@ class UserPhoto(models.Model):
     def __str__(self):
         return self.name or str(self.id)
 
+class Location(models.Model):
+    address = models.CharField(max_length=255, blank=True, null=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    def __str__(self):
+        return self.address or f"{self.latitude}, {self.longitude}"
+
 
 class Event(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -64,6 +72,7 @@ class Event(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
+    location = models.OneToOneField(Location, on_delete=models.SET_NULL, null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     is_free = models.BooleanField(default=False)
