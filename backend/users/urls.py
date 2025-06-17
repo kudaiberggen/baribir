@@ -42,6 +42,7 @@ urlpatterns = [
     path('cities/', CityListAPIView.as_view(), name='get-cities'),
     path('cities/add-bulk/', CityBulkCreateAPIView.as_view(), name='city-bulk-create'),
     path('notifications/', GetNotificationsView.as_view(), name='get-notifications'),
+    path('notifications/count', GetNotificationsCountView.as_view(), name='get-notifications-count'),
     path('profile/my-events/', MyCreatedEventsView.as_view(), name='my-created-events'),
     path('profile/update/', ProfileUpdateView.as_view(), name='profile-update'),
     path('user/<int:user_id>/created-events/', UserCreatedEventsView.as_view(), name='user-created-events'),

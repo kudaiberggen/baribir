@@ -16,6 +16,7 @@ admin.site.register(FriendRequest)
 admin.site.register(City)
 admin.site.register(Chat)
 admin.site.register(MessageMedia)
+admin.site.register(Notification)
 
 class MessageMediaInline(admin.TabularInline):
     model = MessageMedia

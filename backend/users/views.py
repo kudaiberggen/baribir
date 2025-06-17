@@ -320,6 +320,18 @@ class SubscribeToEventView(APIView):
             return Response({"message": "Already subscribed to this event."}, status=status.HTTP_200_OK)
 
         EventParticipant.objects.create(user=request.user, event=event)
+        
+        # Создание уведомления для создателя события
+        if event.author != request.user:
+            Notification.objects.create(
+                user=event.author,
+                type="event_joined",
+                title = "A new participant has joined your event",
+                message = f"{request.user.username} has signed up for the event '{event.title}'.",
+                event=event,
+                related_user=request.user,
+                url=f"/events/{event.id}/",
+            )
         return Response({"message": "Successfully subscribed to the event."}, status=status.HTTP_201_CREATED)
 
 
@@ -508,10 +520,31 @@ class GetNotificationsView(APIView):
             key for key, enabled in vars(settings).items()
             if key in dict(Notification.NOTIFICATION_TYPES) and enabled
         ]
+        print("ALLOWED TYPES:", allowed_types)
 
         notifications = Notification.objects.filter(user=user, type__in=allowed_types)
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
+    
+
+class GetNotificationsCountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        settings = getattr(user, 'settings', None)
+        print(settings)
+        if not settings:
+            return Response([])
+
+        allowed_types = [
+            key for key, enabled in vars(settings).items()
+            if key in dict(Notification.NOTIFICATION_TYPES) and enabled
+        ]
+
+        notifications = Notification.objects.filter(user=user, type__in=allowed_types)
+        count = notifications.count()
+        return Response(count)
 
 
 class FriendRecommendationsAPIView(APIView):

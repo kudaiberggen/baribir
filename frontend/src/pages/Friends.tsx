@@ -69,9 +69,7 @@ const Friends = () => {
     }
   };
 
-  const handleSearch = () => {
-    console.log("Search triggered for:", searchQuery);
-  };
+  const handleSearch = () => {};
 
   const handlePrev = () => {
     if (startIndex > 0) setStartIndex(startIndex - 1);
@@ -82,6 +80,14 @@ const Friends = () => {
   };
 
   console.log("Recommendations:", recommendations);
+
+  const filteredFriends = friends.filter((friend) => {
+    const fullName = `${friend.first_name} ${friend.last_name}`.toLowerCase();
+    const username = friend.username.toLowerCase();
+    const query = searchQuery.toLowerCase();
+
+    return fullName.includes(query) || username.includes(query);
+  });
 
   return (
     <section className="settings-section">
@@ -116,12 +122,12 @@ const Friends = () => {
 
             {isLoading ? (
               <p>Loading friends...</p>
-            ) : friends.length === 0 ? (
+            ) : filteredFriends.length === 0 ? (
               <p style={{ marginTop: "20px", fontSize: "18px" }}>
-                You don't have any friends yet.
+                No friends match your search.
               </p>
             ) : (
-              friends.map((friend, index) => (
+              filteredFriends.map((friend, index) => (
                 <div key={index} className="friends-main">
                   <div className="friend-image">
                     <img
@@ -150,12 +156,12 @@ const Friends = () => {
                     </div>
                   </div>
                   <div className="friend-buttons">
-                    <button onClick={() => handleUnfollow(friend.id)}>
-                      Unfollow
-                    </button>
                     <Link to={`/friend/${friend.id}`} key={friend.id}>
                       View profile
                     </Link>
+                    <button onClick={() => handleUnfollow(friend.id)}>
+                      Unfollow
+                    </button>
                   </div>
                 </div>
               ))

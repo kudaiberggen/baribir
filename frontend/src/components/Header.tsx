@@ -18,6 +18,33 @@ const Header: React.FC = () => {
   });
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const fetchNotificationCount = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/notifications/count",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch notification count");
+
+        const count = await response.json();
+        setNotificationCount(count);
+      } catch (err) {
+        console.error("Error fetching notification count:", err);
+      }
+    };
+
+    fetchNotificationCount();
+  }, [isAuthenticated]);
 
   const fetchProfileImage = () => {
     fetch("http://127.0.0.1:8000/api/user-info", {
@@ -96,7 +123,7 @@ const Header: React.FC = () => {
         <div className="login-div">
           {isAuthenticated ? (
             <>
-              <span>
+              <span style={{ position: "relative" }}>
                 <img
                   src={Notification}
                   alt="Notification"
@@ -106,8 +133,27 @@ const Header: React.FC = () => {
                     borderRadius: "50%",
                     cursor: "pointer",
                   }}
-                  onClick={() => setNotificationOpen(!isNotificationOpen)}
+                  onClick={() => {
+                    setNotificationOpen(!isNotificationOpen);
+                    // if (!isNotificationOpen) setNotificationCount(0);
+                  }}
                 />
+                {notificationCount > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-5px",
+                      right: "-5px",
+                      background: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      padding: "2px 6px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {notificationCount}
+                  </span>
+                )}
               </span>
               {isNotificationOpen && <Notifications />}
               <div className="profile-container" ref={dropdownRef}>
