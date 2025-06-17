@@ -18,6 +18,7 @@ import Friends from "./pages/Friends";
 import Settings from "./pages/Settings";
 import FriendProfile from "./pages/FriendProfile";
 import ScrollToTop from "./components/ScrollToTop";
+import ChatFloatingButton from "./components/ChatFloatingButton";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/friend/:friendId" element={<FriendProfile />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
+        <ChatFloatingButton />
         <Footer />
       </Router>
     </AuthProvider>
