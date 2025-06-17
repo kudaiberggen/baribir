@@ -30,39 +30,53 @@ const Notifications: React.FC = () => {
 
   const handleAccept = async (requestId: string) => {
     try {
-      await fetch(
+      const response = await fetch(
         `http://127.0.0.1:8000/api/friend-request/accept/${requestId}/`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
           },
         }
       );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Unknown error");
+      }
+
       setNotifications((prev) =>
         prev.filter((n) => n.friend_request?.id !== requestId)
       );
     } catch (err) {
-      console.error("Failed to accept friend request", err);
+      console.error("Failed to accept friend request:", err);
     }
   };
 
   const handleDeny = async (requestId: string) => {
     try {
-      await fetch(
+      const response = await fetch(
         `http://127.0.0.1:8000/api/friend-request/decline/${requestId}/`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
           },
         }
       );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Unknown error");
+      }
+
       setNotifications((prev) =>
         prev.filter((n) => n.friend_request?.id !== requestId)
       );
     } catch (err) {
-      console.error("Failed to decline friend request", err);
+      console.error("Failed to decline friend request:", err);
     }
   };
 

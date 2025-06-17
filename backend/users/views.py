@@ -169,6 +169,7 @@ class EventFilterView(APIView):
             filters &= Q(interests__code__in=interest_codes)
 
         events = Event.objects.filter(filters).select_related('location').distinct()
+        events = events.filter(date__gte=timezone.now())
 
         # Геофильтрация
         if latitude and longitude:
@@ -195,7 +196,7 @@ class UserDetailView(APIView):
 
 class GetOtherEventsView(generics.ListAPIView):
     serializer_class = EventSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         event_id = self.kwargs.get("event_id")
@@ -226,7 +227,7 @@ class GetOtherEventsView(generics.ListAPIView):
 
 
 class EventDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request, event_id):
         try:
@@ -450,7 +451,7 @@ class RemoveFavoriteEventView(APIView):
 
 class ListFavoriteEventsView(generics.ListAPIView):
     serializer_class = FavoriteEventSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return FavoriteEvent.objects.filter(user=self.request.user).select_related('event')
@@ -671,6 +672,7 @@ class AcceptFriendRequestView(APIView):
 
         friend_request.is_active = False
         friend_request.save()
+        friend_request.delete()
 
         return Response({"detail": "Friend request accepted."}, status=status.HTTP_200_OK)
 
@@ -683,6 +685,7 @@ class DeclineFriendRequestView(APIView):
 
         friend_request.is_active = False
         friend_request.save()
+        friend_request.delete()
 
         return Response({"detail": "Friend request declined."}, status=status.HTTP_200_OK)
 

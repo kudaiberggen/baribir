@@ -20,6 +20,7 @@ const FriendProfile = () => {
   const [isFriend, setIsFriend] = useState(false);
   const [showFullBio, setShowFullBio] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
 
   useEffect(() => {
     if (!friendId) return;
@@ -72,10 +73,28 @@ const FriendProfile = () => {
 
   const handleFollow = async () => {
     try {
-      await axios.post(`/api/friends/request/${friendId}/`);
-      setIsFriend(true);
-    } catch (err) {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      await axios.post(
+        `/api/friend-request/send/${friendId}/`,
+        {},
+        { headers }
+      );
+
+      setRequestSent(true); // <-- обновляем правильный статус
+    } catch (err: any) {
       console.error("Failed to send friend request:", err);
+      if (err.response?.data?.detail) {
+        alert(err.response.data.detail);
+      }
     }
   };
 
@@ -182,6 +201,10 @@ const FriendProfile = () => {
                 onClick={handleUnfollow}
               >
                 Unfollow
+              </button>
+            ) : requestSent ? (
+              <button className="white-block-follow-button" disabled>
+                Request sent
               </button>
             ) : (
               <button
