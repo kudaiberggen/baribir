@@ -340,3 +340,16 @@ class ChatSerializer(serializers.ModelSerializer):
     def get_last_message(self, obj):
         message = obj.messages.last()
         return MessageSerializer(message).data if message else None
+
+
+class ChatDetailSerializer(serializers.ModelSerializer):
+    participants = serializers.StringRelatedField(many=True)
+    messages = MessageSerializer(many=True, read_only=True)
+    is_group = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Chat
+        fields = ['id', 'name', 'chat_type', 'is_group', 'participants', 'created_at', 'messages']
+
+    def get_is_group(self, obj):
+        return obj.chat_type in [Chat.GROUP, Chat.EVENT]

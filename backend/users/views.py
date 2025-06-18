@@ -738,13 +738,15 @@ class FriendRequestListView(APIView):
 
 
 class ChatViewSet(viewsets.ModelViewSet):
-    queryset = Chat.objects.all()
-    serializer_class = ChatSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Chat.objects.filter(participants=self.request.user)
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ChatDetailSerializer
+        return ChatSerializer
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
