@@ -96,6 +96,9 @@ class EventParticipant(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     is_staff = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.user.username + " in " + self.event.title
+
 
 class UserRole(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
