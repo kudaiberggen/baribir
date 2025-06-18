@@ -428,6 +428,20 @@ class PopularEventsView(APIView):
         serializer = EventSerializer(popular_events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class UpcomingEventsView(APIView):
+    def get(self, request):
+        today = timezone.now().date()
+        in_30_days = today + timedelta(days=30)
+
+        upcoming_events = (
+            Event.objects
+            .filter(date__gte=today, date__lt=in_30_days)
+            .order_by('-date')[:10]
+        )
+
+        serializer = EventSerializer(upcoming_events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class AddFavoriteEventView(APIView):
     permission_classes = [permissions.IsAuthenticated]
