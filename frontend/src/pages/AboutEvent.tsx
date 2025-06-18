@@ -431,7 +431,11 @@ const AboutEvent = () => {
   useEffect(() => {
     const fetchRecommendedEvents = async () => {
       try {
-        const response = await fetch(`/api/event/${eventId}/other/`);
+        const response = await fetch(`/api/event/${eventId}/other/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
         const data = await response.json();
         setRecommendedEvents(data);
       } catch (error) {
@@ -445,7 +449,11 @@ const AboutEvent = () => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch("/api/events/favorites");
+        const response = await fetch("/api/events/favorites", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
         const data = await response.json();
         const isFav = data.some((fav: any) => fav.event.id === eventId);
         setIsFavorite(isFav);

@@ -25,7 +25,9 @@ const MyEvents = () => {
     "myevents"
   );
   const [myEvents, setMyEvents] = useState<EventType[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<EventType[]>([]);
   const [showMoreMyevents, setShowMoreMyevents] = useState(false);
+  const [showMoreUpcoming, setShowMoreUpcoming] = useState(false);
 
   const handleTabClick = (tab: "myevents" | "upcomingevents") => {
     setActiveTab(tab);
@@ -62,7 +64,23 @@ const MyEvents = () => {
       }
     };
 
+    const fetchUpcomingEvents = async () => {
+      try {
+        const response = await fetch("/api/events/upcoming/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        const data = await response.json();
+        console.log("Upcoming Events Data:", data);
+        setUpcomingEvents(data);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+      }
+    };
+
     fetchMyEvents();
+    fetchUpcomingEvents();
   }, []);
 
   return (
@@ -157,9 +175,58 @@ const MyEvents = () => {
 
             {activeTab === "upcomingevents" && (
               <div className="myevents-tab-pane">
-                <p style={{ color: "#888", marginTop: "20px" }}>
-                  Upcoming events will go here.
-                </p>
+                {upcomingEvents.length === 0 ? (
+                  <p style={{ color: "#888", marginTop: "20px" }}>
+                    No upcoming events in the next 30 days.
+                  </p>
+                ) : (
+                  <>
+                    <div className="event-cards">
+                      {(showMoreUpcoming
+                        ? upcomingEvents
+                        : upcomingEvents.slice(0, 4)
+                      ).map((event) => (
+                        <Link
+                          to={`/events/${event.id}`}
+                          key={event.id}
+                          className="event-card"
+                        >
+                          <div>
+                            <div style={{ position: "relative" }}>
+                              <img
+                                src={
+                                  event.photos && event.photos.length > 0
+                                    ? `http://127.0.0.1:8000${event.photos[0].image}`
+                                    : "/default-event.jpg"
+                                }
+                                alt="Event"
+                                className="myprofile-event-card-image"
+                              />
+                              <div className="myprofile-event-card-category">
+                                {event.category || "General"}
+                              </div>
+                            </div>
+                            <h3>{event.title}</h3>
+                            <p>
+                              {event.city}, {event.address}
+                            </p>
+                            <p>{formatDateTime(event.date)}</p>
+                            <p>{formatPrice(event.price)}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {upcomingEvents.length > 4 && (
+                      <button
+                        onClick={() => setShowMoreUpcoming(!showMoreUpcoming)}
+                        className="show-more-button"
+                      >
+                        {showMoreUpcoming ? "Show less" : "Show more"}
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
             )}
           </div>

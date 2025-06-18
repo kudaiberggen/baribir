@@ -93,7 +93,7 @@ class EventPhoto(models.Model):
 class EventParticipant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='participants')
     is_staff = models.BooleanField(default=False)
 
 
@@ -260,6 +260,7 @@ class Chat(models.Model):
     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True, blank=True)
     participants = models.ManyToManyField(CustomUser, related_name='chats')
     created_at = models.DateTimeField(auto_now_add=True)
+    avatar = models.ImageField(upload_to='chat_avatars/', blank=True, null=True)
 
     def __str__(self):
         return self.name or f"{self.chat_type} chat #{self.pk}"
