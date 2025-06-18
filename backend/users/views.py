@@ -145,6 +145,7 @@ class EventFilterView(APIView):
     def get(self, request):
         date = request.GET.get('date')
         category_code = request.GET.get('category')
+        city_id = request.GET.get('city')  # 👈 ДОБАВЛЕНО
         interest_codes = request.GET.getlist('interests')
         latitude = request.GET.get('lat')
         longitude = request.GET.get('lng')
@@ -165,13 +166,17 @@ class EventFilterView(APIView):
             except Category.DoesNotExist:
                 return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
 
+        # 🔹 Фильтрация по городу
+        if city_id:
+            filters &= Q(city__id=city_id)
+
         if interest_codes:
             filters &= Q(interests__code__in=interest_codes)
 
         events = Event.objects.filter(filters).select_related('location').distinct()
         events = events.filter(date__gte=timezone.now())
 
-        # Геофильтрация
+        # 🔹 Геофильтрация
         if latitude and longitude:
             user_coords = (float(latitude), float(longitude))
             nearby_events = []
@@ -185,6 +190,7 @@ class EventFilterView(APIView):
 
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
+
 
 
 class UserDetailView(APIView):

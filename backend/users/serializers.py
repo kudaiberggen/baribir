@@ -292,10 +292,16 @@ class MessageMediaSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     media = MessageMediaSerializer(many=True, read_only=True)
     sender = serializers.StringRelatedField(read_only=True)
+    sender_avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
-        fields = ['id', 'chat', 'sender', 'content', 'created_at', 'media']
+        fields = ['id', 'chat', 'sender', 'content', 'created_at', 'media', 'sender_avatar']
+
+    def get_sender_avatar(self, obj):
+        if obj.sender.profile_image:
+            return obj.sender.profile_image.url
+        return None
 
 
 class MessageMediaSerializer(serializers.ModelSerializer):
@@ -329,10 +335,14 @@ class ChatSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     is_group = serializers.SerializerMethodField()
     participants = serializers.StringRelatedField(many=True)
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
-        fields = ['id', 'name', 'chat_type', 'is_group', 'participants', 'last_message']
+        fields = [
+            'id', 'name', 'chat_type', 'is_group',
+            'participants', 'last_message', 'avatar_url'
+        ]
 
     def get_is_group(self, obj):
         return obj.chat_type in [Chat.GROUP, Chat.EVENT]
@@ -341,15 +351,28 @@ class ChatSerializer(serializers.ModelSerializer):
         message = obj.messages.last()
         return MessageSerializer(message).data if message else None
 
+    def get_avatar_url(self, obj):
+        if obj.avatar:
+            return obj.avatar.url
+        return None
 
 class ChatDetailSerializer(serializers.ModelSerializer):
     participants = serializers.StringRelatedField(many=True)
     messages = MessageSerializer(many=True, read_only=True)
     is_group = serializers.SerializerMethodField()
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
-        fields = ['id', 'name', 'chat_type', 'is_group', 'participants', 'created_at', 'messages']
+        fields = [
+            'id', 'name', 'chat_type', 'is_group',
+            'participants', 'created_at', 'avatar_url', 'messages'
+        ]
 
     def get_is_group(self, obj):
         return obj.chat_type in [Chat.GROUP, Chat.EVENT]
+
+    def get_avatar_url(self, obj):
+        if obj.avatar:
+            return obj.avatar.url
+        return None

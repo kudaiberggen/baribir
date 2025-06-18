@@ -75,11 +75,13 @@
 }
 
 .chat-groups:hover {
-  background-color: #eeeeee;
+  /* background-color: #eeeeee; */
+  background-color: #eee9ff;
 }
 
 .active-group {
-  background-color: #eeeeee;
+  /* background-color: #eeeeee; */
+  background-color: #eee9ff;
 }
 
 .group-logo {
@@ -154,4 +156,37 @@
   font-size: 14px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.message-bubble {
+  background-color: #7e57c2;
+  /* background-color: #724a95; */
+  color: white;
+  padding: 7px 14px;
+  border-radius: 12px;
+  max-width: 60%;
+  font-size: 14px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.sender-name {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 3px;
+  color: #bbbbbb;
 }

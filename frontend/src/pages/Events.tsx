@@ -45,14 +45,17 @@ const Events = () => {
     code: string;
     name: string;
   } | null>(null);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isCityOpen, setIsCityOpen] = useState(false);
   const [showMoreEvents, setShowMoreEvents] = useState(false);
   const [categories, setCategories] = useState<
     { code: string; name: string }[]
   >([]);
-  const [cities, setCities] = useState<string[]>([]);
+  const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
   const [popularEvents, setPopularEvents] = useState<EventType[]>([]);
   const findCategoryByName = (name: string) =>
     categories.find((cat) => cat.name.toLowerCase() === name.toLowerCase());
@@ -67,7 +70,7 @@ const Events = () => {
 
     fetch("/api/cities/")
       .then((res) => res.json())
-      .then((data) => setCities(data.map((item: any) => item.name)))
+      .then(setCities)
       .catch((err) => console.error("Ошибка загрузки городов:", err));
 
     fetchWithOptionalAuth("/api/events/")
@@ -82,7 +85,7 @@ const Events = () => {
       queryParams.append("date", selectedDate.toISOString().split("T")[0]);
     if (selectedCategory)
       queryParams.append("category", selectedCategory.code.toString());
-    if (selectedCity) queryParams.append("city", selectedCity);
+    if (selectedCity) queryParams.append("city", selectedCity.id.toString());
 
     fetchWithOptionalAuth(`/api/events/?${queryParams}`)
       .then((res) => res.json())
@@ -241,7 +244,7 @@ const Events = () => {
               onClick={() => setIsCityOpen(!isCityOpen)}
             >
               <div className="dropdown-header">
-                {selectedCity || "City"}
+                {selectedCity?.name || "City"}
                 <span className="arrow">
                   <img src={isCityOpen ? ArrowUp : ArrowDown} alt="Arrow" />
                 </span>
@@ -250,13 +253,13 @@ const Events = () => {
                 <ul className="dropdown-list">
                   {cities.map((city) => (
                     <li
-                      key={city}
+                      key={city.id}
                       onClick={() => {
                         setSelectedCity(city);
                         setIsCityOpen(false);
                       }}
                     >
-                      {city}
+                      {city.name}
                     </li>
                   ))}
                 </ul>
